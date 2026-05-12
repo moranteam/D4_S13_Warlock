@@ -238,6 +238,7 @@
       });
       const titleEl = document.getElementById('topbarCurrent');
       if (titleEl) titleEl.textContent = this.titles[this.current] || this.current;
+      if (this.current === 'walkthrough') Walkthrough.render();
     },
   };
 
@@ -466,6 +467,7 @@
 
       AppState.save();
       Dashboard.render();
+      Walkthrough.render();
       Nav.updateBadges();
 
       if (successCount > 0 && failCount === 0) {
@@ -646,25 +648,25 @@
     getPhase(level) {
       if (level < 3) return { name: 'Pre-tutorial', desc: 'Pick a starter zone and reach level 3 to unlock Dread Claws.' };
       if (level < 8) return { name: 'Phase 1: Foundation', desc: 'Dread Claws is your spam. Nether Step for mobility. Spec into base skills.' };
-      if (level < 15) return { name: 'Phase 2: Rampage Online', desc: 'Drop your Greater Demon (Rampage) into packs. Position him for double Encircling Terror hits when it unlocks.' };
-      if (level < 20) return { name: 'Phase 3: Mastermind Locked In', desc: 'Mastermind Shard active, Laalish summoned, Dread Claws is now a circular AoE around you and your demon.' };
-      if (level < 30) return { name: 'Phase 4: Abyssal Titan', desc: 'Rampage gets the Abyssal Titan variant. Recast to reposition him without spending Dominance.' };
+      if (level < 15) return { name: 'Phase 2: Rampage Online', desc: 'Drop Rampage into packs. Position him for double trigger overlap with Dread Claws.' };
+      if (level < 20) return { name: 'Phase 3: Mastermind Locked In', desc: 'Mastermind Shard active, Laalish summoned, Dread Claws: Enveloping Terror is now a circular AoE around you and your demon.' };
+      if (level < 30) return { name: 'Phase 4: Abyssal Titan', desc: 'Take Rampage: Abyssal Titan. Recast to reposition him without spending Dominance.' };
       if (level < 34) return { name: 'Phase 5: Fragment Pivot', desc: 'Pick Blasphemous Fragment. Rampage now applies Hex, amplifying all Abyss damage.' };
-      if (level < 40) return { name: 'Phase 6: Resource Engine', desc: 'Respec at 34. Drop Hellion Sting and Sigil. Pick up Command Fallen Fallen Rush and Dark Prison Chain Aura.' };
-      if (level < 60) return { name: 'Phase 7: Metamorphosis', desc: 'Respec at 40. Drop Dark Prison. Pick up Metamorphosis Terror Demon. Endgame scaling begins.' };
-      if (level < 70) return { name: 'Phase 8: Endgame Approach', desc: 'Push to 70 through Helltides, Strongholds, and War Plans activities. Refresh gear at every tier.' };
+      if (level < 40) return { name: 'Phase 6: Resource Engine', desc: 'Respec at 34. Drop Hellion Sting and Sigil of Subversion. Install Command Fallen: Fallen Rush and Dark Prison: Chain Aura.' };
+      if (level < 60) return { name: 'Phase 7: Metamorphosis', desc: 'Respec at 40. Drop Dark Prison. Install Metamorphosis: Terror Demon. Endgame scaling begins.' };
+      if (level < 70) return { name: 'Phase 8: Endgame Approach', desc: 'Push to 70 through Helltides, Strongholds, and War Plans. Refresh gear at every tier.' };
       return { name: 'Phase 9: Endgame', desc: 'Paragon unlocked. Clear Pit Tier 10 to enter Torment 1. Hunt uniques. Optimize the build.' };
     },
 
     getNextPivot(level) {
       if (level < 3) return { name: 'Level 3', desc: 'Unlock Dread Claws and start spamming. This is your core skill from now until 70.' };
       if (level < 4) return { name: 'Level 4', desc: 'Unlock Nether Step. Mobility and Shadowform generation. Use on cooldown.' };
-      if (level < 8) return { name: 'Level 8', desc: 'Unlock Rampage (Greater Demon). Summon him into packs for double-trigger Encircling Terror.' };
-      if (level < 15) return { name: 'Level 15', desc: 'Complete Warlock class quest. Take Mastermind Shard. Take Enveloping Terror on Dread Claws.' };
-      if (level < 20) return { name: 'Level 20', desc: 'Take Abyssal Titan variant on Rampage. Recast to reposition without spending Dominance.' };
+      if (level < 8) return { name: 'Level 8', desc: 'Unlock Rampage (Greater Demon). Summon him into packs for double trigger overlap.' };
+      if (level < 15) return { name: 'Level 15', desc: 'Complete Warlock class quest. Take Mastermind Shard. Take Dread Claws: Enveloping Terror.' };
+      if (level < 20) return { name: 'Level 20', desc: 'Take Rampage: Abyssal Titan. Recast to reposition without spending Dominance.' };
       if (level < 30) return { name: 'Level 30', desc: 'Fragments unlock. Take Blasphemous Fragment for Hex application via Rampage.' };
-      if (level < 34) return { name: 'Level 34 Respec', desc: 'Drop Hellion Sting and Sigil. Add Command Fallen Fallen Rush and Dark Prison Chain Aura.' };
-      if (level < 40) return { name: 'Level 40 Respec', desc: 'Drop Dark Prison. Add Metamorphosis Terror Demon. Endgame scaling begins here.' };
+      if (level < 34) return { name: 'Level 34 Respec', desc: 'Drop Hellion Sting and Sigil of Subversion. Add Command Fallen: Fallen Rush and Dark Prison: Chain Aura. Take Nether Step: Recall Shadows.' };
+      if (level < 40) return { name: 'Level 40 Respec', desc: 'Drop Dark Prison. Add Metamorphosis: Terror Demon. Endgame scaling begins here.' };
       if (level < 70) return { name: 'Level 70', desc: 'Paragon unlocks. Refresh tempers and imprints. Push Pit Tier 10 for Torment 1.' };
       if (AppState.data.character.torment < 1) return { name: 'Pit Tier 10', desc: 'Clear Pit T10 to enter Torment 1. Endgame difficulty unlocks.' };
       if (AppState.data.character.paragon < 200) return { name: 'Paragon 200', desc: 'Board rush all legendary nodes first. Respec to optimal rotation after 200.' };
@@ -679,43 +681,19 @@
     },
 
     getPriorities(level) {
-      if (level < 15) {
-        return [
-          'Reach level 15 to unlock Soul Shards',
-          'Complete the Warlock class quest the moment it appears in your log',
-          'Start salvaging gear to research Aspect of Deeper Shadows',
-          'Spam Dread Claws, weave a basic attack when Wrath is low',
-        ];
-      }
-      if (level < 30) {
-        return [
-          'Take Mastermind Shard if you have not already',
-          'Push to level 30 for Fragment unlock',
-          'Imprint Aspect of Deeper Shadows on your amulet ASAP',
-          'Save salvaged gear for Demonic Aspect',
-        ];
-      }
-      if (level < 34) {
-        return [
-          'Take Blasphemous Fragment to enable Hex via Rampage',
-          'Prep for level 34 respec (drop Hellion Sting and Sigil)',
-          'Keep Subo hired, Aldkin as reinforcement',
-        ];
-      }
-      if (level < 40) {
-        return [
-          'Execute the level 34 respec when you ding',
-          'Push to level 40 for Metamorphosis Terror Demon pivot',
-          'Continue farming Deeper Shadows aspect upgrades',
-        ];
-      }
-      if (level < 70) {
-        return [
-          'Run Helltides for Forgotten Souls and gear',
-          'Clear Strongholds (huge XP, do them around level 60)',
-          'Stay on Normal difficulty for fastest leveling',
-          'Refresh weapon every time base damage increases',
-        ];
+      const phases = (window.D4_DATA && window.D4_DATA.walkthrough) || [];
+      const phase = phases.find((p) => level >= p.levelMin && level <= p.levelMax);
+      if (phase) {
+        const wt = AppState.data.walkthrough;
+        const unchecked = phase.steps.filter((s) => !wt[phase.id + ':' + s.id]);
+        if (unchecked.length > 0) {
+          const ranked = unchecked.slice().sort((a, b) => {
+            const w = { high: 0, med: 1, low: 2 };
+            return (w[a.priority] || 9) - (w[b.priority] || 9);
+          });
+          return ranked.slice(0, 3).map((s) => s.text);
+        }
+        return ['Phase ' + phase.name + ' complete. Push to Level ' + (phase.levelMax + 1) + '.'];
       }
       if (AppState.data.character.torment < 1) {
         return [
@@ -734,14 +712,155 @@
   };
 
   // ========================================
+  // WALKTHROUGH RENDERER
+  // ========================================
+  const Walkthrough = {
+    bound: false,
+
+    render() {
+      const root = document.getElementById('walkthroughRoot');
+      if (!root) return;
+      const phases = (window.D4_DATA && window.D4_DATA.walkthrough) || [];
+      if (!phases.length) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-hammer placeholder-icon"></i><div class="placeholder-title">No walkthrough data loaded</div><div class="placeholder-text">data.js may have failed to load. Check the console.</div></div>';
+        return;
+      }
+
+      const c = AppState.data.character;
+      const wt = AppState.data.walkthrough;
+      const respec = AppState.data.skills.respec || {};
+      const currentPhaseId = this.getCurrentPhaseId(c.level, phases);
+
+      const totalSteps = phases.reduce((n, p) => n + p.steps.length, 0);
+      const doneSteps = phases.reduce((n, p) => {
+        return n + p.steps.filter((s) => wt[p.id + ':' + s.id]).length;
+      }, 0);
+      const globalPct = totalSteps > 0 ? Math.round((doneSteps / totalSteps) * 100) : 0;
+
+      let html = '';
+      html += '<div class="wt-summary">';
+      html += '  <div class="wt-summary-row">';
+      html += '    <div class="wt-summary-label">Overall</div>';
+      html += '    <div class="wt-summary-pct">' + globalPct + '%</div>';
+      html += '  </div>';
+      html += '  <div class="wt-summary-bar"><div class="wt-summary-fill" style="width:' + globalPct + '%"></div></div>';
+      html += '  <div class="wt-summary-meta">' + doneSteps + ' of ' + totalSteps + ' steps complete, character Level ' + c.level + '</div>';
+      html += '</div>';
+
+      for (const p of phases) {
+        const isCurrent = p.id === currentPhaseId;
+        const isPast = c.level > p.levelMax;
+        const phaseDone = p.steps.filter((s) => wt[p.id + ':' + s.id]).length;
+        const phasePct = p.steps.length > 0 ? Math.round((phaseDone / p.steps.length) * 100) : 0;
+        const stateClass = isCurrent ? 'is-current' : isPast ? 'is-past' : 'is-future';
+
+        html += '<section class="wt-phase ' + stateClass + '" data-phase="' + p.id + '">';
+        html += '  <header class="wt-phase-head">';
+        html += '    <div class="wt-phase-meta">';
+        html += '      <span class="wt-phase-range">Lv ' + p.levelMin + (p.levelMax >= 999 ? '+' : ' to ' + p.levelMax) + '</span>';
+        if (isCurrent) html += '<span class="wt-here-chip">You are here</span>';
+        html += '      <span class="wt-conf wt-conf-' + (p.confidence || 'MEDIUM').toLowerCase() + '">' + (p.confidence || 'MEDIUM') + '</span>';
+        html += '    </div>';
+        html += '    <h2 class="wt-phase-title">' + escapeHtml(p.name) + '</h2>';
+        html += '    <p class="wt-phase-summary">' + escapeHtml(p.summary) + '</p>';
+        html += '    <div class="wt-phase-bar"><div class="wt-phase-fill" style="width:' + phasePct + '%"></div></div>';
+        html += '    <div class="wt-phase-progress">' + phaseDone + ' / ' + p.steps.length + ' steps</div>';
+        html += '  </header>';
+
+        if (p.respec && p.respec.trigger) {
+          const key = 'lv' + p.respec.level;
+          const done = !!respec[key];
+          html += '  <div class="wt-respec ' + (done ? 'is-done' : '') + '">';
+          html += '    <div class="wt-respec-text"><i class="fa-solid fa-rotate"></i> ' + escapeHtml(p.respec.label) + '</div>';
+          if (done) {
+            html += '    <span class="wt-respec-done"><i class="fa-solid fa-check"></i> Acknowledged</span>';
+          } else {
+            html += '    <button class="btn btn-danger wt-respec-btn" data-respec="' + p.respec.level + '">I respecced</button>';
+          }
+          html += '  </div>';
+        }
+
+        html += '  <ul class="wt-steps">';
+        for (const s of p.steps) {
+          const key = p.id + ':' + s.id;
+          const checked = !!wt[key];
+          html += '    <li class="wt-step ' + (checked ? 'is-checked' : '') + ' wt-step-' + (s.priority || 'med') + '">';
+          html += '      <label class="wt-step-label">';
+          html += '        <input type="checkbox" class="wt-step-cb" data-step="' + key + '"' + (checked ? ' checked' : '') + ' />';
+          html += '        <span class="wt-step-text">' + escapeHtml(s.text) + '</span>';
+          html += '      </label>';
+          html += '    </li>';
+        }
+        html += '  </ul>';
+
+        if (p.sources && p.sources.length) {
+          html += '  <div class="wt-sources">Sources: ' + p.sources.map((s) => '<span class="wt-source">' + escapeHtml(s) + '</span>').join('') + '</div>';
+        }
+        html += '</section>';
+      }
+
+      root.innerHTML = html;
+      this.bind(root);
+    },
+
+    getCurrentPhaseId(level, phases) {
+      for (const p of phases) {
+        if (level >= p.levelMin && level <= p.levelMax) return p.id;
+      }
+      return phases.length ? phases[phases.length - 1].id : null;
+    },
+
+    bind(root) {
+      if (this.bound) return;
+      this.bound = true;
+
+      const main = document.getElementById('main');
+      if (!main) return;
+
+      main.addEventListener('change', (e) => {
+        const t = e.target;
+        if (t && t.classList && t.classList.contains('wt-step-cb')) {
+          const key = t.getAttribute('data-step');
+          if (key) {
+            AppState.data.walkthrough[key] = t.checked;
+            AppState.save('walkthrough');
+            Walkthrough.render();
+            Dashboard.render();
+            Nav.updateBadges();
+          }
+        }
+      });
+
+      main.addEventListener('click', (e) => {
+        const btn = e.target.closest && e.target.closest('[data-respec]');
+        if (btn) {
+          const n = btn.getAttribute('data-respec');
+          const key = 'lv' + n;
+          AppState.data.skills.respec[key] = true;
+          AppState.save('skills');
+          Toast.show('Respec ' + n + ' acknowledged', 'success');
+          Walkthrough.render();
+        }
+      });
+    },
+  };
+
+  // ========================================
   // NAV BADGE UPDATER
   // ========================================
   const Nav = {
     updateBadges() {
       const walkthroughBadge = document.getElementById('navBadgeWalkthrough');
       if (walkthroughBadge) {
-        const total = Object.keys(AppState.data.walkthrough).length || 1;
-        const done = Object.values(AppState.data.walkthrough).filter(Boolean).length;
+        const phases = (window.D4_DATA && window.D4_DATA.walkthrough) || [];
+        const total = phases.reduce((n, p) => n + p.steps.length, 0);
+        const wt = AppState.data.walkthrough;
+        let done = 0;
+        for (const p of phases) {
+          for (const s of p.steps) {
+            if (wt[p.id + ':' + s.id]) done++;
+          }
+        }
         const pct = total > 0 ? Math.round((done / total) * 100) : 0;
         walkthroughBadge.textContent = pct + '%';
       }
@@ -788,6 +907,7 @@
           if (ok) {
             Theme.apply(AppState.data.settings.theme || 'dark');
             Dashboard.render();
+            Walkthrough.render();
             Nav.updateBadges();
             Toast.show('Save imported', 'success');
           } else {
@@ -807,6 +927,7 @@
             AppState.reset();
             Theme.apply('dark');
             Dashboard.render();
+            Walkthrough.render();
             Nav.updateBadges();
             Toast.show('Reset complete', 'success');
           },
@@ -829,6 +950,7 @@
     Router.init();
     initIO();
     Dashboard.render();
+    Walkthrough.render();
     Nav.updateBadges();
 
     // Welcome toast on first visit
@@ -848,6 +970,6 @@
   }
 
   // Expose for debugging
-  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Toast, Modal, Nav };
+  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, Toast, Modal, Nav };
 
 })();
