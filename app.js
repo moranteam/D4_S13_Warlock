@@ -239,6 +239,9 @@
       const titleEl = document.getElementById('topbarCurrent');
       if (titleEl) titleEl.textContent = this.titles[this.current] || this.current;
       if (this.current === 'walkthrough') Walkthrough.render();
+      if (this.current === 'skills') Skills.render();
+      if (this.current === 'shards') Shards.render();
+      if (this.current === 'aspects') Aspects.render();
     },
   };
 
@@ -468,6 +471,9 @@
       AppState.save();
       Dashboard.render();
       Walkthrough.render();
+      Skills.render();
+      Shards.render();
+      Aspects.render();
       Nav.updateBadges();
 
       if (successCount > 0 && failCount === 0) {
@@ -846,6 +852,235 @@
   };
 
   // ========================================
+  // SKILLS RENDERER
+  // ========================================
+  const Skills = {
+    bound: false,
+
+    render() {
+      const root = document.getElementById('skillsRoot');
+      if (!root) return;
+      const data = window.D4_DATA || {};
+      const skills = data.skills || [];
+      const clusters = data.clusters || [];
+      const bar = data.endgameBar || [];
+      if (!skills.length) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-hammer placeholder-icon"></i><div class="placeholder-title">No skill data</div></div>';
+        return;
+      }
+
+      let html = '';
+
+      html += '<div class="bar-card">';
+      html += '  <div class="bar-header"><i class="fa-solid fa-star"></i><h2 class="bar-title">Endgame Skill Bar</h2><span class="card-tag">Maxroll endgame</span></div>';
+      html += '  <ol class="bar-slots">';
+      for (const b of bar) {
+        const s = skills.find((x) => x.id === b.skillId) || { name: b.skillId };
+        const up = b.upgrade ? ': ' + b.upgrade : '';
+        html += '    <li class="bar-slot"><span class="bar-slot-n">' + b.slot + '</span><div class="bar-slot-text"><div class="bar-slot-skill">' + escapeHtml(s.name + up) + '</div><div class="bar-slot-role">' + escapeHtml(b.role) + '</div></div></li>';
+      }
+      html += '  </ol>';
+      html += '</div>';
+
+      for (const cl of clusters) {
+        const inCluster = skills.filter((s) => s.cluster === cl.id);
+        if (!inCluster.length) continue;
+        html += '<section class="cluster">';
+        html += '  <header class="cluster-head"><h2 class="cluster-name">' + escapeHtml(cl.name) + '</h2><span class="cluster-desc">' + escapeHtml(cl.desc) + '</span></header>';
+        html += '  <div class="cluster-grid">';
+        for (const sk of inCluster) {
+          const rel = sk.relevance || 'unused';
+          html += '<article class="skill skill-' + rel + '">';
+          html += '  <header class="skill-head">';
+          html += '    <h3 class="skill-name">' + escapeHtml(sk.name) + '</h3>';
+          html += '    <span class="skill-rel skill-rel-' + rel + '">' + this.relLabel(rel) + '</span>';
+          html += '  </header>';
+          if (sk.role) html += '<p class="skill-role">' + escapeHtml(sk.role) + '</p>';
+          html += '  <ul class="skill-upgrades">';
+          for (const u of (sk.upgrades || [])) {
+            const isRec = (sk.recommended || []).includes(u);
+            html += '<li class="skill-up' + (isRec ? ' is-rec' : '') + '">' + escapeHtml(u) + (isRec ? '<i class="fa-solid fa-check"></i>' : '') + '</li>';
+          }
+          html += '  </ul>';
+          html += '</article>';
+        }
+        html += '  </div>';
+        html += '</section>';
+      }
+
+      root.innerHTML = html;
+    },
+
+    relLabel(rel) {
+      return ({ core: 'Core', situational: 'Situational', leveling: 'Leveling Only', 'leveling-bridge': 'Leveling Bridge', unused: 'Unused' })[rel] || rel;
+    },
+  };
+
+  // ========================================
+  // SOUL SHARDS RENDERER
+  // ========================================
+  const Shards = {
+    render() {
+      const root = document.getElementById('shardsRoot');
+      if (!root) return;
+      const data = window.D4_DATA || {};
+      const shards = data.soulShards || [];
+      const fragments = data.fragments || {};
+      if (!shards.length) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-hammer placeholder-icon"></i><div class="placeholder-title">No shard data</div></div>';
+        return;
+      }
+
+      const c = AppState.data.character;
+      const selectedShard = (c.soulShard || '').toLowerCase();
+      const selectedFragment = (c.fragment || '').toLowerCase();
+
+      let html = '<div class="shard-grid">';
+      for (const sh of shards) {
+        const isSelected = selectedShard === sh.id;
+        html += '<article class="shard ' + (isSelected ? 'is-selected' : '') + (sh.buildRecommended ? ' is-recommended' : '') + '">';
+        html += '  <header class="shard-head">';
+        html += '    <h2 class="shard-name">' + escapeHtml(sh.name) + '</h2>';
+        if (sh.buildRecommended) html += '<span class="shard-rec"><i class="fa-solid fa-star"></i> Build pick</span>';
+        html += '  </header>';
+        html += '  <p class="shard-mech">' + escapeHtml(sh.mechanic) + '</p>';
+        html += '  <div class="shard-meta">' + escapeHtml(sh.whenUnlocks) + '</div>';
+
+        const frags = fragments[sh.id] || [];
+        if (frags.length) {
+          html += '  <div class="frag-list">';
+          html += '    <div class="frag-title">Fragments</div>';
+          for (const f of frags) {
+            const fragSelected = selectedFragment === f.id;
+            html += '<div class="frag ' + (fragSelected ? 'is-selected' : '') + (f.buildRecommended ? ' is-recommended' : '') + '" data-shard="' + sh.id + '" data-frag="' + f.id + '">';
+            html += '  <div class="frag-name">' + escapeHtml(f.name) + (f.buildRecommended ? '<i class="fa-solid fa-star"></i>' : '') + '</div>';
+            html += '  <div class="frag-effect">' + escapeHtml(f.effect) + '</div>';
+            html += '</div>';
+          }
+          html += '  </div>';
+        }
+
+        html += '  <div class="shard-actions">';
+        html += '    <button class="btn btn-ghost shard-pick" data-shard-pick="' + sh.id + '">' + (isSelected ? 'Selected' : 'Select shard') + '</button>';
+        html += '  </div>';
+        html += '</article>';
+      }
+      html += '</div>';
+
+      root.innerHTML = html;
+      this.bind(root);
+    },
+
+    bound: false,
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+      main.addEventListener('click', (e) => {
+        const sBtn = e.target.closest && e.target.closest('[data-shard-pick]');
+        if (sBtn) {
+          const id = sBtn.getAttribute('data-shard-pick');
+          AppState.data.character.soulShard = id.charAt(0).toUpperCase() + id.slice(1);
+          AppState.save('character');
+          Toast.show('Soul Shard: ' + AppState.data.character.soulShard, 'success');
+          Shards.render();
+          Dashboard.render();
+          return;
+        }
+        const fNode = e.target.closest && e.target.closest('[data-frag]');
+        if (fNode) {
+          const fragId = fNode.getAttribute('data-frag');
+          AppState.data.character.fragment = fragId;
+          AppState.save('character');
+          Toast.show('Fragment: ' + fragId, 'success');
+          Shards.render();
+        }
+      });
+    },
+  };
+
+  // ========================================
+  // ASPECTS RENDERER
+  // ========================================
+  const Aspects = {
+    render() {
+      const root = document.getElementById('aspectsRoot');
+      if (!root) return;
+      const aspects = (window.D4_DATA && window.D4_DATA.aspects) || [];
+      if (!aspects.length) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-hammer placeholder-icon"></i><div class="placeholder-title">No aspect data</div></div>';
+        return;
+      }
+      const imp = AppState.data.aspects || {};
+
+      const families = ['offensive', 'defensive', 'utility'];
+      const familyLabel = { offensive: 'Offensive', defensive: 'Defensive', utility: 'Utility', mobility: 'Mobility' };
+
+      const total = aspects.length;
+      const done = aspects.filter((a) => imp[a.id] && imp[a.id].imprinted).length;
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+      let html = '';
+      html += '<div class="aspects-summary">';
+      html += '  <div class="aspects-summary-row"><div class="aspects-summary-label">Imprinted</div><div class="aspects-summary-pct">' + done + ' / ' + total + '</div></div>';
+      html += '  <div class="aspects-summary-bar"><div class="aspects-summary-fill" style="width:' + pct + '%"></div></div>';
+      html += '</div>';
+
+      for (const fam of families) {
+        const inFam = aspects.filter((a) => a.slotFamily === fam);
+        if (!inFam.length) continue;
+        html += '<section class="aspect-group">';
+        html += '  <h2 class="aspect-group-name">' + (familyLabel[fam] || fam) + '</h2>';
+        html += '  <div class="aspect-list">';
+        for (const a of inFam) {
+          const isImp = !!(imp[a.id] && imp[a.id].imprinted);
+          const slotsStr = (a.slots || []).join(', ');
+          html += '<article class="aspect ' + (isImp ? 'is-imprinted' : '') + ' aspect-priority-' + (a.priority || 'situational') + '">';
+          html += '  <header class="aspect-head">';
+          html += '    <label class="aspect-check"><input type="checkbox" class="aspect-cb" data-aspect="' + a.id + '"' + (isImp ? ' checked' : '') + ' /><span></span></label>';
+          html += '    <div class="aspect-title-block">';
+          html += '      <h3 class="aspect-name">' + escapeHtml(a.name) + '</h3>';
+          html += '      <div class="aspect-meta">';
+          html += '        <span class="aspect-slots">' + escapeHtml(slotsStr) + '</span>';
+          html += '        <span class="aspect-priority aspect-priority-tag-' + (a.priority || 'situational') + '">' + (a.priority || 'situational') + '</span>';
+          html += '        <span class="wt-conf wt-conf-' + (a.confidence || 'MEDIUM').toLowerCase() + '">' + (a.confidence || 'MEDIUM') + '</span>';
+          html += '      </div>';
+          html += '    </div>';
+          html += '  </header>';
+          html += '  <p class="aspect-effect">' + escapeHtml(a.effect) + '</p>';
+          html += '  <div class="aspect-source"><span class="aspect-source-label">Source:</span> ' + escapeHtml(a.farm || a.source || '') + '</div>';
+          html += '</article>';
+        }
+        html += '  </div>';
+        html += '</section>';
+      }
+
+      root.innerHTML = html;
+      this.bind();
+    },
+
+    bound: false,
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+      main.addEventListener('change', (e) => {
+        const t = e.target;
+        if (t && t.classList && t.classList.contains('aspect-cb')) {
+          const id = t.getAttribute('data-aspect');
+          if (!AppState.data.aspects[id]) AppState.data.aspects[id] = {};
+          AppState.data.aspects[id].imprinted = t.checked;
+          AppState.save('aspects');
+          Aspects.render();
+          Nav.updateBadges();
+        }
+      });
+    },
+  };
+
+  // ========================================
   // NAV BADGE UPDATER
   // ========================================
   const Nav = {
@@ -908,6 +1143,9 @@
             Theme.apply(AppState.data.settings.theme || 'dark');
             Dashboard.render();
             Walkthrough.render();
+            Skills.render();
+            Shards.render();
+            Aspects.render();
             Nav.updateBadges();
             Toast.show('Save imported', 'success');
           } else {
@@ -928,6 +1166,9 @@
             Theme.apply('dark');
             Dashboard.render();
             Walkthrough.render();
+            Skills.render();
+            Shards.render();
+            Aspects.render();
             Nav.updateBadges();
             Toast.show('Reset complete', 'success');
           },
@@ -951,6 +1192,9 @@
     initIO();
     Dashboard.render();
     Walkthrough.render();
+    Skills.render();
+    Shards.render();
+    Aspects.render();
     Nav.updateBadges();
 
     // Welcome toast on first visit
@@ -970,6 +1214,6 @@
   }
 
   // Expose for debugging
-  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, Toast, Modal, Nav };
+  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, Skills, Shards, Aspects, Toast, Modal, Nav };
 
 })();
