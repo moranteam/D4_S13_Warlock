@@ -19,6 +19,9 @@
     paragon: 'd4_warlock_paragon_v1',
     bosses: 'd4_warlock_bosses_v1',
     warplans: 'd4_warlock_warplans_v1',
+    talismans: 'd4_warlock_talismans_v1',
+    mercs: 'd4_warlock_mercs_v1',
+    verified: 'd4_warlock_verified_v1',
     settings: 'd4_warlock_settings_v1',
     notes: 'd4_warlock_notes_v1',
   };
@@ -56,6 +59,15 @@
     },
     bosses: {},
     warplans: {},
+    talismans: {
+      ownedSets: {},
+      ownedUniqueCharms: {},
+    },
+    mercs: {
+      hired: null,
+      reinforcement: null,
+    },
+    verified: {},
     settings: {
       theme: 'dark',
     },
@@ -246,6 +258,10 @@
       if (this.current === 'uniques') Uniques.render();
       if (this.current === 'bosses') Bosses.render();
       if (this.current === 'endbuild') Endbuild.render();
+      if (this.current === 'talismans') Talismans.render();
+      if (this.current === 'warplans') WarPlans.render();
+      if (this.current === 'mercenary') Mercenary.render();
+      if (this.current === 'patch') Patch.render();
     },
   };
 
@@ -551,6 +567,23 @@
       }
     },
 
+    renderAll() {
+      Dashboard.render();
+      Walkthrough.render();
+      Skills.render();
+      Shards.render();
+      Aspects.render();
+      Paragon.render();
+      Uniques.render();
+      Bosses.render();
+      Endbuild.render();
+      Talismans.render();
+      WarPlans.render();
+      Mercenary.render();
+      Patch.render();
+      Nav.updateBadges();
+    },
+
     applyForm() {
       const c = AppState.data.character;
       const skills = AppState.data.skills;
@@ -594,16 +627,7 @@
       }
 
       AppState.save();
-      Dashboard.render();
-      Walkthrough.render();
-      Skills.render();
-      Shards.render();
-      Aspects.render();
-      Paragon.render();
-      Uniques.render();
-      Bosses.render();
-      Endbuild.render();
-      Nav.updateBadges();
+      this.renderAll();
 
       Toast.show(changes.length + ' update' + (changes.length === 1 ? '' : 's') + ' applied', 'success');
       Modal.close('modalQuick');
@@ -1554,6 +1578,374 @@
   };
 
   // ========================================
+  // TALISMANS RENDERER
+  // ========================================
+  const Talismans = {
+    render() {
+      const root = document.getElementById('talismansRoot');
+      if (!root) return;
+      const t = (window.D4_DATA && window.D4_DATA.talismans);
+      if (!t) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-hammer placeholder-icon"></i><div class="placeholder-title">No talisman data</div></div>';
+        return;
+      }
+      const owned = AppState.data.talismans || { ownedSets: {}, ownedUniqueCharms: {} };
+
+      let html = '';
+
+      html += '<div class="tal-card">';
+      html += '  <div class="tal-card-title"><i class="fa-solid fa-key"></i> Unlock</div>';
+      html += '  <p class="tal-card-text">' + escapeHtml(t.unlock) + '</p>';
+      html += '  <div class="tal-card-meta">' + escapeHtml(t.dropRules) + '</div>';
+      html += '</div>';
+
+      html += '<section class="tal-section">';
+      html += '  <h2 class="tal-section-name">Seal Priority</h2>';
+      html += '  <ol class="tal-priority">';
+      for (const s of t.sealPriority) {
+        html += '<li class="tal-priority-row"><span class="tal-priority-n">' + s.priority + '</span><div><div class="tal-priority-name">' + escapeHtml(s.target) + '</div><div class="tal-priority-note">' + escapeHtml(s.notes) + '</div></div></li>';
+      }
+      html += '  </ol>';
+      html += '</section>';
+
+      html += '<section class="tal-section">';
+      html += '  <h2 class="tal-section-name">Charm Affix Targets</h2>';
+      html += '  <div class="tal-charm-grid">';
+      for (const c of t.charmTargets) {
+        html += '<div class="tal-charm tal-charm-' + c.priority + '"><div class="tal-charm-affix">' + escapeHtml(c.affix) + '</div><div class="tal-charm-note">' + escapeHtml(c.notes) + '</div><span class="aspect-priority aspect-priority-tag-' + c.priority + '">' + c.priority + '</span></div>';
+      }
+      html += '  </div>';
+      html += '</section>';
+
+      html += '<section class="tal-section">';
+      html += '  <h2 class="tal-section-name">Charm Sets</h2>';
+      for (const s of t.sets) {
+        const isOwned = !!owned.ownedSets[s.id];
+        html += '<article class="tal-set tal-set-' + s.tier + ' ' + (isOwned ? 'is-owned' : '') + '">';
+        html += '  <header class="tal-set-head">';
+        html += '    <h3 class="tal-set-name">' + escapeHtml(s.name) + '</h3>';
+        html += '    <span class="tal-set-tier">' + s.tier + '</span>';
+        if (s.classSpecific) html += '<span class="tal-set-class">' + escapeHtml(s.classSpecific) + '</span>';
+        html += '    <span class="wt-conf wt-conf-' + (s.confidence || 'MEDIUM').toLowerCase() + '">' + (s.confidence || 'MEDIUM') + '</span>';
+        html += '  </header>';
+        html += '  <ul class="tal-set-bonuses">';
+        for (const pieces of Object.keys(s.bonuses).sort((a, b) => parseInt(a) - parseInt(b))) {
+          html += '<li><span class="tal-set-pieces">' + pieces + '-piece:</span> ' + escapeHtml(s.bonuses[pieces]) + '</li>';
+        }
+        html += '  </ul>';
+        html += '  <button type="button" class="btn btn-ghost tal-set-toggle" data-tal-set="' + s.id + '">' + (isOwned ? 'Mark not owned' : 'Mark set owned') + '</button>';
+        html += '</article>';
+      }
+      html += '</section>';
+
+      html += '<section class="tal-section">';
+      html += '  <h2 class="tal-section-name">Unique Charms</h2>';
+      for (const u of t.uniqueCharms) {
+        const isOwned = !!owned.ownedUniqueCharms[u.id];
+        html += '<article class="tal-unique ' + (isOwned ? 'is-owned' : '') + '">';
+        html += '  <header class="tal-unique-head">';
+        html += '    <h3 class="tal-unique-name">' + escapeHtml(u.name) + '</h3>';
+        html += '    <span class="aspect-priority aspect-priority-tag-' + u.priority + '">' + u.priority + '</span>';
+        html += '    <span class="wt-conf wt-conf-' + (u.confidence || 'MEDIUM').toLowerCase() + '">' + (u.confidence || 'MEDIUM') + '</span>';
+        html += '  </header>';
+        html += '  <p class="tal-unique-effect">' + escapeHtml(u.effect) + '</p>';
+        html += '  <div class="tal-unique-source">Source: ' + escapeHtml(u.source) + '</div>';
+        html += '  <button type="button" class="btn btn-ghost tal-unique-toggle" data-tal-uniq="' + u.id + '">' + (isOwned ? 'Mark not owned' : 'Mark owned') + '</button>';
+        html += '</article>';
+      }
+      html += '</section>';
+
+      root.innerHTML = html;
+      this.bind();
+    },
+
+    bound: false,
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+      main.addEventListener('click', (e) => {
+        const sBtn = e.target.closest && e.target.closest('[data-tal-set]');
+        if (sBtn) {
+          const id = sBtn.getAttribute('data-tal-set');
+          if (!AppState.data.talismans.ownedSets) AppState.data.talismans.ownedSets = {};
+          AppState.data.talismans.ownedSets[id] = !AppState.data.talismans.ownedSets[id];
+          AppState.save('talismans');
+          Talismans.render();
+          return;
+        }
+        const uBtn = e.target.closest && e.target.closest('[data-tal-uniq]');
+        if (uBtn) {
+          const id = uBtn.getAttribute('data-tal-uniq');
+          if (!AppState.data.talismans.ownedUniqueCharms) AppState.data.talismans.ownedUniqueCharms = {};
+          AppState.data.talismans.ownedUniqueCharms[id] = !AppState.data.talismans.ownedUniqueCharms[id];
+          AppState.save('talismans');
+          Talismans.render();
+        }
+      });
+    },
+  };
+
+  // ========================================
+  // WAR PLANS RENDERER
+  // ========================================
+  const WarPlans = {
+    render() {
+      const root = document.getElementById('warplansRoot');
+      if (!root) return;
+      const wp = (window.D4_DATA && window.D4_DATA.warPlans);
+      if (!wp) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-hammer placeholder-icon"></i><div class="placeholder-title">No war plan data</div></div>';
+        return;
+      }
+      const plan = AppState.data.warplans || {};
+      const planCount = Object.values(plan).filter((x) => x && x.inPlan).length;
+      const max = wp.maxPlanSize || 5;
+
+      let html = '';
+      html += '<div class="wp-status">';
+      html += '  <div class="wp-status-row"><div class="wp-status-label">Plan Slots</div><div class="wp-status-pct">' + planCount + ' / ' + max + '</div></div>';
+      html += '  <div class="wp-status-bar"><div class="wp-status-fill" style="width:' + Math.min(100, (planCount / max) * 100) + '%"></div></div>';
+      html += '  <p class="wp-overview">' + escapeHtml(wp.overview) + '</p>';
+      html += '</div>';
+
+      html += '<div class="wp-list">';
+      for (const a of wp.activities) {
+        const inPlan = !!(plan[a.id] && plan[a.id].inPlan);
+        const tierClass = 'wp-tier-' + a.tier.toLowerCase().replace('+', 'plus');
+        html += '<article class="wp ' + (inPlan ? 'is-in-plan' : '') + ' ' + tierClass + '" data-wp="' + a.id + '">';
+        html += '  <header class="wp-head">';
+        html += '    <h3 class="wp-name">' + escapeHtml(a.name) + '</h3>';
+        html += '    <span class="wp-tier-tag">' + escapeHtml(a.tier) + '</span>';
+        html += '    <span class="wt-conf wt-conf-' + (a.confidence || 'MEDIUM').toLowerCase() + '">' + (a.confidence || 'MEDIUM') + '</span>';
+        html += '  </header>';
+        html += '  <p class="wp-summary">' + escapeHtml(a.rewardSummary) + '</p>';
+        if (a.rewardItems && a.rewardItems.length) {
+          html += '<div class="wp-rewards">';
+          for (const r of a.rewardItems) html += '<span class="wp-reward">' + escapeHtml(r) + '</span>';
+          html += '</div>';
+        }
+        html += '  <div class="wp-meta"><span class="wp-meta-label">Cadence:</span> ' + escapeHtml(a.cadence) + '</div>';
+        if (a.notes) html += '<p class="wp-notes">' + escapeHtml(a.notes) + '</p>';
+        html += '  <button type="button" class="btn ' + (inPlan ? 'btn-ghost' : 'btn-danger') + ' wp-toggle" data-wp-toggle="' + a.id + '">' + (inPlan ? 'Remove from plan' : 'Add to plan') + '</button>';
+        html += '</article>';
+      }
+      html += '</div>';
+
+      root.innerHTML = html;
+      this.bind();
+    },
+
+    bound: false,
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+      main.addEventListener('click', (e) => {
+        const btn = e.target.closest && e.target.closest('[data-wp-toggle]');
+        if (btn) {
+          const id = btn.getAttribute('data-wp-toggle');
+          if (!AppState.data.warplans[id]) AppState.data.warplans[id] = {};
+          const cur = !!AppState.data.warplans[id].inPlan;
+          const wpData = (window.D4_DATA && window.D4_DATA.warPlans) || { maxPlanSize: 5 };
+          if (!cur) {
+            const count = Object.values(AppState.data.warplans).filter((x) => x && x.inPlan).length;
+            if (count >= wpData.maxPlanSize) {
+              Toast.show('Plan full (' + wpData.maxPlanSize + ' slots). Remove one first.', 'warn');
+              return;
+            }
+          }
+          AppState.data.warplans[id].inPlan = !cur;
+          AppState.data.warplans[id].ts = Date.now();
+          AppState.save('warplans');
+          WarPlans.render();
+        }
+      });
+    },
+  };
+
+  // ========================================
+  // MERCENARY RENDERER
+  // ========================================
+  const Mercenary = {
+    render() {
+      const root = document.getElementById('mercenaryRoot');
+      if (!root) return;
+      const mercs = (window.D4_DATA && window.D4_DATA.mercenaries) || [];
+      const pairs = (window.D4_DATA && window.D4_DATA.mercPairs) || [];
+      if (!mercs.length) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-hammer placeholder-icon"></i><div class="placeholder-title">No mercenary data</div></div>';
+        return;
+      }
+      const state = AppState.data.mercs || { hired: null, reinforcement: null };
+      const findM = (id) => mercs.find((m) => m.id === id);
+
+      let html = '';
+
+      html += '<section class="merc-section">';
+      html += '  <h2 class="merc-section-name">Recommended Pairs</h2>';
+      html += '  <div class="merc-pair-list">';
+      for (const p of pairs) {
+        const h = findM(p.hired); const r = findM(p.reinforcement);
+        const isActive = state.hired === p.hired && state.reinforcement === p.reinforcement;
+        html += '<article class="merc-pair ' + (isActive ? 'is-active' : '') + '" data-pair="' + p.id + '">';
+        html += '  <header class="merc-pair-head"><h3 class="merc-pair-name">' + escapeHtml(p.name) + '</h3>' + (isActive ? '<span class="merc-pair-active">Active</span>' : '') + '</header>';
+        html += '  <div class="merc-pair-slots">';
+        html += '    <div class="merc-pair-slot"><div class="merc-pair-role">Hired</div><div class="merc-pair-merc">' + escapeHtml((h && h.name) || p.hired) + '</div></div>';
+        html += '    <div class="merc-pair-slot"><div class="merc-pair-role">Reinforcement</div><div class="merc-pair-merc">' + escapeHtml((r && r.name) || p.reinforcement) + '</div></div>';
+        html += '  </div>';
+        html += '  <p class="merc-pair-notes">' + escapeHtml(p.notes) + '</p>';
+        html += '  <button type="button" class="btn ' + (isActive ? 'btn-ghost' : 'btn-danger') + ' merc-pair-btn" data-merc-pair="' + p.id + '">' + (isActive ? 'Active' : 'Set as active') + '</button>';
+        html += '</article>';
+      }
+      html += '  </div>';
+      html += '</section>';
+
+      html += '<section class="merc-section">';
+      html += '  <h2 class="merc-section-name">Mercenaries</h2>';
+      html += '  <div class="merc-list">';
+      for (const m of mercs) {
+        html += '<article class="merc">';
+        html += '  <header class="merc-head">';
+        html += '    <h3 class="merc-name">' + escapeHtml(m.name) + '</h3>';
+        html += '    <span class="merc-role merc-role-' + m.role.toLowerCase() + '">' + escapeHtml(m.role) + '</span>';
+        html += '    <span class="merc-style">' + escapeHtml(m.style) + '</span>';
+        html += '  </header>';
+        html += '  <p class="merc-role-text">' + escapeHtml(m.buildRole) + '</p>';
+        html += '  <div class="merc-skills"><span class="merc-skills-label">Key:</span>';
+        for (const ks of (m.keySkills || [])) html += '<span class="merc-skill">' + escapeHtml(ks) + '</span>';
+        html += '  </div>';
+        html += '  <div class="merc-upgrade"><span class="merc-upgrade-label">Upgrade order:</span> ' + (m.upgradePriority || []).map(escapeHtml).join(' &rsaquo; ') + '</div>';
+        html += '</article>';
+      }
+      html += '  </div>';
+      html += '</section>';
+
+      root.innerHTML = html;
+      this.bind();
+    },
+
+    bound: false,
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+      main.addEventListener('click', (e) => {
+        const btn = e.target.closest && e.target.closest('[data-merc-pair]');
+        if (btn) {
+          const id = btn.getAttribute('data-merc-pair');
+          const pairs = (window.D4_DATA && window.D4_DATA.mercPairs) || [];
+          const p = pairs.find((x) => x.id === id);
+          if (!p) return;
+          AppState.data.mercs.hired = p.hired;
+          AppState.data.mercs.reinforcement = p.reinforcement;
+          AppState.save('mercs');
+          Toast.show('Active pair: ' + p.name, 'success');
+          Mercenary.render();
+        }
+      });
+    },
+  };
+
+  // ========================================
+  // PATCH NOTES + DATA FRESHNESS
+  // ========================================
+  const Patch = {
+    render() {
+      const root = document.getElementById('patchRoot');
+      if (!root) return;
+      const meta = (window.D4_DATA && window.D4_DATA.patchMeta) || {};
+      const verified = AppState.data.verified || {};
+
+      const layers = [
+        { key: 'skills', label: 'Skill names + upgrade variants', confidence: 'HIGH', source: 'FextraLife wiki' },
+        { key: 'endgameBar', label: 'Endgame skill bar', confidence: 'HIGH', source: 'Maxroll endgame + Mobalytics' },
+        { key: 'shards', label: 'Soul Shards + Fragments', confidence: 'HIGH', source: 'FextraLife wiki' },
+        { key: 'aspects-core', label: 'Core aspects (Deeper Shadows, Juggernaut, Calamity)', confidence: 'HIGH', source: 'Maxroll' },
+        { key: 'aspects-strong', label: 'Strong aspects (Demonic Pact, Profane, etc.)', confidence: 'MEDIUM', source: 'Maxroll (effects partial)' },
+        { key: 'uniques-core', label: 'Core uniques (Litany, Footfalls, Heir, Starless)', confidence: 'HIGH', source: 'Maxroll + FextraLife + Aoeah' },
+        { key: 'uniques-seed', label: 'Seed of Horazon -> Grigoire', confidence: 'MEDIUM', source: 'Maxroll' },
+        { key: 'glyph-priority', label: 'Glyph priority order', confidence: 'HIGH', source: 'Maxroll' },
+        { key: 'board-rotation', label: 'Paragon board rotation names', confidence: 'MEDIUM', source: 'Canonical glyph-keyed boards; Maxroll diagrams visual-only' },
+        { key: 'bartuc-footfalls', label: 'Bartuc alt Footfalls drop', confidence: 'LOW', source: 'Aoeah Season 13 notes only' },
+        { key: 'talisman-sets', label: 'Charm Set bonuses', confidence: 'MEDIUM', source: 'User-locked + FextraLife (LoH live data still expanding)' },
+        { key: 'walkthrough', label: 'Leveling walkthrough phases', confidence: 'HIGH', source: 'Maxroll leveling + Icy Veins' },
+      ];
+
+      let html = '';
+
+      html += '<section class="patch-banner">';
+      html += '  <div class="patch-banner-title"><i class="fa-solid fa-fire"></i> Patch ' + meta.version + ' ' + meta.name + '</div>';
+      html += '  <div class="patch-banner-meta">Season ' + meta.season + ' &middot; ' + meta.seasonName + ' &middot; Launched ' + meta.releaseDate + '</div>';
+      html += '  <div class="patch-banner-compiled">Data compiled ' + ((window.D4_DATA && window.D4_DATA.compiledAt) || 'unknown') + '</div>';
+      html += '</section>';
+
+      html += '<section class="patch-section">';
+      html += '  <h2 class="patch-section-name">Data Freshness</h2>';
+      html += '  <p class="patch-section-desc">Each row shows the source confidence and a checkbox for you to mark when you have verified the data in-game.</p>';
+      html += '  <div class="patch-layers">';
+      for (const layer of layers) {
+        const isVerified = !!verified[layer.key];
+        html += '<div class="patch-layer ' + (isVerified ? 'is-verified' : '') + '">';
+        html += '  <label class="patch-layer-check"><input type="checkbox" class="patch-cb" data-verify="' + layer.key + '"' + (isVerified ? ' checked' : '') + ' /><span></span></label>';
+        html += '  <div class="patch-layer-text">';
+        html += '    <div class="patch-layer-label">' + escapeHtml(layer.label) + '</div>';
+        html += '    <div class="patch-layer-source">' + escapeHtml(layer.source) + '</div>';
+        html += '  </div>';
+        html += '  <span class="wt-conf wt-conf-' + layer.confidence.toLowerCase() + '">' + layer.confidence + '</span>';
+        html += '</div>';
+      }
+      html += '  </div>';
+      html += '</section>';
+
+      html += '<section class="patch-section">';
+      html += '  <h2 class="patch-section-name">Hotfix Log</h2>';
+      if (!meta.hotfixes || !meta.hotfixes.length) {
+        html += '<div class="patch-empty">No hotfixes recorded since data compile. Check the official patch notes when Blizzard pushes a balance update.</div>';
+      } else {
+        html += '<ul class="patch-hotfixes">';
+        for (const h of meta.hotfixes) {
+          html += '<li><strong>' + escapeHtml(h.date) + ':</strong> ' + escapeHtml(h.summary) + '</li>';
+        }
+        html += '</ul>';
+      }
+      html += '</section>';
+
+      html += '<section class="patch-section">';
+      html += '  <h2 class="patch-section-name">Sources</h2>';
+      html += '  <ul class="patch-sources">';
+      for (const s of (meta.sources || [])) {
+        html += '<li><a href="' + s.url + '" target="_blank" rel="noopener"><strong>' + escapeHtml(s.name) + '</strong></a> &middot; <span>' + escapeHtml(s.role) + '</span></li>';
+      }
+      html += '  </ul>';
+      html += '</section>';
+
+      root.innerHTML = html;
+      this.bind();
+    },
+
+    bound: false,
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+      main.addEventListener('change', (e) => {
+        const t = e.target;
+        if (t && t.classList && t.classList.contains('patch-cb')) {
+          const key = t.getAttribute('data-verify');
+          AppState.data.verified[key] = t.checked;
+          AppState.save('verified');
+          Patch.render();
+        }
+      });
+    },
+  };
+
+  // ========================================
   // NAV BADGE UPDATER
   // ========================================
   const Nav = {
@@ -1614,16 +2006,7 @@
           const ok = AppState.importSave(ev.target.result);
           if (ok) {
             Theme.apply(AppState.data.settings.theme || 'dark');
-            Dashboard.render();
-            Walkthrough.render();
-            Skills.render();
-            Shards.render();
-            Aspects.render();
-            Paragon.render();
-            Uniques.render();
-            Bosses.render();
-            Endbuild.render();
-            Nav.updateBadges();
+            QuickUpdate.renderAll();
             Toast.show('Save imported', 'success');
           } else {
             Toast.show('Invalid save file', 'error');
@@ -1641,16 +2024,7 @@
           () => {
             AppState.reset();
             Theme.apply('dark');
-            Dashboard.render();
-            Walkthrough.render();
-            Skills.render();
-            Shards.render();
-            Aspects.render();
-            Paragon.render();
-            Uniques.render();
-            Bosses.render();
-            Endbuild.render();
-            Nav.updateBadges();
+            QuickUpdate.renderAll();
             Toast.show('Reset complete', 'success');
           },
           'Reset Everything?'
@@ -1671,16 +2045,7 @@
     QuickUpdate.init();
     Router.init();
     initIO();
-    Dashboard.render();
-    Walkthrough.render();
-    Skills.render();
-    Shards.render();
-    Aspects.render();
-    Paragon.render();
-    Uniques.render();
-    Bosses.render();
-    Endbuild.render();
-    Nav.updateBadges();
+    QuickUpdate.renderAll();
 
     // Welcome toast on first visit
     if (!AppState.data.settings.welcomed) {
@@ -1699,6 +2064,6 @@
   }
 
   // Expose for debugging
-  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, Skills, Shards, Aspects, Paragon, Uniques, Bosses, Endbuild, Toast, Modal, Nav };
+  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, Skills, Shards, Aspects, Paragon, Uniques, Bosses, Endbuild, Talismans, WarPlans, Mercenary, Patch, Toast, Modal, Nav };
 
 })();

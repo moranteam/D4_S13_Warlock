@@ -392,6 +392,254 @@ window.D4_DATA = {
   ],
 
   /* ==========================================
+     TALISMANS, SEALS, CHARMS (LoH new system)
+     Unlock: Last of the Horadrim main questline.
+     Drop rules: Set Charms from Torment 1+, more in T3.
+     Unique Charms more in T8. Mythic Horadric Seals more
+     in T10+.
+     ========================================== */
+  talismans: {
+    unlock: 'Complete the Last of the Horadrim main questline in the Lord of Hatred campaign. Talisman tab appears in inventory and Charms begin dropping in the open world.',
+    dropRules: 'Set Charms drop from Torment 1 onward, more common in T3. Unique Charms more common from T8. Mythic Horadric Seals more common from T10+.',
+    sealPriority: [
+      { priority: 1, target: 'Maximum Charm Slots (5-slot Mythic Horadric Seal target)', notes: 'Outer socket count is the biggest swing factor.' },
+      { priority: 2, target: 'Unique-rarity Charm slots', notes: 'Lets you slot Endurant Faith without losing set count.' },
+      { priority: 3, target: 'Set-specific bonus multiplier', notes: 'Seal bonus stacks on the set effect.' },
+    ],
+    charmTargets: [
+      { affix: 'XP Gain', priority: 'core', notes: 'Leveling phase: stack 2+ XP charms for Stronghold and Helltide rushes.' },
+      { affix: 'Movement Speed', priority: 'core', notes: 'Quality of life and uptime on Dread Claws AoE positioning.' },
+      { affix: 'Attack Speed', priority: 'core', notes: 'Direct damage multiplier; pairs with Aggressive aspect.' },
+      { affix: '+Abyss / Demonology Skill Ranks', priority: 'strong', notes: 'Charm-only stat, hard to source elsewhere.' },
+      { affix: 'Maximum Life', priority: 'strong', notes: 'Survival floor, scales Temerity barrier.' },
+      { affix: 'Resist (Lightning/Fire/Poison/Physical)', priority: 'strong', notes: 'Cap each before stat optimization on rares.' },
+    ],
+    sets: [
+      {
+        id: 'shadow-of-harash',
+        name: 'Shadow of Harash',
+        tier: 'core',
+        classSpecific: 'Warlock (Shadowform focus)',
+        bonuses: {
+          2: 'Increased Shadowform generation rate.',
+          3: 'Shadowform stacks last longer.',
+          5: 'x350% Abyss damage while in Shadowform. Consumes 1 Shadowform stack per Abyss skill cast.',
+        },
+        sources: ['fextralife', 'maxroll', 'user-locked'],
+        confidence: 'HIGH',
+      },
+      {
+        id: 'slaughter',
+        name: 'Slaughter Set',
+        tier: 'strong',
+        classSpecific: 'Any class',
+        bonuses: {
+          2: 'Increased Elite damage dealt.',
+          3: 'Damage reduction from Elites.',
+          5: 'Combined elite damage and reduction multipliers, scales boss-clear speed.',
+        },
+        sources: ['user-locked'],
+        confidence: 'MEDIUM',
+      },
+      {
+        id: 'practiced-technique',
+        name: 'Practiced Technique',
+        tier: 'leveling',
+        classSpecific: 'Any class',
+        bonuses: {
+          2: 'Skill cooldown reduction or basic stat boost.',
+          3: 'Damage boost on Core skills.',
+          5: 'Early game filler bonus; swap out for Shadow of Harash at endgame.',
+        },
+        sources: ['user-locked'],
+        confidence: 'MEDIUM',
+      },
+    ],
+    uniqueCharms: [
+      {
+        id: 'endurant-faith',
+        name: 'Endurant Faith',
+        priority: 'core',
+        effect: 'Mandatory endgame defensive layer. Provides scaling damage reduction or barrier (verify exact effect in-game on drop).',
+        source: 'Unique Charm pool (T8+ drop rate spike)',
+        confidence: 'MEDIUM',
+        sources: ['user-locked'],
+      },
+    ],
+  },
+
+  /* ==========================================
+     WAR PLANS (LoH new endgame system)
+     Custom playlist of up to 5 activities with per-activity
+     skill trees. Activities below are listed in priority
+     order for the Dread Claws Mastermind farm cycle.
+     ========================================== */
+  warPlans: {
+    overview: 'Build a custom playlist of up to 5 endgame activities. You run them in sequence and collect consolidated bonus rewards at the end. Each activity has its own skill tree you level by running it.',
+    maxPlanSize: 5,
+    activities: [
+      {
+        id: 'helltides',
+        name: 'Helltides',
+        tier: 'S',
+        rewardSummary: 'Forgotten Souls, Lair Keys, large XP bursts, Tortured Gifts.',
+        rewardItems: ['Forgotten Souls', 'Lair Keys', 'Living Steel', 'Tortured Gifts'],
+        cadence: 'Hourly window (continuous in LoH)',
+        notes: 'Top priority for Season 13 resource economy.',
+        sources: ['mobalytics', 'icyveins'],
+        confidence: 'HIGH',
+      },
+      {
+        id: 'kurast-undercity',
+        name: 'Undercity of Kurast',
+        tier: 'S',
+        rewardSummary: 'Customizable rewards via Attunement Rank, Tributes, and Bargains. Fast clear times.',
+        rewardItems: ['Targeted Aspects', 'Gold', 'Mats per Bargain'],
+        cadence: 'On-demand via Tributes',
+        notes: 'Fastest run-time among S-tier. Stack with bargains for specific aspect targeting.',
+        sources: ['mobalytics', 'icyveins'],
+        confidence: 'HIGH',
+      },
+      {
+        id: 'echoing-hatred',
+        name: 'Echoing Hatred',
+        tier: 'A',
+        rewardSummary: 'LoH-specific seasonal activity. Drops Talisman materials and Charm fragments.',
+        rewardItems: ['Charm Fragments', 'LoH currency'],
+        cadence: 'Daily / seasonal reset',
+        notes: 'Run for Talisman system progression specifically.',
+        sources: ['mobalytics'],
+        confidence: 'MEDIUM',
+      },
+      {
+        id: 'strongholds',
+        name: 'Strongholds',
+        tier: 'A',
+        rewardSummary: 'Massive one-time XP burst on clear. Unlocks Aspect codex entries.',
+        rewardItems: ['XP burst', 'Codex aspect unlocks'],
+        cadence: 'One-time per character (re-clearable seasonally)',
+        notes: 'Top XP source between Levels 60 and 70.',
+        sources: ['maxroll'],
+        confidence: 'HIGH',
+      },
+      {
+        id: 'whispers',
+        name: 'Tree of Whispers',
+        tier: 'B',
+        rewardSummary: 'Caches with rerolled affixes, Boss Materials (Grim Favors).',
+        rewardItems: ['Grim Favor', 'Boss Mats', 'Targeted rare gear'],
+        cadence: 'Continuous, cache turn-in every 10 Favors',
+        notes: 'Run to summon Lair Bosses. Less efficient as a standalone activity.',
+        sources: ['maxroll', 'mobalytics'],
+        confidence: 'HIGH',
+      },
+      {
+        id: 'infernal-hordes',
+        name: 'Infernal Hordes',
+        tier: 'A',
+        rewardSummary: 'Wave survival arena. Generates Burning Aether. Talisman Chest after Bartuc/Council.',
+        rewardItems: ['Burning Aether', 'Talismans (Set + Unique Charms)', 'Gear chests'],
+        cadence: 'On-demand via compass',
+        notes: 'Primary Talisman drop activity. Stack the Talisman node on the modifier tree.',
+        sources: ['mobalytics'],
+        confidence: 'HIGH',
+      },
+      {
+        id: 'the-pit',
+        name: 'The Pit',
+        tier: 'S+',
+        rewardSummary: 'Glyph XP, Masterwork mats, Torment progression gate.',
+        rewardItems: ['Glyph XP', 'Masterwork Mats'],
+        cadence: 'Stygian Stone per run, refreshes via Whispers',
+        notes: 'The only Glyph leveling source. Pit T10 clear unlocks Torment 1.',
+        sources: ['maxroll', 'mobalytics'],
+        confidence: 'HIGH',
+      },
+    ],
+  },
+
+  /* ==========================================
+     MERCENARIES (Vessel of Hatred carry-over)
+     4 Mercs: 1 Hired (active), 1 Reinforcement (passive
+     proc on trigger). Master prompt locks the build pairs.
+     ========================================== */
+  mercenaries: [
+    {
+      id: 'subo',
+      name: 'Subo',
+      role: 'Hired',
+      style: 'Tracker / Marksman',
+      buildRole: 'Primary hired for leveling. Reveals chests and applies Vulnerable for free.',
+      keySkills: ['Vulnerable application', 'Chest reveal'],
+      upgradePriority: ['Vulnerable Damage node', 'Cooldown reduction', 'Crit Chance auras'],
+      pair: 'leveling',
+      sources: ['user-locked', 'maxroll'],
+      confidence: 'HIGH',
+    },
+    {
+      id: 'aldkin',
+      name: 'Aldkin',
+      role: 'Reinforcement',
+      style: 'Caster / Demon-touched',
+      buildRole: 'Default reinforcement. Fields of Languish gives 20% damage reduction when you take damage.',
+      keySkills: ['Fields of Languish (20% DR)', 'Shadowform synergy'],
+      upgradePriority: ['Fields of Languish', 'DR multipliers', 'Shadowform buffs'],
+      pair: 'leveling',
+      sources: ['user-locked'],
+      confidence: 'HIGH',
+    },
+    {
+      id: 'raheir',
+      name: 'Raheir',
+      role: 'Hired',
+      style: 'Tank / Barbarian',
+      buildRole: 'Alt hired for survivability. Ground Slam plus Bastion plus Aegis plus Inspiration for boss farming.',
+      keySkills: ['Ground Slam', 'Bastion (barrier)', 'Aegis (taunt)', 'Inspiration (Resource regen)'],
+      upgradePriority: ['Bastion', 'Aegis', 'Inspiration', 'Ground Slam damage'],
+      pair: 'boss-farm',
+      sources: ['user-locked', 'maxroll'],
+      confidence: 'HIGH',
+    },
+    {
+      id: 'varyana',
+      name: 'Varyana',
+      role: 'Reinforcement',
+      style: 'Berserker / Healer',
+      buildRole: 'Alt reinforcement. Taste of Flesh plus Hysteria provides healing and attack speed.',
+      keySkills: ['Taste of Flesh (heal proc)', 'Hysteria (attack speed)'],
+      upgradePriority: ['Taste of Flesh', 'Hysteria', 'Attack Speed nodes'],
+      pair: 'boss-farm',
+      sources: ['user-locked'],
+      confidence: 'HIGH',
+    },
+  ],
+  mercPairs: [
+    { id: 'leveling', name: 'Leveling Pair', hired: 'subo', reinforcement: 'aldkin', notes: 'Subo applies Vulnerable for free DPS, Aldkin caps the DR floor. Run from Level 1 to 70.' },
+    { id: 'boss-farm', name: 'Boss Farming Pair', hired: 'raheir', reinforcement: 'varyana', notes: 'Raheir tanks and taunts, Varyana keeps you healed and fast. Use for Lair Boss runs once gear is locked.' },
+    { id: 'endgame', name: 'Endgame Pair', hired: 'subo', reinforcement: 'varyana', notes: 'Once you outgear leveling, swap Aldkin for Varyana. Vulnerable plus heal plus attack speed.' },
+  ],
+
+  /* ==========================================
+     PATCH METADATA
+     ========================================== */
+  patchMeta: {
+    name: 'Lord of Hatred',
+    version: '3.0',
+    season: 13,
+    seasonName: 'Season of Reckoning',
+    releaseDate: '2026-04-28',
+    sources: [
+      { name: 'Maxroll', url: 'https://maxroll.gg/d4', role: 'Build guides, paragon, tier lists' },
+      { name: 'Icy Veins', url: 'https://www.icy-veins.com/d4', role: 'Build mechanics, leveling' },
+      { name: 'Mobalytics', url: 'https://mobalytics.gg/diablo-4', role: 'Theorycrafting, variants' },
+      { name: 'FextraLife wiki', url: 'https://diablo4.wiki.fextralife.com', role: 'Authoritative in-game names' },
+      { name: 'Game8', url: 'https://game8.co/games/Diablo-4', role: 'Tier lists, quick reference' },
+      { name: 'Wowhead D4', url: 'https://www.wowhead.com/diablo-4', role: 'Item database' },
+    ],
+    hotfixes: [],
+  },
+
+  /* ==========================================
      BOSSES (Lair Bosses + Pinnacle)
      LoH change: each unique now has ONE dedicated drop
      location. Mythic uniques drop from any boss at low rates.
