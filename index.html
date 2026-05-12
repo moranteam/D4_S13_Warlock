@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#8B0000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="D4 Warlock" />
+  <meta name="description" content="Diablo IV Season 13 Lord of Hatred. Dread Claws Mastermind Warlock leveling and endgame companion." />
+
+  <title>D4 Warlock God Run | Season 13 Lord of Hatred</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="theme-dark">
+
+  <!-- =========================================== -->
+  <!-- TOP BAR                                     -->
+  <!-- =========================================== -->
+  <header class="topbar" id="topbar">
+    <button class="topbar-btn topbar-menu" id="sidebarToggle" aria-label="Toggle navigation">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div class="topbar-brand">
+      <span class="topbar-brand-icon"><i class="fa-solid fa-skull"></i></span>
+      <div class="topbar-brand-text">
+        <div class="topbar-brand-title">D4 WARLOCK</div>
+        <div class="topbar-brand-sub">Dread Claws Mastermind</div>
+      </div>
+    </div>
+
+    <div class="topbar-current" id="topbarCurrent">Dashboard</div>
+
+    <div class="topbar-actions">
+      <button class="topbar-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <button class="topbar-btn" id="exportBtn" aria-label="Export save" title="Export save">
+        <i class="fa-solid fa-download"></i>
+      </button>
+      <button class="topbar-btn" id="importBtn" aria-label="Import save" title="Import save">
+        <i class="fa-solid fa-upload"></i>
+      </button>
+      <button class="topbar-btn topbar-btn-danger" id="resetBtn" aria-label="Reset all" title="Reset all">
+        <i class="fa-solid fa-rotate-left"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================== -->
+  <!-- SIDEBAR NAV                                 -->
+  <!-- =========================================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-scroll">
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Overview</div>
+        <a href="#dashboard" class="nav-item" data-section="dashboard">
+          <i class="fa-solid fa-gauge-high nav-icon"></i>
+          <span class="nav-label">Dashboard</span>
+        </a>
+        <a href="#patch" class="nav-item" data-section="patch">
+          <i class="fa-solid fa-clipboard-list nav-icon"></i>
+          <span class="nav-label">Patch Notes</span>
+        </a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Leveling (1 to 70)</div>
+        <a href="#walkthrough" class="nav-item" data-section="walkthrough">
+          <i class="fa-solid fa-route nav-icon"></i>
+          <span class="nav-label">Walkthrough</span>
+          <span class="nav-badge" id="navBadgeWalkthrough">0%</span>
+        </a>
+        <a href="#skills" class="nav-item" data-section="skills">
+          <i class="fa-solid fa-sitemap nav-icon"></i>
+          <span class="nav-label">Skill Tree</span>
+        </a>
+        <a href="#shards" class="nav-item" data-section="shards">
+          <i class="fa-solid fa-gem nav-icon"></i>
+          <span class="nav-label">Soul Shards</span>
+        </a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Gear & Stats</div>
+        <a href="#aspects" class="nav-item" data-section="aspects">
+          <i class="fa-solid fa-wand-magic-sparkles nav-icon"></i>
+          <span class="nav-label">Aspect Tracker</span>
+          <span class="nav-badge" id="navBadgeAspects">0/0</span>
+        </a>
+        <a href="#uniques" class="nav-item" data-section="uniques">
+          <i class="fa-solid fa-trophy nav-icon"></i>
+          <span class="nav-label">Unique Chase</span>
+          <span class="nav-badge" id="navBadgeUniques">0/0</span>
+        </a>
+        <a href="#talismans" class="nav-item" data-section="talismans">
+          <i class="fa-solid fa-coins nav-icon"></i>
+          <span class="nav-label">Talisman & Charms</span>
+        </a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Endgame</div>
+        <a href="#paragon" class="nav-item" data-section="paragon">
+          <i class="fa-solid fa-table-cells-large nav-icon"></i>
+          <span class="nav-label">Paragon Boards</span>
+        </a>
+        <a href="#bosses" class="nav-item" data-section="bosses">
+          <i class="fa-solid fa-dragon nav-icon"></i>
+          <span class="nav-label">Boss Farming</span>
+        </a>
+        <a href="#warplans" class="nav-item" data-section="warplans">
+          <i class="fa-solid fa-fire nav-icon"></i>
+          <span class="nav-label">War Plans</span>
+        </a>
+        <a href="#endbuild" class="nav-item" data-section="endbuild">
+          <i class="fa-solid fa-star nav-icon"></i>
+          <span class="nav-label">Endgame Build</span>
+        </a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Companions</div>
+        <a href="#mercenary" class="nav-item" data-section="mercenary">
+          <i class="fa-solid fa-shield nav-icon"></i>
+          <span class="nav-label">Mercenary</span>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-line">
+        <span class="footer-key">Patch</span>
+        <span class="footer-val">3.0 LoH</span>
+      </div>
+      <div class="sidebar-footer-line">
+        <span class="footer-key">Build</span>
+        <span class="footer-val">v0.1</span>
+      </div>
+      <div class="sidebar-footer-hint">
+        Press <kbd>/</kbd> to quick update
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sidebar backdrop for mobile -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- =========================================== -->
+  <!-- MAIN CONTENT                                -->
+  <!-- =========================================== -->
+  <main class="main" id="main">
+
+    <!-- DASHBOARD ============================ -->
+    <section class="view" id="view-dashboard" data-view="dashboard">
+      <div class="view-header">
+        <h1 class="view-title">Dashboard</h1>
+        <div class="view-subtitle">Where you are, what to do next</div>
+      </div>
+
+      <div class="dashboard-grid">
+
+        <div class="card card-hero">
+          <div class="hero-stat">
+            <div class="hero-label">Character Level</div>
+            <div class="hero-value" id="heroLevel">1</div>
+            <div class="hero-sub" id="heroBuild">Dread Claws Mastermind</div>
+          </div>
+          <div class="hero-progress">
+            <div class="hero-progress-bar"><div class="hero-progress-fill" id="heroLevelFill"></div></div>
+            <div class="hero-progress-label" id="heroLevelLabel">0 / 70</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Current Phase</h2>
+          </div>
+          <div class="card-body">
+            <div class="phase-name" id="phaseName">Pre-tutorial</div>
+            <div class="phase-desc" id="phaseDesc">Pick a starter zone and reach level 3 to unlock Dread Claws.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Next Pivot</h2>
+          </div>
+          <div class="card-body">
+            <div class="phase-name" id="pivotName">Level 15</div>
+            <div class="phase-desc" id="pivotDesc">Complete Warlock class quest. Take Mastermind Shard. Take Enveloping Terror on Dread Claws.</div>
+          </div>
+        </div>
+
+        <div class="card card-wide">
+          <div class="card-header">
+            <h2 class="card-title">Today's Priority</h2>
+            <span class="card-tag">Auto</span>
+          </div>
+          <div class="card-body">
+            <ul class="priority-list" id="priorityList">
+              <li class="priority-item">Reach level 15 to unlock Soul Shards</li>
+              <li class="priority-item">Complete Warlock class quest the moment it appears</li>
+              <li class="priority-item">Start salvaging gear for Deeper Shadows aspect</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Paragon</h2>
+          </div>
+          <div class="card-body">
+            <div class="stat-big" id="paragonBig">0</div>
+            <div class="stat-sub">of 300 points</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Torment</h2>
+          </div>
+          <div class="card-body">
+            <div class="stat-big" id="tormentBig">T0</div>
+            <div class="stat-sub" id="tormentSub">Pre-endgame</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Pit Cleared</h2>
+          </div>
+          <div class="card-body">
+            <div class="stat-big" id="pitBig">0</div>
+            <div class="stat-sub">highest tier</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- WALKTHROUGH ========================== -->
+    <section class="view" id="view-walkthrough" data-view="walkthrough" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Leveling Walkthrough</h1>
+        <div class="view-subtitle">Level 1 to 70 with respec triggers at 15, 30, 34, 40</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 2</div>
+        <div class="placeholder-text">Phase-based checklist with rank-up priority, respec milestones, and aspect imprint triggers.</div>
+      </div>
+    </section>
+
+    <!-- SKILL TREE =========================== -->
+    <section class="view" id="view-skills" data-view="skills" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Skill Tree Planner</h1>
+        <div class="view-subtitle">Skill ranks, variant paths, point allocation</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 3</div>
+        <div class="placeholder-text">Full skill tree data, visual rank tracker, and respec presets for levels 15, 30, 34, 40.</div>
+      </div>
+    </section>
+
+    <!-- SOUL SHARDS ========================== -->
+    <section class="view" id="view-shards" data-view="shards" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Soul Shards & Fragments</h1>
+        <div class="view-subtitle">All 4 shards, 12 fragments, locked recommendations</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 3</div>
+        <div class="placeholder-text">Mastermind, Legion, Vanguard, Ritualist with all fragment options and synergy notes.</div>
+      </div>
+    </section>
+
+    <!-- ASPECT TRACKER ======================= -->
+    <section class="view" id="view-aspects" data-view="aspects" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Aspect Tracker</h1>
+        <div class="view-subtitle">Imprint checklist, slot matcher, farm locations</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 3</div>
+        <div class="placeholder-text">Track which aspects you have, which slot they belong on, where to find them.</div>
+      </div>
+    </section>
+
+    <!-- UNIQUE CHASE ========================= -->
+    <section class="view" id="view-uniques" data-view="uniques" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Unique Chase List</h1>
+        <div class="view-subtitle">Build-defining drops with farm targets</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 4</div>
+        <div class="placeholder-text">Night Terror, Litany of Sable, Lurid Pact, Seed of Horazon, Heir of Perdition with drop tables.</div>
+      </div>
+    </section>
+
+    <!-- TALISMANS ============================ -->
+    <section class="view" id="view-talismans" data-view="talismans" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Talisman & Charm System</h1>
+        <div class="view-subtitle">Seal priority, charm targets, set bonuses</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 5</div>
+        <div class="placeholder-text">New Lord of Hatred Talisman layer with Seal slot priority and Charm stat targets.</div>
+      </div>
+    </section>
+
+    <!-- PARAGON ============================== -->
+    <section class="view" id="view-paragon" data-view="paragon" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Paragon Boards</h1>
+        <div class="view-subtitle">Board rotation, glyph leveling priority, legendary nodes</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 4</div>
+        <div class="placeholder-text">Board rush setup for sub 200 Paragon, full endgame rotation, Glyph leveling order (15 then 46).</div>
+      </div>
+    </section>
+
+    <!-- BOSSES =============================== -->
+    <section class="view" id="view-bosses" data-view="bosses" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Boss Farming Guide</h1>
+        <div class="view-subtitle">Pit tiers, Lair Bosses, Horadric Cube recipes</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 4</div>
+        <div class="placeholder-text">Drop tables for every Lair Boss, Mythic farming priority, Horadric Cube recipe optimizer.</div>
+      </div>
+    </section>
+
+    <!-- WAR PLANS ============================ -->
+    <section class="view" id="view-warplans" data-view="warplans" hidden>
+      <div class="view-header">
+        <h1 class="view-title">War Plans Tracker</h1>
+        <div class="view-subtitle">Helltides, Undercity, Echoing Hatred priorities</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 5</div>
+        <div class="placeholder-text">Customizable War Plans tree, activity rewards, reset cadence.</div>
+      </div>
+    </section>
+
+    <!-- ENDGAME BUILD ======================== -->
+    <section class="view" id="view-endbuild" data-view="endbuild" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Endgame Build Reference</h1>
+        <div class="view-subtitle">Full Dread Claws Mastermind at 70 and beyond</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 4</div>
+        <div class="placeholder-text">Skill bar, full Paragon, glyphs, aspects, uniques, tempers, masterwork priorities.</div>
+      </div>
+    </section>
+
+    <!-- MERCENARY ============================ -->
+    <section class="view" id="view-mercenary" data-view="mercenary" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Mercenary Guide</h1>
+        <div class="view-subtitle">Subo, Aldkin, Raheir, Varyana setups</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 5</div>
+        <div class="placeholder-text">Best hired and reinforcement combos for leveling vs endgame.</div>
+      </div>
+    </section>
+
+    <!-- PATCH NOTES ========================== -->
+    <section class="view" id="view-patch" data-view="patch" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Patch Notes & Updates</h1>
+        <div class="view-subtitle">Hotfix log, build adjustments, data freshness</div>
+      </div>
+      <div class="placeholder-card">
+        <i class="fa-solid fa-hammer placeholder-icon"></i>
+        <div class="placeholder-title">Wiring up in Batch 5</div>
+        <div class="placeholder-text">Patch 3.0 LoH launch notes, ongoing hotfix tracking, build recalc triggers.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================== -->
+  <!-- BOTTOM TAB BAR (mobile only)                -->
+  <!-- =========================================== -->
+  <nav class="bottombar" id="bottombar">
+    <a href="#dashboard" class="bottom-tab" data-section="dashboard">
+      <i class="fa-solid fa-gauge-high"></i>
+      <span>Home</span>
+    </a>
+    <a href="#walkthrough" class="bottom-tab" data-section="walkthrough">
+      <i class="fa-solid fa-route"></i>
+      <span>Level</span>
+    </a>
+    <a href="#aspects" class="bottom-tab" data-section="aspects">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+      <span>Aspects</span>
+    </a>
+    <a href="#uniques" class="bottom-tab" data-section="uniques">
+      <i class="fa-solid fa-trophy"></i>
+      <span>Uniques</span>
+    </a>
+    <button class="bottom-tab bottom-tab-fab" id="fabBottom" aria-label="Quick update">
+      <i class="fa-solid fa-bolt"></i>
+      <span>Update</span>
+    </button>
+  </nav>
+
+  <!-- =========================================== -->
+  <!-- QUICK UPDATE FAB (desktop)                  -->
+  <!-- =========================================== -->
+  <button class="fab" id="fab" aria-label="Quick update">
+    <i class="fa-solid fa-bolt"></i>
+  </button>
+
+  <!-- =========================================== -->
+  <!-- QUICK UPDATE MODAL                          -->
+  <!-- =========================================== -->
+  <div class="modal" id="modalQuick" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal="modalQuick"></div>
+    <div class="modal-panel modal-panel-quick">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <i class="fa-solid fa-bolt"></i> Quick Update
+        </h2>
+        <button class="modal-close" data-close-modal="modalQuick" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="quick-input" id="quickInput" placeholder="level 42  or  imprint deeper-shadows  or  got night-terror" autocomplete="off" />
+        <div class="quick-help">
+          <div class="quick-help-title">Commands</div>
+          <div class="quick-help-grid">
+            <div class="quick-help-row">
+              <code class="quick-cmd">level [n]</code>
+              <span class="quick-desc">Set character level</span>
+            </div>
+            <div class="quick-help-row">
+              <code class="quick-cmd">paragon [n]</code>
+              <span class="quick-desc">Set Paragon level</span>
+            </div>
+            <div class="quick-help-row">
+              <code class="quick-cmd">respec [15|30|34|40]</code>
+              <span class="quick-desc">Mark respec milestone done</span>
+            </div>
+            <div class="quick-help-row">
+              <code class="quick-cmd">shard [name]</code>
+              <span class="quick-desc">Set Soul Shard</span>
+            </div>
+            <div class="quick-help-row">
+              <code class="quick-cmd">fragment [name]</code>
+              <span class="quick-desc">Set Fragment</span>
+            </div>
+            <div class="quick-help-row">
+              <code class="quick-cmd">imprint [aspect]</code>
+              <span class="quick-desc">Mark aspect imprinted</span>
+            </div>
+            <div class="quick-help-row">
+              <code class="quick-cmd">got [unique]</code>
+              <span class="quick-desc">Mark unique acquired</span>
+            </div>
+            <div class="quick-help-row">
+              <code class="quick-cmd">pit [n]</code>
+              <span class="quick-desc">Mark Pit tier cleared</span>
+            </div>
+            <div class="quick-help-row">
+              <code class="quick-cmd">torment [n]</code>
+              <span class="quick-desc">Set Torment tier</span>
+            </div>
+            <div class="quick-help-row">
+              <code class="quick-cmd">boss [name]</code>
+              <span class="quick-desc">Increment boss kill counter</span>
+            </div>
+            <div class="quick-help-row">
+              <code class="quick-cmd">step [phase] [step]</code>
+              <span class="quick-desc">Toggle walkthrough step</span>
+            </div>
+          </div>
+          <div class="quick-tip">
+            Separate multiple commands with a semicolon. Press <kbd>Esc</kbd> to close.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================== -->
+  <!-- CONFIRM MODAL                               -->
+  <!-- =========================================== -->
+  <div class="modal" id="modalConfirm" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal="modalConfirm"></div>
+    <div class="modal-panel modal-panel-confirm">
+      <div class="modal-header">
+        <h2 class="modal-title" id="confirmTitle">Confirm</h2>
+      </div>
+      <div class="modal-body">
+        <p class="confirm-text" id="confirmText">Are you sure?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="confirmCancel">Cancel</button>
+        <button class="btn btn-danger" id="confirmOk">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden file input for import -->
+  <input type="file" id="importFile" accept="application/json" hidden />
+
+  <!-- =========================================== -->
+  <!-- TOAST CONTAINER                             -->
+  <!-- =========================================== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- =========================================== -->
+  <!-- SCRIPTS                                     -->
+  <!-- =========================================== -->
+  <!-- Data files load first (Batches 3, 4, 5 will populate these) -->
+  <script src="./data.js" onerror="window.D4_DATA = {};"></script>
+  <script src="./itemdata.js" onerror="window.D4_ITEMS = {};"></script>
+  <script src="./paragon.js" onerror="window.D4_PARAGON = {};"></script>
+
+  <!-- Engine -->
+  <script src="./app.js"></script>
+
+</body>
+</html>
