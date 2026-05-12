@@ -389,37 +389,6 @@ window.D4_DATA = {
       confidence: 'MEDIUM',
     },
 
-    /* === Specialty === */
-    {
-      id: 'aggressive', name: 'Aggressive Aspect',
-      slots: ['gloves'], slotFamily: 'offensive',
-      effect: 'Offensive gloves layer. Damage multiplier on Core skills (placeholder effect, verify in-game).',
-      priority: 'strong',
-      source: 'codex',
-      farm: 'Salvage legendary drops',
-      sources: ['mobalytics'],
-      confidence: 'LOW',
-    },
-    {
-      id: 'crushing', name: 'Crushing Aspect',
-      slots: ['ring'], slotFamily: 'offensive',
-      effect: 'Offensive ring layer.',
-      priority: 'strong',
-      source: 'codex',
-      farm: 'Salvage legendary drops',
-      sources: ['mobalytics'],
-      confidence: 'LOW',
-    },
-    {
-      id: 'demonic-aspect', name: 'Demonic Aspect',
-      slots: ['offhand'], slotFamily: 'utility',
-      effect: 'Offhand offensive layer for demon damage.',
-      priority: 'strong',
-      source: 'codex',
-      farm: 'Salvage legendary drops',
-      sources: ['mobalytics'],
-      confidence: 'LOW',
-    },
   ],
 
   /* ==========================================

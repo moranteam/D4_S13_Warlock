@@ -1601,6 +1601,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 .paragon-status-bar { height: 6px; background: var(--bg-darker); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
 .paragon-status-fill { height: 100%; background: linear-gradient(90deg, var(--accent-strong), var(--accent-hot)); transition: width 0.3s ease; }
 .paragon-status-meta { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); }
+.paragon-status-note { font-size: 0.74rem; color: var(--text-dim); font-style: italic; padding-top: 4px; border-top: 1px dashed var(--border); }
 
 .paragon-group {
   background: var(--bg-card);

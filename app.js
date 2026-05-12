@@ -1227,6 +1227,7 @@
       html += '  <div class="paragon-status-row"><div class="paragon-status-label">Paragon</div><div class="paragon-status-pct">' + (c.paragon || 0) + ' / 300</div></div>';
       html += '  <div class="paragon-status-bar"><div class="paragon-status-fill" style="width:' + Math.min(100, (c.paragon || 0) / 3) + '%"></div></div>';
       html += '  <div class="paragon-status-meta">' + (c.paragon < 200 ? 'Sub-200: rush legendary nodes' : 'Post-200: full rotation with glyph radius') + '</div>';
+      html += '  <div class="paragon-status-note">Socket positions verify in-game; rotation order is canonical per Maxroll.</div>';
       html += '</div>';
 
       html += '<section class="paragon-group">';
