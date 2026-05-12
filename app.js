@@ -242,6 +242,10 @@
       if (this.current === 'skills') Skills.render();
       if (this.current === 'shards') Shards.render();
       if (this.current === 'aspects') Aspects.render();
+      if (this.current === 'paragon') Paragon.render();
+      if (this.current === 'uniques') Uniques.render();
+      if (this.current === 'bosses') Bosses.render();
+      if (this.current === 'endbuild') Endbuild.render();
     },
   };
 
@@ -595,6 +599,10 @@
       Skills.render();
       Shards.render();
       Aspects.render();
+      Paragon.render();
+      Uniques.render();
+      Bosses.render();
+      Endbuild.render();
       Nav.updateBadges();
 
       Toast.show(changes.length + ' update' + (changes.length === 1 ? '' : 's') + ' applied', 'success');
@@ -1196,6 +1204,355 @@
   };
 
   // ========================================
+  // PARAGON RENDERER (boards + glyphs + stats)
+  // ========================================
+  const Paragon = {
+    render() {
+      const root = document.getElementById('paragonRoot');
+      if (!root) return;
+      const data = window.D4_PARAGON || {};
+      const boards = data.boards || [];
+      const glyphs = data.glyphs || [];
+      const stats = data.statTargets || [];
+      if (!boards.length && !glyphs.length) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-hammer placeholder-icon"></i><div class="placeholder-title">No paragon data</div></div>';
+        return;
+      }
+      const c = AppState.data.character;
+      const pState = AppState.data.paragon || { boards: [], glyphs: {} };
+
+      let html = '';
+
+      html += '<div class="paragon-status">';
+      html += '  <div class="paragon-status-row"><div class="paragon-status-label">Paragon</div><div class="paragon-status-pct">' + (c.paragon || 0) + ' / 300</div></div>';
+      html += '  <div class="paragon-status-bar"><div class="paragon-status-fill" style="width:' + Math.min(100, (c.paragon || 0) / 3) + '%"></div></div>';
+      html += '  <div class="paragon-status-meta">' + (c.paragon < 200 ? 'Sub-200: rush legendary nodes' : 'Post-200: full rotation with glyph radius') + '</div>';
+      html += '</div>';
+
+      html += '<section class="paragon-group">';
+      html += '  <h2 class="paragon-group-name">Board Rotation</h2>';
+      for (const b of boards) {
+        const done = !!pState.boards && pState.boards.includes(b.id);
+        html += '<article class="board ' + (done ? 'is-done' : '') + '" data-board="' + b.id + '">';
+        html += '  <header class="board-head">';
+        html += '    <span class="board-order">' + (b.order === 0 ? 'Start' : b.order) + '</span>';
+        html += '    <h3 class="board-name">' + escapeHtml(b.name) + '</h3>';
+        html += '    <span class="wt-conf wt-conf-' + (b.confidence || 'MEDIUM').toLowerCase() + '">' + (b.confidence || 'MEDIUM') + '</span>';
+        html += '  </header>';
+        html += '  <div class="board-legendary"><span class="board-legendary-label">Legendary node:</span> ' + escapeHtml(b.legendaryNode || '') + '</div>';
+        if (b.glyphSlot) {
+          const g = glyphs.find((x) => x.id === b.glyphSlot);
+          if (g) html += '<div class="board-glyph"><span class="board-glyph-label">Glyph:</span> ' + escapeHtml(g.name) + '</div>';
+        }
+        html += '  <p class="board-notes">' + escapeHtml(b.notes || '') + '</p>';
+        html += '  <button type="button" class="btn btn-ghost board-toggle" data-board-toggle="' + b.id + '">' + (done ? 'Mark unbuilt' : 'Mark built') + '</button>';
+        html += '</article>';
+      }
+      html += '</section>';
+
+      html += '<section class="paragon-group">';
+      html += '  <h2 class="paragon-group-name">Glyph Leveling Priority</h2>';
+      html += '  <div class="glyph-list">';
+      for (const g of glyphs) {
+        const level = (pState.glyphs && pState.glyphs[g.id]) || 0;
+        html += '<article class="glyph">';
+        html += '  <header class="glyph-head">';
+        html += '    <span class="glyph-order">' + g.order + '</span>';
+        html += '    <h3 class="glyph-name">' + escapeHtml(g.name) + '</h3>';
+        html += '    <span class="glyph-level">Lv ' + level + '</span>';
+        html += '  </header>';
+        html += '  <p class="glyph-effect">' + escapeHtml(g.effect) + '</p>';
+        html += '  <div class="glyph-targets">Target ' + g.target1 + ' first, then ' + g.target2 + '</div>';
+        html += '  <div class="glyph-bar"><div class="glyph-fill" style="width:' + Math.min(100, (level / g.target2) * 100) + '%"></div></div>';
+        html += '  <div class="glyph-actions">';
+        html += '    <button class="btn btn-ghost glyph-step" data-glyph="' + g.id + '" data-glyph-step="-1">&minus;</button>';
+        html += '    <button class="btn btn-ghost glyph-step" data-glyph="' + g.id + '" data-glyph-step="1">+</button>';
+        html += '    <button class="btn btn-ghost glyph-step" data-glyph="' + g.id + '" data-glyph-step="5">+5</button>';
+        html += '  </div>';
+        html += '</article>';
+      }
+      html += '  </div>';
+      html += '</section>';
+
+      if (stats.length) {
+        html += '<section class="paragon-group">';
+        html += '  <h2 class="paragon-group-name">Endgame Stat Targets</h2>';
+        html += '  <div class="stat-list">';
+        for (const s of stats) {
+          html += '<div class="stat-row"><div class="stat-name">' + escapeHtml(s.stat) + '</div><div class="stat-target">' + escapeHtml(s.target) + '</div><div class="stat-note">' + escapeHtml(s.note) + '</div></div>';
+        }
+        html += '  </div>';
+        html += '</section>';
+      }
+
+      root.innerHTML = html;
+      this.bind();
+    },
+
+    bound: false,
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+      main.addEventListener('click', (e) => {
+        const boardBtn = e.target.closest && e.target.closest('[data-board-toggle]');
+        if (boardBtn) {
+          const id = boardBtn.getAttribute('data-board-toggle');
+          if (!AppState.data.paragon.boards) AppState.data.paragon.boards = [];
+          const list = AppState.data.paragon.boards;
+          const idx = list.indexOf(id);
+          if (idx >= 0) list.splice(idx, 1);
+          else list.push(id);
+          AppState.save('paragon');
+          Paragon.render();
+          return;
+        }
+        const glyphBtn = e.target.closest && e.target.closest('[data-glyph-step]');
+        if (glyphBtn) {
+          const id = glyphBtn.getAttribute('data-glyph');
+          const step = parseInt(glyphBtn.getAttribute('data-glyph-step'), 10);
+          if (!AppState.data.paragon.glyphs) AppState.data.paragon.glyphs = {};
+          const cur = AppState.data.paragon.glyphs[id] || 0;
+          AppState.data.paragon.glyphs[id] = clamp(cur + step, 0, 100);
+          AppState.save('paragon');
+          Paragon.render();
+        }
+      });
+    },
+  };
+
+  // ========================================
+  // UNIQUES RENDERER
+  // ========================================
+  const Uniques = {
+    render() {
+      const root = document.getElementById('uniquesRoot');
+      if (!root) return;
+      const items = (window.D4_ITEMS && window.D4_ITEMS.uniques) || [];
+      if (!items.length) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-hammer placeholder-icon"></i><div class="placeholder-title">No unique data</div></div>';
+        return;
+      }
+      const owned = AppState.data.uniques || {};
+
+      const priorityOrder = { core: 0, strong: 1, situational: 2 };
+      const sorted = items.slice().sort((a, b) => (priorityOrder[a.priority] || 9) - (priorityOrder[b.priority] || 9));
+
+      const total = items.length;
+      const acquired = items.filter((u) => owned[u.id] && owned[u.id].acquired).length;
+      const pct = Math.round((acquired / total) * 100);
+
+      let html = '';
+      html += '<div class="uniques-summary">';
+      html += '  <div class="uniques-summary-row"><div class="uniques-summary-label">Acquired</div><div class="uniques-summary-pct">' + acquired + ' / ' + total + '</div></div>';
+      html += '  <div class="uniques-summary-bar"><div class="uniques-summary-fill" style="width:' + pct + '%"></div></div>';
+      html += '</div>';
+
+      html += '<div class="unique-list">';
+      for (const u of sorted) {
+        const got = !!(owned[u.id] && owned[u.id].acquired);
+        const isMythic = !!u.mythic;
+        html += '<article class="unique ' + (got ? 'is-owned' : '') + ' unique-priority-' + (u.priority || 'situational') + (isMythic ? ' is-mythic' : '') + '" data-unique="' + u.id + '">';
+        html += '  <header class="unique-head">';
+        html += '    <h3 class="unique-name">' + escapeHtml(u.name) + (isMythic ? '<span class="mythic-tag">MYTHIC</span>' : '') + '</h3>';
+        html += '    <div class="unique-meta">';
+        html += '      <span class="unique-slot">' + escapeHtml(u.slot) + (u.subtype ? ' &middot; ' + escapeHtml(u.subtype) : '') + '</span>';
+        html += '      <span class="aspect-priority aspect-priority-tag-' + (u.priority || 'situational') + '">' + (u.priority || 'situational') + '</span>';
+        html += '      <span class="wt-conf wt-conf-' + (u.confidence || 'MEDIUM').toLowerCase() + '">' + (u.confidence || 'MEDIUM') + '</span>';
+        html += '    </div>';
+        html += '  </header>';
+        html += '  <p class="unique-effect">' + escapeHtml(u.effect) + '</p>';
+        html += '  <div class="unique-drop"><span class="unique-drop-label">Drops from:</span> ' + escapeHtml(u.dropSource || '') + '</div>';
+        if (u.farmNotes) html += '<p class="unique-farm">' + escapeHtml(u.farmNotes) + '</p>';
+        html += '  <button type="button" class="btn btn-ghost unique-toggle" data-unique-toggle="' + u.id + '">' + (got ? 'Mark unowned' : 'Mark owned') + '</button>';
+        html += '</article>';
+      }
+      html += '</div>';
+
+      root.innerHTML = html;
+      this.bind();
+    },
+
+    bound: false,
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+      main.addEventListener('click', (e) => {
+        const btn = e.target.closest && e.target.closest('[data-unique-toggle]');
+        if (btn) {
+          const id = btn.getAttribute('data-unique-toggle');
+          if (!AppState.data.uniques[id]) AppState.data.uniques[id] = {};
+          AppState.data.uniques[id].acquired = !AppState.data.uniques[id].acquired;
+          AppState.data.uniques[id].ts = Date.now();
+          AppState.save('uniques');
+          Uniques.render();
+          Nav.updateBadges();
+        }
+      });
+    },
+  };
+
+  // ========================================
+  // BOSSES RENDERER
+  // ========================================
+  const Bosses = {
+    render() {
+      const root = document.getElementById('bossesRoot');
+      if (!root) return;
+      const bosses = (window.D4_DATA && window.D4_DATA.bosses) || [];
+      const uniques = (window.D4_ITEMS && window.D4_ITEMS.uniques) || [];
+      if (!bosses.length) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-hammer placeholder-icon"></i><div class="placeholder-title">No boss data</div></div>';
+        return;
+      }
+      const kills = AppState.data.bosses || {};
+      const findUnique = (id) => uniques.find((u) => u.id === id);
+
+      let html = '<div class="boss-list">';
+      for (const b of bosses) {
+        const ks = (kills[b.id] && kills[b.id].kills) || 0;
+        html += '<article class="boss" data-boss="' + b.id + '">';
+        html += '  <header class="boss-head">';
+        html += '    <h3 class="boss-name">' + escapeHtml(b.name) + (b.newInPatch ? '<span class="boss-new">NEW</span>' : '') + '</h3>';
+        html += '    <span class="boss-type">' + escapeHtml(b.type) + '</span>';
+        html += '    <span class="wt-conf wt-conf-' + (b.confidence || 'MEDIUM').toLowerCase() + '">' + (b.confidence || 'MEDIUM') + '</span>';
+        html += '  </header>';
+        html += '  <div class="boss-meta">';
+        html += '    <div class="boss-meta-row"><span class="boss-meta-label">Summoning:</span> ' + escapeHtml(b.summoning || '') + '</div>';
+        html += '    <div class="boss-meta-row"><span class="boss-meta-label">Access:</span> ' + escapeHtml(b.access || '') + '</div>';
+        html += '    <div class="boss-meta-row"><span class="boss-meta-label">Tier:</span> ' + escapeHtml(b.minTier || '') + '</div>';
+        html += '  </div>';
+        html += '  <p class="boss-role">' + escapeHtml(b.buildRole) + '</p>';
+        if (b.drops && b.drops.length) {
+          html += '<div class="boss-drops"><span class="boss-drops-label">Drops:</span>';
+          for (const dropId of b.drops) {
+            const u = findUnique(dropId);
+            const label = u ? u.name : dropId;
+            const cls = u && u.mythic ? 'boss-drop is-mythic' : 'boss-drop';
+            html += '<span class="' + cls + '">' + escapeHtml(label) + '</span>';
+          }
+          html += '</div>';
+        }
+        html += '  <div class="boss-counter">';
+        html += '    <span class="boss-counter-label">Kills:</span>';
+        html += '    <span class="boss-counter-n">' + ks + '</span>';
+        html += '    <button class="btn btn-ghost boss-step" data-boss-step="-1" data-boss="' + b.id + '">&minus;</button>';
+        html += '    <button class="btn btn-danger boss-step" data-boss-step="1" data-boss="' + b.id + '">+1 kill</button>';
+        html += '  </div>';
+        html += '</article>';
+      }
+      html += '</div>';
+
+      root.innerHTML = html;
+      this.bind();
+    },
+
+    bound: false,
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+      main.addEventListener('click', (e) => {
+        const btn = e.target.closest && e.target.closest('[data-boss-step]');
+        if (btn) {
+          const id = btn.getAttribute('data-boss');
+          const step = parseInt(btn.getAttribute('data-boss-step'), 10);
+          if (!AppState.data.bosses[id]) AppState.data.bosses[id] = { kills: 0 };
+          AppState.data.bosses[id].kills = Math.max(0, (AppState.data.bosses[id].kills || 0) + step);
+          AppState.save('bosses');
+          Bosses.render();
+        }
+      });
+    },
+  };
+
+  // ========================================
+  // ENDGAME BUILD RENDERER (aggregator)
+  // ========================================
+  const Endbuild = {
+    render() {
+      const root = document.getElementById('endbuildRoot');
+      if (!root) return;
+      const D = window.D4_DATA || {};
+      const I = window.D4_ITEMS || {};
+      const P = window.D4_PARAGON || {};
+      const bar = D.endgameBar || [];
+      const skills = D.skills || [];
+      const aspects = D.aspects || [];
+      const uniques = I.uniques || [];
+      const glyphs = P.glyphs || [];
+
+      const c = AppState.data.character;
+      const skillById = (id) => skills.find((s) => s.id === id) || { name: id };
+
+      let html = '';
+
+      html += '<section class="eb-section">';
+      html += '  <h2 class="eb-section-name"><i class="fa-solid fa-bolt"></i> Skill Bar</h2>';
+      html += '  <ol class="eb-bar">';
+      for (const b of bar) {
+        const sk = skillById(b.skillId);
+        const up = b.upgrade ? ': ' + b.upgrade : '';
+        html += '<li class="eb-bar-slot"><span class="eb-bar-n">' + b.slot + '</span><div><div class="eb-bar-skill">' + escapeHtml(sk.name + up) + '</div><div class="eb-bar-role">' + escapeHtml(b.role) + '</div></div></li>';
+      }
+      html += '  </ol>';
+      html += '</section>';
+
+      html += '<section class="eb-section">';
+      html += '  <h2 class="eb-section-name"><i class="fa-solid fa-gem"></i> Soul Shard</h2>';
+      html += '  <div class="eb-line"><span class="eb-line-label">Shard:</span> ' + escapeHtml(c.soulShard || 'Mastermind (recommended)') + '</div>';
+      html += '  <div class="eb-line"><span class="eb-line-label">Fragment:</span> ' + escapeHtml(c.fragment || 'blasphemous (recommended)') + '</div>';
+      html += '</section>';
+
+      const coreAspects = aspects.filter((a) => a.priority === 'core');
+      html += '<section class="eb-section">';
+      html += '  <h2 class="eb-section-name"><i class="fa-solid fa-wand-magic-sparkles"></i> Core Aspects</h2>';
+      html += '  <ul class="eb-list">';
+      for (const a of coreAspects) {
+        html += '<li><strong>' + escapeHtml(a.name) + '</strong> &middot; ' + escapeHtml((a.slots || []).join(', ')) + '</li>';
+      }
+      html += '  </ul>';
+      html += '</section>';
+
+      const coreUniques = uniques.filter((u) => u.priority === 'core');
+      html += '<section class="eb-section">';
+      html += '  <h2 class="eb-section-name"><i class="fa-solid fa-trophy"></i> Core Uniques</h2>';
+      html += '  <ul class="eb-list">';
+      for (const u of coreUniques) {
+        const got = AppState.data.uniques[u.id] && AppState.data.uniques[u.id].acquired;
+        html += '<li class="' + (got ? 'is-owned' : '') + '"><strong>' + escapeHtml(u.name) + '</strong> &middot; ' + escapeHtml(u.slot) + (u.mythic ? ' <span class="mythic-tag">MYTHIC</span>' : '') + ' &middot; <em>' + escapeHtml(u.dropSource) + '</em>' + (got ? ' &check;' : '') + '</li>';
+      }
+      html += '  </ul>';
+      html += '</section>';
+
+      html += '<section class="eb-section">';
+      html += '  <h2 class="eb-section-name"><i class="fa-solid fa-table-cells-large"></i> Glyph Priority</h2>';
+      html += '  <ol class="eb-list">';
+      for (const g of glyphs) {
+        const lv = (AppState.data.paragon.glyphs && AppState.data.paragon.glyphs[g.id]) || 0;
+        html += '<li><strong>' + escapeHtml(g.name) + '</strong> &middot; Lv ' + lv + ' / target ' + g.target2 + '</li>';
+      }
+      html += '  </ol>';
+      html += '</section>';
+
+      html += '<section class="eb-section">';
+      html += '  <h2 class="eb-section-name"><i class="fa-solid fa-bullseye"></i> Stat Targets</h2>';
+      html += '  <ul class="eb-list">';
+      for (const s of (P.statTargets || [])) {
+        html += '<li><strong>' + escapeHtml(s.stat) + ':</strong> ' + escapeHtml(s.target) + '</li>';
+      }
+      html += '  </ul>';
+      html += '</section>';
+
+      root.innerHTML = html;
+    },
+  };
+
+  // ========================================
   // NAV BADGE UPDATER
   // ========================================
   const Nav = {
@@ -1261,6 +1618,10 @@
             Skills.render();
             Shards.render();
             Aspects.render();
+            Paragon.render();
+            Uniques.render();
+            Bosses.render();
+            Endbuild.render();
             Nav.updateBadges();
             Toast.show('Save imported', 'success');
           } else {
@@ -1284,6 +1645,10 @@
             Skills.render();
             Shards.render();
             Aspects.render();
+            Paragon.render();
+            Uniques.render();
+            Bosses.render();
+            Endbuild.render();
             Nav.updateBadges();
             Toast.show('Reset complete', 'success');
           },
@@ -1310,6 +1675,10 @@
     Skills.render();
     Shards.render();
     Aspects.render();
+    Paragon.render();
+    Uniques.render();
+    Bosses.render();
+    Endbuild.render();
     Nav.updateBadges();
 
     // Welcome toast on first visit
@@ -1329,6 +1698,6 @@
   }
 
   // Expose for debugging
-  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, Skills, Shards, Aspects, Toast, Modal, Nav };
+  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, Skills, Shards, Aspects, Paragon, Uniques, Bosses, Endbuild, Toast, Modal, Nav };
 
 })();

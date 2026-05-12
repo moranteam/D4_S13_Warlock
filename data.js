@@ -423,6 +423,88 @@ window.D4_DATA = {
   ],
 
   /* ==========================================
+     BOSSES (Lair Bosses + Pinnacle)
+     LoH change: each unique now has ONE dedicated drop
+     location. Mythic uniques drop from any boss at low rates.
+     ========================================== */
+  bosses: [
+    {
+      id: 'astaroth',
+      name: 'Astaroth',
+      type: 'Lair Boss',
+      newInPatch: true,
+      summoning: 'Escalation Sigil',
+      access: 'Escalating Nightmare Dungeons',
+      minTier: 'Scales with Torment',
+      drops: ['litany-of-sable', 'footfalls-of-the-waning-world', 'hecaton-chasm'],
+      buildRole: 'Primary farm target. Both build-defining uniques drop here. Run weekly until Litany lands.',
+      sources: ['fextralife', 'maxroll', 'gamerant', 'aoeah'],
+      confidence: 'HIGH',
+    },
+    {
+      id: 'grigoire',
+      name: 'Grigoire, The Galvanic Saint',
+      type: 'Lair Boss',
+      summoning: 'Living Steel x12',
+      access: 'Hall of the Penitent (Helltide)',
+      minTier: 'T1+',
+      drops: ['seed-of-horazon'],
+      buildRole: 'Farm for Seed of Horazon amulet. Living Steel from Helltide Tortured Gifts of Mystery.',
+      sources: ['maxroll', 'mobalytics'],
+      confidence: 'MEDIUM',
+    },
+    {
+      id: 'bartuc',
+      name: 'Bartuc',
+      type: 'Lair Boss',
+      newInPatch: true,
+      summoning: 'TBD (LoH-specific material)',
+      access: 'Lord of Hatred dungeon',
+      minTier: 'No minimum',
+      drops: ['footfalls-of-the-waning-world'],
+      buildRole: 'Reported alt path for Footfalls in Season 13. Astaroth is canonical, Bartuc as backup.',
+      sources: ['aoeah'],
+      confidence: 'LOW',
+    },
+    {
+      id: 'duriel',
+      name: 'Duriel, King of Maggots',
+      type: 'Pinnacle Boss',
+      summoning: 'Mucus-Slick Egg x2 plus Shard of Agony x2 (from Echo of Varshan and Lord Zir)',
+      access: 'Gaping Crevasse, Kehjistan',
+      minTier: 'T2+ recommended',
+      drops: ['ring-of-starless-skies', 'heir-of-perdition', 'temerity'],
+      buildRole: 'Mythic pool target. Highest Mythic drop rate of any boss in the rotation.',
+      sources: ['mobalytics', 'icyveins'],
+      confidence: 'HIGH',
+    },
+    {
+      id: 'andariel',
+      name: 'Andariel, Maiden of Anguish',
+      type: 'Pinnacle Boss',
+      summoning: 'Pincushioned Doll x2 plus Sandscorched Shackles x2 (from Beast in Ice and Grigoire)',
+      access: "Hanged Man's Hall, Kehjistan",
+      minTier: 'T2+ recommended',
+      drops: ['ring-of-starless-skies', 'heir-of-perdition', 'temerity'],
+      buildRole: 'Mythic pool target, mirrors Duriel for Mythic farming.',
+      sources: ['mobalytics', 'icyveins'],
+      confidence: 'HIGH',
+    },
+    {
+      id: 'lord-zir',
+      name: 'Lord Zir, Avatar of Hatred',
+      type: 'Lair Boss',
+      summoning: 'Exquisite Blood x12',
+      access: 'Darkened Way, Fractured Peaks',
+      minTier: 'T1+',
+      drops: ['eye-of-baal', 'infernal-homunculus'],
+      buildRole: 'Strong offhand drop pool. Run if you do not have Eye of Baal or Infernal Homunculus.',
+      sources: ['fextralife', 'mobalytics'],
+      confidence: 'MEDIUM',
+    },
+  ],
+
+  /* ==========================================
      WALKTHROUGH
      Source priority: Maxroll leveling, Icy Veins,
      Mobalytics. FextraLife wiki authoritative for
