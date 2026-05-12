@@ -441,59 +441,93 @@
         </button>
       </div>
       <div class="modal-body">
-        <input type="text" class="quick-input" id="quickInput" placeholder="level 42  or  imprint deeper-shadows  or  got night-terror" autocomplete="off" />
-        <div class="quick-help">
-          <div class="quick-help-title">Commands</div>
-          <div class="quick-help-grid">
-            <div class="quick-help-row">
-              <code class="quick-cmd">level [n]</code>
-              <span class="quick-desc">Set character level</span>
+        <form id="quickForm" class="qf" autocomplete="off" novalidate>
+
+          <fieldset class="qf-set">
+            <legend class="qf-legend">Character</legend>
+            <div class="qf-row">
+              <label class="qf-label" for="qf-level">Level</label>
+              <div class="qf-stepper">
+                <button type="button" class="qf-step" data-step="-1" data-target="qf-level" aria-label="Decrement level">&minus;</button>
+                <input type="number" id="qf-level" name="level" inputmode="numeric" min="1" max="70" step="1" />
+                <button type="button" class="qf-step" data-step="1" data-target="qf-level" aria-label="Increment level">+</button>
+              </div>
             </div>
-            <div class="quick-help-row">
-              <code class="quick-cmd">paragon [n]</code>
-              <span class="quick-desc">Set Paragon level</span>
+            <div class="qf-row">
+              <label class="qf-label" for="qf-paragon">Paragon</label>
+              <div class="qf-stepper">
+                <button type="button" class="qf-step" data-step="-1" data-target="qf-paragon" aria-label="Decrement paragon">&minus;</button>
+                <input type="number" id="qf-paragon" name="paragon" inputmode="numeric" min="0" max="300" step="1" />
+                <button type="button" class="qf-step" data-step="1" data-target="qf-paragon" aria-label="Increment paragon">+</button>
+              </div>
             </div>
-            <div class="quick-help-row">
-              <code class="quick-cmd">respec [15|30|34|40]</code>
-              <span class="quick-desc">Mark respec milestone done</span>
+          </fieldset>
+
+          <fieldset class="qf-set">
+            <legend class="qf-legend">Endgame</legend>
+            <div class="qf-row">
+              <label class="qf-label" for="qf-torment">Torment</label>
+              <select id="qf-torment" name="torment" class="qf-select">
+                <option value="0">T0 (Pre-endgame)</option>
+                <option value="1">T1</option>
+                <option value="2">T2</option>
+                <option value="3">T3</option>
+                <option value="4">T4</option>
+                <option value="5">T5</option>
+                <option value="6">T6</option>
+                <option value="7">T7</option>
+                <option value="8">T8</option>
+                <option value="9">T9</option>
+                <option value="10">T10</option>
+                <option value="11">T11</option>
+                <option value="12">T12</option>
+              </select>
             </div>
-            <div class="quick-help-row">
-              <code class="quick-cmd">shard [name]</code>
-              <span class="quick-desc">Set Soul Shard</span>
+            <div class="qf-row">
+              <label class="qf-label" for="qf-pit">Pit cleared</label>
+              <div class="qf-stepper">
+                <button type="button" class="qf-step" data-step="-1" data-target="qf-pit" aria-label="Decrement pit">&minus;</button>
+                <input type="number" id="qf-pit" name="pit" inputmode="numeric" min="0" max="200" step="1" />
+                <button type="button" class="qf-step" data-step="1" data-target="qf-pit" aria-label="Increment pit">+</button>
+              </div>
             </div>
-            <div class="quick-help-row">
-              <code class="quick-cmd">fragment [name]</code>
-              <span class="quick-desc">Set Fragment</span>
+          </fieldset>
+
+          <fieldset class="qf-set">
+            <legend class="qf-legend">Build</legend>
+            <div class="qf-row">
+              <label class="qf-label" for="qf-shard">Soul Shard</label>
+              <select id="qf-shard" name="shard" class="qf-select">
+                <option value="">None</option>
+                <option value="mastermind">Mastermind</option>
+                <option value="legion">Legion</option>
+                <option value="vanguard">Vanguard</option>
+                <option value="ritualist">Ritualist</option>
+              </select>
             </div>
-            <div class="quick-help-row">
-              <code class="quick-cmd">imprint [aspect]</code>
-              <span class="quick-desc">Mark aspect imprinted</span>
+            <div class="qf-row">
+              <label class="qf-label" for="qf-fragment">Fragment</label>
+              <select id="qf-fragment" name="fragment" class="qf-select" disabled>
+                <option value="">Pick a shard first</option>
+              </select>
             </div>
-            <div class="quick-help-row">
-              <code class="quick-cmd">got [unique]</code>
-              <span class="quick-desc">Mark unique acquired</span>
+          </fieldset>
+
+          <fieldset class="qf-set">
+            <legend class="qf-legend">Respec acknowledgements</legend>
+            <div class="qf-respec-row">
+              <button type="button" class="qf-respec-btn" data-respec="15">Lv 15</button>
+              <button type="button" class="qf-respec-btn" data-respec="30">Lv 30</button>
+              <button type="button" class="qf-respec-btn" data-respec="34">Lv 34</button>
+              <button type="button" class="qf-respec-btn" data-respec="40">Lv 40</button>
             </div>
-            <div class="quick-help-row">
-              <code class="quick-cmd">pit [n]</code>
-              <span class="quick-desc">Mark Pit tier cleared</span>
-            </div>
-            <div class="quick-help-row">
-              <code class="quick-cmd">torment [n]</code>
-              <span class="quick-desc">Set Torment tier</span>
-            </div>
-            <div class="quick-help-row">
-              <code class="quick-cmd">boss [name]</code>
-              <span class="quick-desc">Increment boss kill counter</span>
-            </div>
-            <div class="quick-help-row">
-              <code class="quick-cmd">step [phase] [step]</code>
-              <span class="quick-desc">Toggle walkthrough step</span>
-            </div>
-          </div>
-          <div class="quick-tip">
-            Separate multiple commands with a semicolon. Press <kbd>Esc</kbd> to close.
-          </div>
-        </div>
+          </fieldset>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" id="qfCancel">Cancel</button>
+        <button type="button" class="btn btn-danger" id="qfApply">Apply</button>
       </div>
     </div>
   </div>

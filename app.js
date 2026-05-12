@@ -415,20 +415,8 @@
     init() {
       const fab = document.getElementById('fab');
       const fabBottom = document.getElementById('fabBottom');
-      const input = document.getElementById('quickInput');
-
       if (fab) fab.addEventListener('click', () => this.open());
       if (fabBottom) fabBottom.addEventListener('click', () => this.open());
-
-      if (input) {
-        input.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            this.submit(input.value);
-            input.value = '';
-          }
-        });
-      }
 
       document.addEventListener('keydown', (e) => {
         if (e.key === '/' && !this.isInputFocused()) {
@@ -436,36 +424,169 @@
           this.open();
         }
       });
+
+      this.bindForm();
     },
 
     isInputFocused() {
       const a = document.activeElement;
-      return a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA');
+      if (!a) return false;
+      const tag = a.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
     },
 
     open() {
+      this.prefill();
       Modal.open('modalQuick');
+      setTimeout(() => {
+        const first = document.getElementById('qf-level');
+        if (first) first.focus();
+      }, 60);
     },
 
-    submit(raw) {
-      if (!raw || !raw.trim()) {
-        Modal.close('modalQuick');
+    prefill() {
+      const c = AppState.data.character;
+      const skills = AppState.data.skills || { respec: {} };
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+
+      set('qf-level', c.level || 1);
+      set('qf-paragon', c.paragon || 0);
+      set('qf-torment', c.torment || 0);
+      set('qf-pit', c.pitHighest || 0);
+
+      const shardId = (c.soulShard || '').toLowerCase();
+      set('qf-shard', shardId);
+      this.refreshFragmentOptions(shardId, (c.fragment || '').toLowerCase());
+
+      const respec = skills.respec || {};
+      document.querySelectorAll('.qf-respec-btn').forEach((btn) => {
+        const n = btn.getAttribute('data-respec');
+        if (respec['lv' + n]) btn.classList.add('is-on');
+        else btn.classList.remove('is-on');
+      });
+    },
+
+    refreshFragmentOptions(shardId, selectedFragId) {
+      const sel = document.getElementById('qf-fragment');
+      if (!sel) return;
+      const all = (window.D4_DATA && window.D4_DATA.fragments) || {};
+      const frags = all[shardId] || [];
+      if (!shardId || !frags.length) {
+        sel.innerHTML = '<option value="">Pick a shard first</option>';
+        sel.disabled = true;
         return;
       }
-      const commands = raw.split(';').map((c) => c.trim()).filter(Boolean);
-      let successCount = 0;
-      let failCount = 0;
-      const messages = [];
+      sel.disabled = false;
+      let html = '<option value="">None</option>';
+      for (const f of frags) {
+        const sel2 = f.id === selectedFragId ? ' selected' : '';
+        const tag = f.buildRecommended ? ' (Build pick)' : '';
+        html += '<option value="' + f.id + '"' + sel2 + '>' + escapeHtml(f.name) + tag + '</option>';
+      }
+      sel.innerHTML = html;
+    },
 
-      for (const cmd of commands) {
-        const result = this.parse(cmd);
-        if (result.ok) {
-          successCount++;
-          if (result.message) messages.push(result.message);
-        } else {
-          failCount++;
-          messages.push('Unknown: ' + cmd);
+    bindForm() {
+      let holdTimer = null;
+      let holdInterval = null;
+      const stopHold = () => {
+        if (holdTimer) { clearTimeout(holdTimer); holdTimer = null; }
+        if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
+      };
+
+      document.querySelectorAll('.qf-step').forEach((btn) => {
+        const fire = () => {
+          const step = parseInt(btn.getAttribute('data-step'), 10);
+          const targetId = btn.getAttribute('data-target');
+          const input = document.getElementById(targetId);
+          if (!input) return;
+          const min = parseInt(input.min, 10);
+          const max = parseInt(input.max, 10);
+          const cur = parseInt(input.value, 10) || 0;
+          input.value = clamp(cur + step, min, max);
+        };
+        const start = (e) => {
+          e.preventDefault();
+          fire();
+          stopHold();
+          holdTimer = setTimeout(() => {
+            holdInterval = setInterval(fire, 80);
+          }, 500);
+        };
+        btn.addEventListener('mousedown', start);
+        btn.addEventListener('touchstart', start, { passive: false });
+        btn.addEventListener('mouseup', stopHold);
+        btn.addEventListener('mouseleave', stopHold);
+        btn.addEventListener('touchend', stopHold);
+        btn.addEventListener('touchcancel', stopHold);
+      });
+
+      const shardSel = document.getElementById('qf-shard');
+      if (shardSel) {
+        shardSel.addEventListener('change', () => this.refreshFragmentOptions(shardSel.value, ''));
+      }
+
+      document.querySelectorAll('.qf-respec-btn').forEach((btn) => {
+        btn.addEventListener('click', () => btn.classList.toggle('is-on'));
+      });
+
+      const apply = document.getElementById('qfApply');
+      const cancel = document.getElementById('qfCancel');
+      if (apply) apply.addEventListener('click', () => this.applyForm());
+      if (cancel) cancel.addEventListener('click', () => Modal.close('modalQuick'));
+
+      const form = document.getElementById('quickForm');
+      if (form) {
+        form.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            this.applyForm();
+          }
+        });
+        form.addEventListener('submit', (e) => e.preventDefault());
+      }
+    },
+
+    applyForm() {
+      const c = AppState.data.character;
+      const skills = AppState.data.skills;
+      const get = (id) => { const el = document.getElementById(id); return el ? el.value : ''; };
+      const getNum = (id, min, max, fallback) => {
+        const v = parseInt(get(id), 10);
+        if (isNaN(v)) return fallback;
+        return clamp(v, min, max);
+      };
+
+      const newLevel = getNum('qf-level', 1, 70, c.level);
+      const newParagon = getNum('qf-paragon', 0, 300, c.paragon);
+      const newTorment = getNum('qf-torment', 0, 12, c.torment);
+      const newPit = getNum('qf-pit', 0, 200, c.pitHighest);
+      const newShardId = get('qf-shard');
+      const newShard = newShardId ? (newShardId.charAt(0).toUpperCase() + newShardId.slice(1)) : null;
+      const newFragment = get('qf-fragment') || null;
+
+      const changes = [];
+      if (newLevel !== c.level) { c.level = newLevel; changes.push('Level ' + newLevel); }
+      if (newParagon !== c.paragon) { c.paragon = newParagon; changes.push('Paragon ' + newParagon); }
+      if (newTorment !== c.torment) { c.torment = newTorment; changes.push('Torment T' + newTorment); }
+      if (newPit > c.pitHighest) { c.pitHighest = newPit; changes.push('Pit T' + newPit); }
+      if (newShard !== c.soulShard) { c.soulShard = newShard; changes.push('Shard ' + (newShard || 'none')); }
+      if (newFragment !== c.fragment) { c.fragment = newFragment; changes.push('Fragment ' + (newFragment || 'none')); }
+
+      document.querySelectorAll('.qf-respec-btn').forEach((btn) => {
+        const n = btn.getAttribute('data-respec');
+        const key = 'lv' + n;
+        const on = btn.classList.contains('is-on');
+        if (!!skills.respec[key] !== on) {
+          skills.respec[key] = on;
+          changes.push('Respec ' + n + (on ? ' done' : ' undone'));
         }
+      });
+
+      if (changes.length === 0) {
+        Toast.show('No changes', 'info', 1800);
+        Modal.close('modalQuick');
+        return;
       }
 
       AppState.save();
@@ -476,14 +597,8 @@
       Aspects.render();
       Nav.updateBadges();
 
-      if (successCount > 0 && failCount === 0) {
-        Toast.show(messages.join(' | ') || (successCount + ' updates'), 'success');
-        Modal.close('modalQuick');
-      } else if (successCount > 0 && failCount > 0) {
-        Toast.show(successCount + ' applied, ' + failCount + ' unknown', 'warn');
-      } else {
-        Toast.show(messages.join(' | ') || 'No commands recognized', 'error');
-      }
+      Toast.show(changes.length + ' update' + (changes.length === 1 ? '' : 's') + ' applied', 'success');
+      Modal.close('modalQuick');
     },
 
     parse(cmd) {

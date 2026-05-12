@@ -745,67 +745,135 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
   line-height: 1.5;
 }
 
-/* === Quick Input === */
-.quick-input {
-  width: 100%;
-  background: var(--bg-darker);
-  border: 1px solid var(--border-strong);
+/* === Quick Form === */
+.qf {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+}
+.qf-set {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 14px 16px;
-  color: var(--text);
-  font-size: 1rem;
-  font-family: var(--font-mono);
-  margin-bottom: 16px;
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  background: var(--bg-darker);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.quick-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-light);
-}
-.quick-input::placeholder { color: var(--text-dim); }
-
-.quick-help-title {
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
+.qf-legend {
+  font-family: var(--font-display, var(--font-title));
+  font-size: 0.7rem;
+  font-weight: 700;
   letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--text-dim);
-  margin-bottom: 10px;
+  padding: 0 6px;
 }
-.quick-help-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 6px;
-  margin-bottom: 16px;
-}
-.quick-help-row {
+.qf-row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 6px 0;
-  font-size: 0.85rem;
+  flex-wrap: wrap;
 }
-.quick-cmd {
+.qf-label {
+  font-size: 0.92rem;
+  color: var(--text);
+  font-weight: 500;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.qf-stepper {
+  display: inline-flex;
+  align-items: stretch;
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.qf-step {
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qf-step:hover, .qf-step:active { background: var(--accent-light); color: var(--accent); }
+.qf-stepper input[type="number"] {
+  width: 72px;
+  text-align: center;
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
   background: var(--bg-darker);
-  border: 1px solid var(--border);
-  padding: 3px 8px;
-  border-radius: 4px;
-  color: var(--accent-hot);
-  white-space: nowrap;
-  flex-shrink: 0;
-  min-width: 140px;
+  border: none;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  outline: none;
+  padding: 0;
+  -moz-appearance: textfield;
 }
-.quick-desc { color: var(--text-secondary); }
-.quick-tip {
-  font-size: 0.78rem;
-  color: var(--text-dim);
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-  line-height: 1.5;
+.qf-stepper input[type="number"]::-webkit-outer-spin-button,
+.qf-stepper input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.qf-stepper input[type="number"]:focus {
+  background: var(--bg-card-alt);
+}
+
+.qf-select {
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.94rem;
+  min-width: 180px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.qf-select:focus { border-color: var(--accent); }
+.qf-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.qf-respec-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.qf-respec-btn {
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 12px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.qf-respec-btn:hover { border-color: var(--accent); color: var(--text); }
+.qf-respec-btn.is-on {
+  background: rgba(92, 184, 92, 0.18);
+  border-color: var(--good);
+  color: var(--good);
 }
 
 /* === Buttons === */
