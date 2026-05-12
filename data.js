@@ -119,7 +119,7 @@ window.D4_DATA = {
         { id: 's1', text: 'Respec: drop Hellion Sting and Sigil of Subversion', priority: 'high' },
         { id: 's2', text: 'Pick Command Fallen: Fallen Rush for the resource generation chain', priority: 'high' },
         { id: 's3', text: 'Pick Dark Prison: Chain Aura for sustained area control', priority: 'high' },
-        { id: 's4', text: 'Take Nether Step: Recall Shadows for the summon pull and extra duration', priority: 'high' },
+        { id: 's4', text: 'Take Nether Step: Shadow Recall for the summon pull and extra duration', priority: 'high' },
         { id: 's5', text: 'Mark the Level 34 respec milestone complete', priority: 'med' },
       ],
       sources: ['maxroll', 'fextralife'],
