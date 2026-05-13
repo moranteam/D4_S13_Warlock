@@ -230,110 +230,98 @@
       </div>
     </section>
 
-    <!-- WALKTHROUGH ========================== -->
-    <section class="view" id="view-walkthrough" data-view="walkthrough" hidden>
+    <!-- 2. LEVELING PATH ====================== -->
+    <section class="view" id="view-leveling-path" data-view="leveling-path" hidden>
       <div class="view-header">
-        <h1 class="view-title">Leveling Walkthrough</h1>
-        <div class="view-subtitle">Level 1 to 70 with respec triggers at 15, 30, 34, 40</div>
+        <h1 class="view-title">Leveling Path</h1>
+        <div class="view-subtitle">Walkthrough phases, per-level skill timeline, controller bindings</div>
       </div>
       <div id="walkthroughRoot" class="walkthrough-root"></div>
+      <div id="skillTimelineRoot" class="skill-timeline-root">
+        <div class="placeholder-card">
+          <i class="fa-solid fa-hammer placeholder-icon"></i>
+          <div class="placeholder-title">Skill Timeline (Sprint 2)</div>
+          <div class="placeholder-text">Per-level skill point allocation Lv 1 to 70 renders here in Sprint 2. Data is already populated in window.D4_DATA.levelingPath.</div>
+        </div>
+      </div>
+      <div id="controllerRoot" class="controller-root">
+        <div class="placeholder-card">
+          <i class="fa-solid fa-gamepad placeholder-icon"></i>
+          <div class="placeholder-title">Controller Bindings (Sprint 2)</div>
+          <div class="placeholder-text">PS5 controller milestone bindings render here. Data is already populated in window.D4_DATA.controllerBindings.</div>
+        </div>
+      </div>
     </section>
 
-    <!-- SKILL TREE =========================== -->
-    <section class="view" id="view-skills" data-view="skills" hidden>
+    <!-- 3. SKILLS REFERENCE ==================== -->
+    <section class="view" id="view-skills-reference" data-view="skills-reference" hidden>
       <div class="view-header">
-        <h1 class="view-title">Skill Tree Planner</h1>
+        <h1 class="view-title">Skills Reference</h1>
         <div class="view-subtitle">All 25 Warlock skills grouped by cluster, with build recommendations highlighted</div>
       </div>
       <div id="skillsRoot" class="skills-root"></div>
     </section>
 
-    <!-- SOUL SHARDS ========================== -->
-    <section class="view" id="view-shards" data-view="shards" hidden>
+    <!-- 4. ENDGAME BUILD ======================= -->
+    <section class="view" id="view-endgame-build" data-view="endgame-build" hidden>
       <div class="view-header">
-        <h1 class="view-title">Soul Shards & Fragments</h1>
-        <div class="view-subtitle">All 4 shards, 12 fragments, Mastermind plus Blasphemous locked for this build</div>
-      </div>
-      <div id="shardsRoot" class="shards-root"></div>
-    </section>
-
-    <!-- ASPECT TRACKER ======================= -->
-    <section class="view" id="view-aspects" data-view="aspects" hidden>
-      <div class="view-header">
-        <h1 class="view-title">Aspect Tracker</h1>
-        <div class="view-subtitle">Imprint checklist grouped by slot family</div>
-      </div>
-      <div id="aspectsRoot" class="aspects-root"></div>
-    </section>
-
-    <!-- UNIQUE CHASE ========================= -->
-    <section class="view" id="view-uniques" data-view="uniques" hidden>
-      <div class="view-header">
-        <h1 class="view-title">Unique Chase List</h1>
-        <div class="view-subtitle">Build-defining drops with farm targets, sorted by priority</div>
-      </div>
-      <div id="uniquesRoot" class="uniques-root"></div>
-    </section>
-
-    <!-- TALISMANS ============================ -->
-    <section class="view" id="view-talismans" data-view="talismans" hidden>
-      <div class="view-header">
-        <h1 class="view-title">Talisman & Charm System</h1>
-        <div class="view-subtitle">Seal priority, charm targets, set bonuses (new LoH layer)</div>
-      </div>
-      <div id="talismansRoot" class="talismans-root"></div>
-    </section>
-
-    <!-- PARAGON ============================== -->
-    <section class="view" id="view-paragon" data-view="paragon" hidden>
-      <div class="view-header">
-        <h1 class="view-title">Paragon Boards</h1>
-        <div class="view-subtitle">Board rotation, glyph leveling priority, legendary nodes</div>
-      </div>
-      <div id="paragonRoot" class="paragon-root"></div>
-    </section>
-
-    <!-- BOSSES =============================== -->
-    <section class="view" id="view-bosses" data-view="bosses" hidden>
-      <div class="view-header">
-        <h1 class="view-title">Boss Farming Guide</h1>
-        <div class="view-subtitle">Lair and Pinnacle bosses with drop tables, summoning materials, kill counter</div>
-      </div>
-      <div id="bossesRoot" class="bosses-root"></div>
-    </section>
-
-    <!-- WAR PLANS ============================ -->
-    <section class="view" id="view-warplans" data-view="warplans" hidden>
-      <div class="view-header">
-        <h1 class="view-title">War Plans Tracker</h1>
-        <div class="view-subtitle">Build a playlist of up to 5 endgame activities</div>
-      </div>
-      <div id="warplansRoot" class="warplans-root"></div>
-    </section>
-
-    <!-- ENDGAME BUILD ======================== -->
-    <section class="view" id="view-endbuild" data-view="endbuild" hidden>
-      <div class="view-header">
-        <h1 class="view-title">Endgame Build Reference</h1>
-        <div class="view-subtitle">Skill bar, shard, aspects, uniques, glyphs, stat targets in one view</div>
+        <h1 class="view-title">Endgame Build</h1>
+        <div class="view-subtitle">Bar, shards, paragon, war plans, mercenary in one view</div>
       </div>
       <div id="endbuildRoot" class="endbuild-root"></div>
-    </section>
-
-    <!-- MERCENARY ============================ -->
-    <section class="view" id="view-mercenary" data-view="mercenary" hidden>
-      <div class="view-header">
-        <h1 class="view-title">Mercenary Guide</h1>
-        <div class="view-subtitle">Subo, Aldkin, Raheir, Varyana with leveling, boss-farm, endgame pairs</div>
-      </div>
+      <div id="shardsRoot" class="shards-root"></div>
+      <div id="paragonRoot" class="paragon-root"></div>
+      <div id="warplansRoot" class="warplans-root"></div>
       <div id="mercenaryRoot" class="mercenary-root"></div>
     </section>
 
-    <!-- PATCH NOTES ========================== -->
-    <section class="view" id="view-patch" data-view="patch" hidden>
+    <!-- 5. GEAR TARGETS ======================== -->
+    <section class="view" id="view-gear-targets" data-view="gear-targets" hidden>
       <div class="view-header">
-        <h1 class="view-title">Patch Notes & Updates</h1>
-        <div class="view-subtitle">Patch 3.0 Lord of Hatred. Data freshness, hotfix log, source attribution.</div>
+        <h1 class="view-title">Gear Targets</h1>
+        <div class="view-subtitle">Aspects to imprint, uniques to chase, bosses to farm</div>
+      </div>
+      <div id="aspectsRoot" class="aspects-root"></div>
+      <div id="uniquesRoot" class="uniques-root"></div>
+      <div id="bossesRoot" class="bosses-root"></div>
+    </section>
+
+    <!-- 6. GEAR COMPARISON ===================== -->
+    <section class="view" id="view-gear-comparison" data-view="gear-comparison" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Gear Comparison</h1>
+        <div class="view-subtitle">Compare gear rolls against build targets (Sprint 3 build)</div>
+      </div>
+      <div id="gearCompareRoot" class="gear-compare-root">
+        <div class="placeholder-card">
+          <i class="fa-solid fa-scale-balanced placeholder-icon"></i>
+          <div class="placeholder-title">Gear Comparison (Sprint 3)</div>
+          <div class="placeholder-text">Compare My Build feature renders here. Stat weights are already populated in window.D4_GEAR_WEIGHTS.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. SLOT REFERENCE ====================== -->
+    <section class="view" id="view-slot-reference" data-view="slot-reference" hidden>
+      <div class="view-header">
+        <h1 class="view-title">Slot Reference</h1>
+        <div class="view-subtitle">Talismans and charms, runes and gems</div>
+      </div>
+      <div id="talismansRoot" class="talismans-root"></div>
+      <div id="runesGemsRoot" class="runes-gems-root">
+        <div class="placeholder-card">
+          <i class="fa-solid fa-gem placeholder-icon"></i>
+          <div class="placeholder-title">Runes and Gems (Sprint 5)</div>
+          <div class="placeholder-text">Rune combos, gem socket recommendations, runeword reference render here. Data is in data-sources/runes-gems.md.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. ABOUT =============================== -->
+    <section class="view" id="view-about" data-view="about" hidden>
+      <div class="view-header">
+        <h1 class="view-title">About</h1>
+        <div class="view-subtitle">Patch 3.0 Lord of Hatred. Data freshness and source attribution.</div>
       </div>
       <div id="patchRoot" class="patch-root"></div>
     </section>
