@@ -642,6 +642,47 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
   transition: transform 0.15s;
 }
 
+/* === SETTINGS DROPDOWN MENU === */
+.settings-menu {
+  position: absolute;
+  top: calc(var(--topbar-h) + 6px);
+  right: 8px;
+  min-width: 220px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 8px;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.settings-menu[hidden] { display: none; }
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 0.12s, color 0.12s;
+}
+.settings-item:hover { background: var(--bg-hover); }
+.settings-item i { width: 16px; text-align: center; color: var(--text-secondary); }
+.settings-item-danger { color: var(--accent-strong); }
+.settings-item-danger:hover { background: var(--accent-light); }
+.settings-item-danger i { color: var(--accent-strong); }
+
 /* === MORE DRAWER ITEMS === */
 .more-item {
   display: flex;

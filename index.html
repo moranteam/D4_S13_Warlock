@@ -42,15 +42,27 @@
     <div class="topbar-current" id="topbarCurrent">Dashboard</div>
 
     <div class="topbar-actions">
-      <button class="topbar-btn" id="exportBtn" aria-label="Export save" title="Export save">
-        <i class="fa-solid fa-download"></i>
+      <button class="topbar-btn" id="settingsBtn" aria-label="Settings" title="Settings" aria-haspopup="menu" aria-expanded="false">
+        <i class="fa-solid fa-gear"></i>
       </button>
-      <button class="topbar-btn" id="importBtn" aria-label="Import save" title="Import save">
-        <i class="fa-solid fa-upload"></i>
-      </button>
-      <button class="topbar-btn topbar-btn-danger" id="resetBtn" aria-label="Reset all" title="Reset all">
-        <i class="fa-solid fa-rotate-left"></i>
-      </button>
+      <div class="settings-menu" id="settingsMenu" hidden role="menu">
+        <button class="settings-item" id="exportBtn" role="menuitem">
+          <i class="fa-solid fa-download"></i>
+          <span>Export Save</span>
+        </button>
+        <button class="settings-item" id="importBtn" role="menuitem">
+          <i class="fa-solid fa-upload"></i>
+          <span>Import Save</span>
+        </button>
+        <a class="settings-item" href="#about" data-section="about" role="menuitem">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>About</span>
+        </a>
+        <button class="settings-item settings-item-danger" id="resetBtn" role="menuitem">
+          <i class="fa-solid fa-rotate-left"></i>
+          <span>Reset All Data</span>
+        </button>
+      </div>
     </div>
   </header>
 

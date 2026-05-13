@@ -2008,6 +2008,34 @@
     const moreBtn = document.getElementById('moreBtn');
     if (moreBtn) moreBtn.addEventListener('click', () => Modal.open('modalMore'));
 
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsMenu = document.getElementById('settingsMenu');
+    if (settingsBtn && settingsMenu) {
+      const closeSettings = () => {
+        settingsMenu.hidden = true;
+        settingsBtn.setAttribute('aria-expanded', 'false');
+      };
+      const openSettings = () => {
+        settingsMenu.hidden = false;
+        settingsBtn.setAttribute('aria-expanded', 'true');
+      };
+      settingsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (settingsMenu.hidden) openSettings(); else closeSettings();
+      });
+      document.addEventListener('click', (e) => {
+        if (settingsMenu.hidden) return;
+        if (e.target.closest('#settingsMenu')) {
+          closeSettings();
+          return;
+        }
+        if (!e.target.closest('#settingsBtn')) closeSettings();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !settingsMenu.hidden) closeSettings();
+      });
+    }
+
     // Welcome toast on first visit
     if (!AppState.data.settings.welcomed) {
       setTimeout(() => {
