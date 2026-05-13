@@ -453,9 +453,7 @@
   const QuickUpdate = {
     init() {
       const fab = document.getElementById('fab');
-      const fabBottom = document.getElementById('fabBottom');
       if (fab) fab.addEventListener('click', () => this.open());
-      if (fabBottom) fabBottom.addEventListener('click', () => this.open());
 
       document.addEventListener('keydown', (e) => {
         if (e.key === '/' && !this.isInputFocused()) {
@@ -2057,6 +2055,9 @@
     Router.init();
     initIO();
     QuickUpdate.renderAll();
+
+    const moreBtn = document.getElementById('moreBtn');
+    if (moreBtn) moreBtn.addEventListener('click', () => Modal.open('modalMore'));
 
     // Welcome toast on first visit
     if (!AppState.data.settings.welcomed) {

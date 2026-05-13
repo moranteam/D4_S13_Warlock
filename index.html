@@ -336,23 +336,56 @@
       <i class="fa-solid fa-gauge-high"></i>
       <span>Home</span>
     </a>
-    <a href="#walkthrough" class="bottom-tab" data-section="walkthrough">
+    <a href="#leveling-path" class="bottom-tab" data-section="leveling-path">
       <i class="fa-solid fa-route"></i>
       <span>Level</span>
     </a>
-    <a href="#aspects" class="bottom-tab" data-section="aspects">
-      <i class="fa-solid fa-wand-magic-sparkles"></i>
-      <span>Aspects</span>
+    <a href="#gear-comparison" class="bottom-tab" data-section="gear-comparison">
+      <i class="fa-solid fa-scale-balanced"></i>
+      <span>Gear</span>
     </a>
-    <a href="#uniques" class="bottom-tab" data-section="uniques">
-      <i class="fa-solid fa-trophy"></i>
-      <span>Uniques</span>
+    <a href="#endgame-build" class="bottom-tab" data-section="endgame-build">
+      <i class="fa-solid fa-star"></i>
+      <span>Endgame</span>
     </a>
-    <button class="bottom-tab bottom-tab-fab" id="fabBottom" aria-label="Quick update">
-      <i class="fa-solid fa-bolt"></i>
-      <span>Update</span>
+    <button class="bottom-tab" id="moreBtn" aria-label="More sections">
+      <i class="fa-solid fa-ellipsis"></i>
+      <span>More</span>
     </button>
   </nav>
+
+  <!-- =========================================== -->
+  <!-- MORE DRAWER MODAL (mobile)                  -->
+  <!-- =========================================== -->
+  <div class="modal" id="modalMore" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal="modalMore"></div>
+    <div class="modal-panel modal-panel-more">
+      <div class="modal-header">
+        <h2 class="modal-title"><i class="fa-solid fa-ellipsis"></i> More</h2>
+        <button class="modal-close" data-close-modal="modalMore" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <a href="#skills-reference" class="more-item" data-section="skills-reference" data-close-modal="modalMore">
+          <i class="fa-solid fa-sitemap"></i>
+          <span>Skills Reference</span>
+        </a>
+        <a href="#gear-targets" class="more-item" data-section="gear-targets" data-close-modal="modalMore">
+          <i class="fa-solid fa-trophy"></i>
+          <span>Gear Targets</span>
+        </a>
+        <a href="#slot-reference" class="more-item" data-section="slot-reference" data-close-modal="modalMore">
+          <i class="fa-solid fa-coins"></i>
+          <span>Slot Reference</span>
+        </a>
+        <a href="#about" class="more-item" data-section="about" data-close-modal="modalMore">
+          <i class="fa-solid fa-clipboard-list"></i>
+          <span>About</span>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- =========================================== -->
   <!-- QUICK UPDATE FAB (desktop)                  -->
