@@ -95,26 +95,6 @@ kbd {
   --shadow-glow: 0 0 24px rgba(196, 30, 58, 0.25);
 }
 
-/* === LIGHT THEME (warm cream, never cold white) === */
-body.theme-light {
-  --bg: #f7ede3;
-  --bg-darker: #ede0d2;
-  --bg-card: #ffffff;
-  --bg-card-alt: #fdf6ee;
-  --bg-hover: #f4e4d2;
-  --bg-frost: rgba(247, 237, 227, 0.95);
-  --border: #d9c4b0;
-  --border-strong: #b89a7d;
-  --text: #2c1810;
-  --text-secondary: #6b4c3b;
-  --text-dim: #998472;
-  --accent-light: rgba(196, 30, 58, 0.08);
-  --accent-glow: rgba(255, 69, 0, 0.18);
-  --shadow-sm: 0 1px 3px rgba(60, 30, 20, 0.08);
-  --shadow-md: 0 4px 14px rgba(60, 30, 20, 0.12);
-  --shadow-lg: 0 10px 30px rgba(60, 30, 20, 0.18);
-}
-
 /* === TYPOGRAPHY === */
 h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; }
 .mono { font-family: var(--font-mono); }

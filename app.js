@@ -68,9 +68,7 @@
       reinforcement: null,
     },
     verified: {},
-    settings: {
-      theme: 'dark',
-    },
+    settings: {},
     notes: '',
   };
 
@@ -317,35 +315,6 @@
       const bd = document.getElementById('sidebarBackdrop');
       if (el) el.classList.remove('is-open');
       if (bd) bd.classList.remove('is-visible');
-    },
-  };
-
-  // ========================================
-  // THEME
-  // ========================================
-  const Theme = {
-    init() {
-      this.apply(AppState.data.settings.theme || 'dark');
-      const btn = document.getElementById('themeToggle');
-      if (btn) btn.addEventListener('click', () => this.toggle());
-    },
-
-    apply(theme) {
-      document.body.classList.remove('theme-dark', 'theme-light');
-      document.body.classList.add('theme-' + theme);
-      AppState.data.settings.theme = theme;
-      AppState.save('settings');
-      const btn = document.getElementById('themeToggle');
-      if (btn) {
-        btn.innerHTML = theme === 'dark'
-          ? '<i class="fa-solid fa-moon"></i>'
-          : '<i class="fa-solid fa-sun"></i>';
-      }
-    },
-
-    toggle() {
-      const next = AppState.data.settings.theme === 'dark' ? 'light' : 'dark';
-      this.apply(next);
     },
   };
 
@@ -2014,7 +1983,6 @@
         reader.onload = (ev) => {
           const ok = AppState.importSave(ev.target.result);
           if (ok) {
-            Theme.apply(AppState.data.settings.theme || 'dark');
             QuickUpdate.renderAll();
             Toast.show('Save imported', 'success');
           } else {
@@ -2032,7 +2000,6 @@
           'This wipes all progress. Levels, aspects, uniques, walkthrough, paragon, everything. Cannot be undone unless you have exported a save.',
           () => {
             AppState.reset();
-            Theme.apply('dark');
             QuickUpdate.renderAll();
             Toast.show('Reset complete', 'success');
           },
@@ -2049,7 +2016,6 @@
     AppState.load();
     Toast.init();
     Modal.init();
-    Theme.init();
     Sidebar.init();
     QuickUpdate.init();
     Router.init();
