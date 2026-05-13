@@ -180,24 +180,24 @@
   const Router = {
     current: 'dashboard',
     sections: [
-      'dashboard', 'walkthrough', 'skills', 'shards',
-      'aspects', 'uniques', 'talismans', 'paragon',
-      'bosses', 'warplans', 'endbuild', 'mercenary', 'patch',
+      'dashboard',
+      'leveling-path',
+      'skills-reference',
+      'endgame-build',
+      'gear-targets',
+      'gear-comparison',
+      'slot-reference',
+      'about',
     ],
     titles: {
-      dashboard: 'Dashboard',
-      walkthrough: 'Leveling Walkthrough',
-      skills: 'Skill Tree Planner',
-      shards: 'Soul Shards & Fragments',
-      aspects: 'Aspect Tracker',
-      uniques: 'Unique Chase List',
-      talismans: 'Talisman & Charms',
-      paragon: 'Paragon Boards',
-      bosses: 'Boss Farming',
-      warplans: 'War Plans',
-      endbuild: 'Endgame Build',
-      mercenary: 'Mercenary',
-      patch: 'Patch Notes',
+      'dashboard': 'Dashboard',
+      'leveling-path': 'Leveling Path',
+      'skills-reference': 'Skills Reference',
+      'endgame-build': 'Endgame Build',
+      'gear-targets': 'Gear Targets',
+      'gear-comparison': 'Gear Comparison',
+      'slot-reference': 'Slot Reference',
+      'about': 'About',
     },
 
     init() {
@@ -250,18 +250,37 @@
       });
       const titleEl = document.getElementById('topbarCurrent');
       if (titleEl) titleEl.textContent = this.titles[this.current] || this.current;
-      if (this.current === 'walkthrough') Walkthrough.render();
-      if (this.current === 'skills') Skills.render();
-      if (this.current === 'shards') Shards.render();
-      if (this.current === 'aspects') Aspects.render();
-      if (this.current === 'paragon') Paragon.render();
-      if (this.current === 'uniques') Uniques.render();
-      if (this.current === 'bosses') Bosses.render();
-      if (this.current === 'endbuild') Endbuild.render();
-      if (this.current === 'talismans') Talismans.render();
-      if (this.current === 'warplans') WarPlans.render();
-      if (this.current === 'mercenary') Mercenary.render();
-      if (this.current === 'patch') Patch.render();
+
+      // Consolidated sections call multiple module renders in sequence.
+      // Existing module objects are preserved; the new sections just
+      // stack their content vertically.
+      if (this.current === 'leveling-path') {
+        Walkthrough.render();
+        // skillTimelineRoot and controllerRoot are Sprint 2 placeholders.
+      }
+      if (this.current === 'skills-reference') {
+        Skills.render();
+      }
+      if (this.current === 'endgame-build') {
+        Endbuild.render();
+        Shards.render();
+        Paragon.render();
+        WarPlans.render();
+        Mercenary.render();
+      }
+      if (this.current === 'gear-targets') {
+        Aspects.render();
+        Uniques.render();
+        Bosses.render();
+      }
+      // gear-comparison: Sprint 3 placeholder, no module to render yet.
+      if (this.current === 'slot-reference') {
+        Talismans.render();
+        // runesGemsRoot is a Sprint 5 placeholder.
+      }
+      if (this.current === 'about') {
+        Patch.render();
+      }
     },
   };
 
@@ -1963,14 +1982,6 @@
         }
         const pct = total > 0 ? Math.round((done / total) * 100) : 0;
         walkthroughBadge.textContent = pct + '%';
-      }
-
-      const aspectsBadge = document.getElementById('navBadgeAspects');
-      if (aspectsBadge) {
-        const aspects = AppState.data.aspects;
-        const done = Object.values(aspects).filter((a) => a && a.imprinted).length;
-        const totalAspects = (window.D4_DATA && window.D4_DATA.aspects && window.D4_DATA.aspects.length) || done;
-        aspectsBadge.textContent = done + '/' + totalAspects;
       }
 
       const uniquesBadge = document.getElementById('navBadgeUniques');
