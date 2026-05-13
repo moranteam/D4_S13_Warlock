@@ -2095,10 +2095,21 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 
 /* Desktop (1024px+) */
 @media (min-width: 1024px) {
-  /* Sidebar stays hidden by default on desktop; hamburger toggles it. */
-  .sidebar.is-open + .sidebar-backdrop,
-  .sidebar-backdrop.is-visible { display: block; }
-  .main { padding-left: 24px; padding-right: 24px; padding-bottom: 40px; }
+  /* Sidebar visible by default on desktop, reserves layout space.
+     User can collapse via hamburger; .is-collapsed hides it and the
+     body.sidebar-collapsed class lets main reclaim the space. */
+  .sidebar {
+    transform: translateX(0);
+    box-shadow: none;
+  }
+  .sidebar.is-collapsed {
+    transform: translateX(-100%);
+  }
+  .sidebar-backdrop { display: none !important; }
+  .topbar { padding-left: calc(var(--sidebar-w) + 16px); }
+  .main { padding-left: calc(var(--sidebar-w) + 24px); padding-right: 24px; padding-bottom: 40px; }
+  body.sidebar-collapsed .topbar { padding-left: 16px; }
+  body.sidebar-collapsed .main { padding-left: 24px; }
   .bottombar { display: none; }
   .fab { bottom: 28px; right: 28px; }
   .topbar-current { text-align: center; padding-left: 0; }

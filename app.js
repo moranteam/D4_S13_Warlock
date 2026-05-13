@@ -295,37 +295,68 @@
       if (backdrop) {
         backdrop.addEventListener('click', () => this.close());
       }
-      // Sidebar is collapsed by default on every viewport. If the user
-      // previously opened it, restore that state.
-      try {
-        if (localStorage.getItem(this.LS_KEY) === '1') this.open();
-      } catch (err) { /* localStorage unavailable, default closed */ }
+      // Mobile (< 1024px): always start collapsed. Hamburger opens the
+      // drawer. localStorage does not apply on mobile.
+      // Desktop (1024px+): visible by default. If the user previously
+      // collapsed via hamburger, restore that state from localStorage.
+      if (this.isDesktop()) {
+        try {
+          if (localStorage.getItem(this.LS_KEY) === '0') {
+            this.collapseDesktop();
+          }
+        } catch (err) { /* localStorage unavailable, default open */ }
+      }
     },
 
-    open() {
-      const el = document.getElementById('sidebar');
-      const bd = document.getElementById('sidebarBackdrop');
-      if (el) el.classList.add('is-open');
-      if (bd) bd.classList.add('is-visible');
-      this.persist(true);
+    isDesktop() {
+      return typeof window.matchMedia === 'function'
+        && window.matchMedia('(min-width: 1024px)').matches;
     },
 
     toggle() {
+      if (this.isDesktop()) {
+        const el = document.getElementById('sidebar');
+        if (el && el.classList.contains('is-collapsed')) {
+          this.expandDesktop();
+        } else {
+          this.collapseDesktop();
+        }
+        return;
+      }
+      // Mobile drawer toggle
       const el = document.getElementById('sidebar');
       if (!el) return;
       if (el.classList.contains('is-open')) {
         this.close();
       } else {
-        this.open();
+        const bd = document.getElementById('sidebarBackdrop');
+        el.classList.add('is-open');
+        if (bd) bd.classList.add('is-visible');
       }
     },
 
+    collapseDesktop() {
+      const el = document.getElementById('sidebar');
+      if (el) el.classList.add('is-collapsed');
+      document.body.classList.add('sidebar-collapsed');
+      this.persist(false);
+    },
+
+    expandDesktop() {
+      const el = document.getElementById('sidebar');
+      if (el) el.classList.remove('is-collapsed');
+      document.body.classList.remove('sidebar-collapsed');
+      this.persist(true);
+    },
+
     close() {
+      // Mobile drawer close (called by Router on navigation and by
+      // backdrop click). No-op for desktop: on desktop, the layout
+      // sidebar stays visible until the user toggles via hamburger.
       const el = document.getElementById('sidebar');
       const bd = document.getElementById('sidebarBackdrop');
       if (el) el.classList.remove('is-open');
       if (bd) bd.classList.remove('is-visible');
-      this.persist(false);
     },
 
     persist(isOpen) {
