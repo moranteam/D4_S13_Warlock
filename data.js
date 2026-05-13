@@ -10,7 +10,7 @@ window.D4_DATA = {
   patch: '3.0 Lord of Hatred',
   season: 13,
   seasonName: 'Season of Reckoning',
-  compiledAt: '2026-05-11',
+  compiledAt: '2026-05-13',
 
   /* ==========================================
      CLUSTERS (skill tree groupings)
@@ -49,10 +49,10 @@ window.D4_DATA = {
     /* === CORE === */
     {
       id: 'dread-claws', name: 'Dread Claws', cluster: 'core',
-      role: 'Build core. Spam from Lv 3 to 70. Enveloping Terror at Lv 15 turns it into an AoE around you AND your Greater Demon.',
+      role: 'Build core. Spam from Lv 3 to 70. Encircling Terror at Lv 15 turns it into an AoE around you AND your Greater Demon.',
       relevance: 'core',
-      upgrades: ['Cascading Dread', 'Enveloping Terror', 'Ravenous Jaws', 'Damage', 'Cost Reduction', 'Ambush', 'Vulnerable'],
-      recommended: ['Enveloping Terror', 'Ambush', 'Vulnerable'],
+      upgrades: ['Cascading Dread', 'Encircling Terror', 'Ravenous Jaws', 'Damage', 'Cost Reduction', 'Ambush', 'Vulnerable'],
+      recommended: ['Encircling Terror', 'Ambush', 'Vulnerable'],
       maxRank: 5,
     },
     {
@@ -73,10 +73,10 @@ window.D4_DATA = {
     /* === DEFENSIVE === */
     {
       id: 'nether-step', name: 'Nether Step', cluster: 'defensive',
-      role: 'Build core. Mobility + Shadowform generation from Lv 4. At Lv 34 take Shadow Recall to pull summons to you and extend their durations.',
+      role: 'Build core. Mobility + Shadowform generation from Lv 4. At Lv 34 take Recall Shadows to pull summons to you and extend their durations.',
       relevance: 'core',
-      upgrades: ['Portals', 'Gloomwalker', 'Shadow Recall', 'Damage Reduction', 'Extra Charge', 'Vacuum Swap', 'Movement Speed'],
-      recommended: ['Shadow Recall', 'Damage Reduction', 'Extra Charge'],
+      upgrades: ['Portals', 'Gloomwalker', 'Recall Shadows', 'Damage Reduction', 'Extra Charge', 'Vacuum Swap', 'Movement Speed'],
+      recommended: ['Recall Shadows', 'Damage Reduction', 'Extra Charge'],
       maxRank: 5,
     },
     {
@@ -220,11 +220,11 @@ window.D4_DATA = {
      ENDGAME SKILL BAR (Maxroll endgame)
      ========================================== */
   endgameBar: [
-    { slot: 1, skillId: 'dread-claws', upgrade: 'Enveloping Terror', role: 'Primary damage' },
+    { slot: 1, skillId: 'dread-claws', upgrade: 'Encircling Terror', role: 'Primary damage' },
     { slot: 2, skillId: 'rampage', upgrade: 'Abyssal Titan', role: 'Greater Demon AoE source' },
     { slot: 3, skillId: 'profane-sentinel', upgrade: '', role: 'Vulnerable application' },
     { slot: 4, skillId: 'command-fallen', upgrade: 'Fallen Rush', role: 'Resource + Hex amplification' },
-    { slot: 5, skillId: 'nether-step', upgrade: 'Shadow Recall', role: 'Mobility + summon pull (boosted by Footfalls)' },
+    { slot: 5, skillId: 'nether-step', upgrade: 'Recall Shadows', role: 'Mobility + summon pull (boosted by Footfalls)' },
     { slot: 6, skillId: 'metamorphosis', upgrade: 'Terror Demon', role: 'Shadowform generation + survival' },
   ],
 
@@ -620,6 +620,203 @@ window.D4_DATA = {
   ],
 
   /* ==========================================
+     LEVELING PATH (Reconciled per-level skill point allocation)
+     Source: data-sources/leveling-skill-points.md
+     Maxroll canonical via Claude reconciliation. See
+     data-sources/RECONCILIATION.md Resolution 3.
+     ========================================== */
+  levelingPath: {
+    legend: {
+      AS: 'Active Skill rank',
+      P: 'Passive node',
+      U: 'Upgrade node (first or second branch upgrade on an active)',
+      R: 'Soul Shard or Fragment selection (class mechanic, not a skill point)',
+    },
+    levels: [
+      { level: 1, pointSpent: 'AS: Hellion Sting r1', cumulative: 'Hellion Sting 1', respec: false, confidence: 'HIGH', notes: 'Basic skill only at Lv 1' },
+      { level: 2, pointSpent: 'AS: Hellion Sting r2', cumulative: 'Hellion Sting 2', respec: false, confidence: 'MEDIUM', notes: 'Build Basic ranks while Core is locked' },
+      { level: 3, pointSpent: 'AS: Dread Claws r1', cumulative: 'HS 2, DC 1', respec: false, confidence: 'HIGH', notes: 'Dread Claws unlocks; immediately becomes the spam skill' },
+      { level: 4, pointSpent: 'AS: Nether Step r1', cumulative: 'HS 2, DC 1, NS 1', respec: false, confidence: 'HIGH', notes: 'Mobility + Shadowform generation unlocked' },
+      { level: 5, pointSpent: 'AS: Dread Claws r2', cumulative: 'HS 2, DC 2, NS 1', respec: false, confidence: 'MEDIUM', notes: 'Stack Core ranks for Wrath efficiency' },
+      { level: 6, pointSpent: 'U: Dread Claws Enhanced', cumulative: 'HS 2, DC 2 + Enhanced, NS 1', respec: false, confidence: 'MEDIUM', notes: 'Damage ramp upgrade' },
+      { level: 7, pointSpent: 'U: Dread Claws Damage', cumulative: 'HS 2, DC 2 + both upgrades, NS 1', respec: false, confidence: 'MEDIUM', notes: 'Locks the damage ramp' },
+      { level: 8, pointSpent: 'AS: Rampage r1', cumulative: 'HS 2, DC 2 upg, NS 1, R 1', respec: false, confidence: 'HIGH', notes: 'Greater Demon unlocks (Archfiend class)' },
+      { level: 9, pointSpent: 'U: Hellion Sting Eviscerate', cumulative: 'HS 2 + Eviscerate, DC 2 upg, NS 1, R 1', respec: false, confidence: 'HIGH', notes: 'Single-target spike via Eviscerate' },
+      { level: 10, pointSpent: 'U: Nether Step Enhanced', cumulative: 'HS 2 + Evis, DC 2 upg, NS 1 + Enhanced, R 1', respec: false, confidence: 'MEDIUM', notes: 'Adds charge and Shadowform on use' },
+      { level: 11, pointSpent: 'U: Nether Step Disciplined', cumulative: 'NS 1 + Enhanced + Disciplined', respec: false, confidence: 'MEDIUM', notes: 'Disciplined is the Mastermind pick for damage reduction. Methodical is the alternative for pure movement-speed leveling, not recommended for this build.' },
+      { level: 12, pointSpent: 'AS: Rampage r2', cumulative: 'R 2', respec: false, confidence: 'MEDIUM', notes: 'Bring Rampage online for boss damage' },
+      { level: 13, pointSpent: 'U: Rampage Enhanced', cumulative: 'R 2 + Enhanced', respec: false, confidence: 'MEDIUM', notes: 'Prepares the Abyssal Titan branch' },
+      { level: 14, pointSpent: 'U: Hellion Sting Tail Spikes', cumulative: 'HS 2 + Eviscerate + Tail Spikes', respec: false, confidence: 'HIGH', notes: 'Elite and boss melt combo with Eviscerate active' },
+      { level: 15, pointSpent: 'R: Mastermind Shard; full respec redistribution', cumulative: 'See respecStates.lv15', respec: true, confidence: 'HIGH', notes: 'Soul Shard unlocked via Warlock class quest. Summon Laalish granted free. Dread Claws gains Encircling Terror upgrade.' },
+      { level: 16, pointSpent: 'AS: Dread Claws r6', cumulative: 'DC 6', respec: false, confidence: 'MEDIUM', notes: 'Continue maxing Core' },
+      { level: 17, pointSpent: 'AS: Dread Claws r7', cumulative: 'DC 7', respec: false, confidence: 'MEDIUM', notes: 'Damage scales linearly per rank' },
+      { level: 18, pointSpent: 'P: Shadow damage passive r1', cumulative: '+1 Abyss passive', respec: false, confidence: 'MEDIUM', notes: 'Feeds Mastermind Shard multiplier' },
+      { level: 19, pointSpent: 'AS: Rampage r3', cumulative: 'R 3', respec: false, confidence: 'MEDIUM', notes: 'Prep for Abyssal Titan unlock' },
+      { level: 20, pointSpent: 'U: Rampage Abyssal Titan', cumulative: 'R 3 + Abyssal Titan upgrade', respec: false, confidence: 'HIGH', notes: 'Greater Demon variant doubles Encircling Terror damage' },
+      { level: 21, pointSpent: 'AS: Nether Step r2', cumulative: 'NS 2', respec: false, confidence: 'MEDIUM', notes: 'More Shadowform stacks per cast' },
+      { level: 22, pointSpent: 'AS: Dread Claws r8', cumulative: 'DC 8', respec: false, confidence: 'MEDIUM', notes: 'Push Core' },
+      { level: 23, pointSpent: 'P: Demonology passive r1', cumulative: '+1 Demonology cluster', respec: false, confidence: 'MEDIUM', notes: 'Buffs Rampage and Summon Laalish damage' },
+      { level: 24, pointSpent: 'AS: Dread Claws r9', cumulative: 'DC 9', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 25, pointSpent: 'AS: Hellion Sting r3', cumulative: 'HS 3', respec: false, confidence: 'MEDIUM', notes: 'Keeps Wrath generation healthy pre-respec' },
+      { level: 26, pointSpent: 'P: Wrath generation passive r1', cumulative: 'Wrath gen node', respec: false, confidence: 'MEDIUM', notes: 'Smooths spending DC at high rank' },
+      { level: 27, pointSpent: 'AS: Rampage r4', cumulative: 'R 4', respec: false, confidence: 'MEDIUM', notes: 'Build Greater Demon damage' },
+      { level: 28, pointSpent: 'AS: Dread Claws r10', cumulative: 'DC 10', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 29, pointSpent: 'P: Shadow damage passive r2', cumulative: '+2 in cluster', respec: false, confidence: 'MEDIUM', notes: 'Pre-30 passive build out' },
+      { level: 30, pointSpent: 'R: Blasphemous Fragment; minor skill cleanup', cumulative: 'See respecStates.lv30', respec: true, confidence: 'HIGH', notes: 'Fragment slot unlocks. Blasphemous makes Rampage Abyssal Titan apply Hex on hit.' },
+      { level: 31, pointSpent: 'AS: Dread Claws r11', cumulative: 'DC 11', respec: false, confidence: 'MEDIUM', notes: 'Continue scaling' },
+      { level: 32, pointSpent: 'AS: Rampage r5', cumulative: 'R 5', respec: false, confidence: 'MEDIUM', notes: 'Bring Greater Demon to mid rank' },
+      { level: 33, pointSpent: 'AS: Dread Claws r12', cumulative: 'DC 12', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 34, pointSpent: 'RESPEC: drop HS + SoS; pick up Command Fallen (Fallen Rush), Dark Prison (Chain Aura), Nether Step Recall Shadows', cumulative: 'See respecStates.lv34', respec: true, confidence: 'HIGH', notes: 'Maxroll: drop Hellion Sting and Sigil of Subversion; pick up Command Fallen (Fallen Rush) and Dark Prison (Chain Aura). Recall Shadows on Nether Step teleports Abyssal Titan with you.' },
+      { level: 35, pointSpent: 'AS: Dread Claws r13', cumulative: 'DC 13', respec: false, confidence: 'MEDIUM', notes: 'Continue Core scaling' },
+      { level: 36, pointSpent: 'AS: Rampage r6', cumulative: 'R 6', respec: false, confidence: 'MEDIUM', notes: 'Abyssal Titan damage' },
+      { level: 37, pointSpent: 'P: Critical Strike passive cluster r1', cumulative: '+1 Crit passive', respec: false, confidence: 'MEDIUM', notes: 'Sets up Crit scaling for Litany of Sable endgame' },
+      { level: 38, pointSpent: 'AS: Dread Claws r14', cumulative: 'DC 14', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 39, pointSpent: 'AS: Command Fallen r2', cumulative: 'CF 2', respec: false, confidence: 'MEDIUM', notes: 'Improves Wrath generation per Fallen Rush tap' },
+      { level: 40, pointSpent: 'RESPEC: drop Dark Prison; take Metamorphosis with Terror Demon upgrade', cumulative: 'See respecStates.lv40', respec: true, confidence: 'HIGH', notes: 'Maxroll: at Lv 40 drop Dark Prison, pick up Metamorphosis Terror Demon. Dark Prison instead automated with Prid rune. Metamorphosis takes effect on bar at Lv 41.' },
+      { level: 41, pointSpent: 'AS: Dread Claws r15 (MAX)', cumulative: 'DC 15', respec: false, confidence: 'HIGH', notes: 'Dread Claws hits max rank. First full level operating with Metamorphosis on bar.' },
+      { level: 42, pointSpent: 'AS: Metamorphosis r2', cumulative: 'Meta 2', respec: false, confidence: 'MEDIUM', notes: 'Improves Shadowform generation' },
+      { level: 43, pointSpent: 'AS: Metamorphosis r3', cumulative: 'Meta 3', respec: false, confidence: 'MEDIUM', notes: 'Continue ultimate scaling' },
+      { level: 44, pointSpent: 'AS: Rampage r7', cumulative: 'R 7', respec: false, confidence: 'MEDIUM', notes: 'Abyssal Titan damage' },
+      { level: 45, pointSpent: 'AS: Metamorphosis r4', cumulative: 'Meta 4', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 46, pointSpent: 'AS: Rampage r8', cumulative: 'R 8', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 47, pointSpent: 'AS: Metamorphosis r5', cumulative: 'Meta 5', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 48, pointSpent: 'AS: Rampage r9', cumulative: 'R 9', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 49, pointSpent: 'AS: Command Fallen r3', cumulative: 'CF 3', respec: false, confidence: 'MEDIUM', notes: 'Resource generation rank' },
+      { level: 50, pointSpent: 'AS: Metamorphosis r6', cumulative: 'Meta 6', respec: false, confidence: 'MEDIUM', notes: 'Mid game ultimate ramp' },
+      { level: 51, pointSpent: 'AS: Rampage r10', cumulative: 'R 10', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 52, pointSpent: 'AS: Metamorphosis r7', cumulative: 'Meta 7', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 53, pointSpent: 'AS: Command Fallen r4', cumulative: 'CF 4', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 54, pointSpent: 'AS: Rampage r11', cumulative: 'R 11', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 55, pointSpent: 'AS: Metamorphosis r8', cumulative: 'Meta 8', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 56, pointSpent: 'AS: Rampage r12', cumulative: 'R 12', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 57, pointSpent: 'AS: Metamorphosis r9', cumulative: 'Meta 9', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 58, pointSpent: 'AS: Rampage r13', cumulative: 'R 13', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 59, pointSpent: 'AS: Metamorphosis r10', cumulative: 'Meta 10', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 60, pointSpent: 'AS: Rampage r14', cumulative: 'R 14', respec: false, confidence: 'MEDIUM', notes: 'First Paragon point unlocks (Mobalytics planner)' },
+      { level: 61, pointSpent: 'AS: Metamorphosis r11', cumulative: 'Meta 11', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 62, pointSpent: 'AS: Rampage r15 (MAX)', cumulative: 'R 15', respec: false, confidence: 'MEDIUM', notes: 'Rampage hits max rank' },
+      { level: 63, pointSpent: 'AS: Metamorphosis r12', cumulative: 'Meta 12', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 64, pointSpent: 'AS: Command Fallen r5', cumulative: 'CF 5', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 65, pointSpent: 'AS: Metamorphosis r13', cumulative: 'Meta 13', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 66, pointSpent: 'AS: Command Fallen r6', cumulative: 'CF 6', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 67, pointSpent: 'AS: Metamorphosis r14', cumulative: 'Meta 14', respec: false, confidence: 'MEDIUM', notes: 'Continue' },
+      { level: 68, pointSpent: 'P: Critical Strike Damage passive max', cumulative: '+1 max Crit cluster', respec: false, confidence: 'MEDIUM', notes: 'Endgame passive shaping' },
+      { level: 69, pointSpent: 'AS: Metamorphosis r15 (MAX)', cumulative: 'Meta 15', respec: false, confidence: 'MEDIUM', notes: 'All three primary actives at rank 15' },
+      { level: 70, pointSpent: 'P: Final Abyss damage passive max', cumulative: 'Final spec lock', respec: false, confidence: 'HIGH', notes: '69 base points spent. Remaining points from Season Rank rewards (Icy Veins notes 83 total at full season completion).' },
+    ],
+    respecStates: {
+      lv15: {
+        trigger: 'Warlock class quest grants Mastermind Shard choice. Summon Laalish becomes available free. Encircling Terror upgrade unlocks on Dread Claws.',
+        totalPoints: 14,
+        skills: [
+          { name: 'Hellion Sting', rank: 1, upgrades: ['Eviscerate', 'Tail Spikes'] },
+          { name: 'Dread Claws', rank: 5, upgrades: ['Encircling Terror', 'Ambush'] },
+          { name: 'Nether Step', rank: 1, upgrades: ['Enhanced', 'Disciplined'] },
+          { name: 'Rampage', rank: 1, upgrades: ['Enhanced'] },
+          { name: 'Sigil of Subversion', rank: 1, upgrades: [] },
+        ],
+        passives: 'All relevant Abyss and Demonology cluster rank 1 nodes filled',
+        soulShard: 'Mastermind Shard (grants Summon Laalish)',
+        fragment: 'None yet (unlocks at Lv 30)',
+        barEffect: 'Encircling Terror converts Dread Claws into a circular AoE around the player and the Greater Demon. Mastermind Shard grants 30 percent Abyss damage while in Shadowform plus 5 percent move speed per stack.',
+      },
+      lv30: {
+        trigger: 'Fragment slot unlocks. Blasphemous Fragment makes Rampage Abyssal Titan apply Hex on hit.',
+        totalPoints: 29,
+        skills: [
+          { name: 'Hellion Sting', rank: 3, upgrades: ['Eviscerate', 'Tail Spikes'] },
+          { name: 'Dread Claws', rank: 10, upgrades: ['Encircling Terror', 'Ambush', 'Cascading Dread'] },
+          { name: 'Nether Step', rank: 2, upgrades: ['Enhanced', 'Disciplined'] },
+          { name: 'Rampage', rank: 4, upgrades: ['Enhanced', 'Abyssal Titan'] },
+          { name: 'Sigil of Subversion', rank: 1, upgrades: ['Enhanced'] },
+        ],
+        passives: 'Abyss and Demonology cluster expansion: Shadow damage r2, Demonology r1, Wrath generation r1',
+        soulShard: 'Mastermind Shard',
+        fragment: 'Blasphemous Fragment (NEW this respec)',
+        barEffect: 'Rampage Abyssal Titan now applies Hex via Blasphemous Fragment. Each Hexed enemy takes 20 percent more damage from Abyss and Demonology skills.',
+      },
+      lv34: {
+        trigger: 'Recall Shadows upgrade on Nether Step unlocks. Drop Hellion Sting and Sigil of Subversion. Add Command Fallen and Dark Prison.',
+        totalPoints: 33,
+        skills: [
+          { name: 'Dread Claws', rank: 12, upgrades: ['Encircling Terror', 'Ambush', 'Cascading Dread'] },
+          { name: 'Nether Step', rank: 2, upgrades: ['Enhanced', 'Disciplined', 'Recall Shadows'] },
+          { name: 'Rampage', rank: 5, upgrades: ['Enhanced', 'Abyssal Titan'] },
+          { name: 'Command Fallen', rank: 1, upgrades: ['Fallen Rush'] },
+          { name: 'Dark Prison', rank: 1, upgrades: ['Chain Aura'] },
+        ],
+        dropped: ['Hellion Sting', 'Sigil of Subversion'],
+        passives: 'Abyss, Demonology, Shadow, Wrath generation clusters at full leveling investment',
+        soulShard: 'Mastermind Shard',
+        fragment: 'Blasphemous Fragment',
+        barEffect: 'Fallen Rush taps generate Wrath in bulk, replacing the need for a Basic skill on bar. Chain Aura Dark Prison provides Weaken plus Fortify defensive layer. Recall Shadows teleports Abyssal Titan with you.',
+      },
+      lv40: {
+        trigger: 'Ultimate slot opens. Drop Dark Prison (automated by Neo + Prid rune later). Take Metamorphosis with Terror Demon upgrade.',
+        totalPoints: 39,
+        skills: [
+          { name: 'Dread Claws', rank: 14, upgrades: ['Encircling Terror', 'Ambush', 'Cascading Dread'] },
+          { name: 'Nether Step', rank: 2, upgrades: ['Enhanced', 'Disciplined', 'Recall Shadows'] },
+          { name: 'Rampage', rank: 6, upgrades: ['Enhanced', 'Abyssal Titan'] },
+          { name: 'Command Fallen', rank: 2, upgrades: ['Fallen Rush'] },
+          { name: 'Metamorphosis', rank: 1, upgrades: ['Terror Demon'] },
+        ],
+        dropped: ['Dark Prison (from bar; runeword-automated by Neo + Prid)'],
+        passives: 'Abyss, Demonology, Shadow, Wrath gen, plus Critical Strike cluster r1',
+        soulShard: 'Mastermind Shard',
+        fragment: 'Blasphemous Fragment',
+        barEffect: 'Endgame leveling skeleton. From Lv 41 through Lv 70 the player only spends ranks on existing actives. No further respecs needed.',
+      },
+    },
+    endgameTarget: {
+      basic: '(none; dropped at Lv 34 respec)',
+      core: { skill: 'Dread Claws', rank: 15, upgrades: ['Enhanced', 'Damage', 'Encircling Terror', 'Ambush', 'Cascading Dread'] },
+      mobility: { skill: 'Nether Step', rank: '2 to 3', upgrades: ['Enhanced', 'Disciplined', 'Recall Shadows'] },
+      defensive: { skill: 'Rampage', rank: 15, upgrades: ['Enhanced', 'Abyssal Titan'] },
+      demonology1: { skill: 'Command Fallen', rank: '5 to 6', upgrades: ['Fallen Rush'] },
+      demonology2Endgame: { skill: 'Profane Sentinel (replaces Command Fallen post-Dominion paragon plus 2x Lucky Hit Restore Resources rings)', rank: 1, upgrades: ['Vulnerable application', 'Dominion synergy'] },
+      ultimate: { skill: 'Metamorphosis', rank: 15, upgrades: ['Terror Demon'] },
+      classMechanic: 'Mastermind Shard plus Blasphemous Fragment',
+      passives: 'Shadow, Abyss, Demonology, Critical Strike clusters fully invested per Maxroll endgame node map',
+      pointMath: '69 base points spent by Lv 70. Season Rank rewards bring total to ~83 at full season completion (Icy Veins).',
+    },
+  },
+
+  /* ==========================================
+     CONTROLLER BINDINGS (PS5 milestone evolution)
+     Source: data-sources/controller-bindings.md
+     Maxroll canonical for bar contents. Player preference for
+     button placement (Sprint 3 will add customization).
+     See data-sources/RECONCILIATION.md Resolution 5 + 6.
+     ========================================== */
+  controllerBindings: {
+    layoutNotes: 'Pure Maxroll ergonomic. R2 locked to Dread Claws from Lv 3 onward (the spam Core stays on the trigger). R1 locked to Rampage from Lv 8 onward. Square holds the resource swap (Hellion Sting then Command Fallen then Profane Sentinel). Triangle settles on Metamorphosis as the Ultimate from Lv 41.',
+    confidence: 'HIGH on bar contents per milestone, MEDIUM on exact button placement (player preference, customizable in Sprint 3)',
+    lockedSlots: [
+      { button: 'R2', skill: 'Dread Claws', from: 'Lv 3', why: 'Spam Core, never moves' },
+      { button: 'R1', skill: 'Rampage', from: 'Lv 8', why: 'Greater Demon recast button' },
+      { button: 'Circle', skill: 'Nether Step', from: 'Lv 4', why: 'Mobility on the right thumb' },
+      { button: 'X', skill: 'Summon Laalish', from: 'Lv 15', why: 'Soul Shard active' },
+      { button: 'L2', skill: 'Evade (or Sigil of Summons post-Footfalls)', from: 'Lv 1', why: 'D4 PS5 default' },
+    ],
+    milestones: [
+      { level: 1, label: 'Starter', square: '(empty)', triangle: '(empty)', circle: '(empty)', x: '(empty)', r1: 'Hellion Sting', r2: '(empty)', l2: 'Evade', replaced: 'Initial slot', why: 'Only the Basic skill is available at Lv 1. R1 holds the only attack for index-finger fluency.' },
+      { level: 3, label: 'Dread Claws', square: '(empty)', triangle: '(empty)', circle: '(empty)', x: '(empty)', r1: 'Hellion Sting', r2: 'Dread Claws', l2: 'Evade', replaced: 'R2 filled with Dread Claws (permanent slot from this level onward)', why: 'Dread Claws is the spam Core from Lv 3 to Lv 70. R2 is the spam trigger and Dread Claws never leaves it.' },
+      { level: 4, label: 'Nether Step', square: '(empty)', triangle: '(empty)', circle: 'Nether Step', x: '(empty)', r1: 'Hellion Sting', r2: 'Dread Claws', l2: 'Evade', replaced: 'Circle filled with mobility', why: 'Nether Step on Circle keeps it at the thumb for instinctive evade chaining and Shadowform generation.' },
+      { level: 8, label: 'Rampage', square: 'Hellion Sting', triangle: '(empty)', circle: 'Nether Step', x: '(empty)', r1: 'Rampage', r2: 'Dread Claws', l2: 'Evade', replaced: 'Hellion Sting moved from R1 to Square; R1 filled with Rampage (permanent slot from this level onward)', why: 'Rampage is recast frequently to apply Hex via Blasphemous Fragment at Lv 30. R1 is the natural index-finger button for repeated triggers.' },
+      { level: 9, label: 'Eviscerate', square: 'Hellion Sting (Eviscerate)', triangle: '(empty)', circle: 'Nether Step', x: '(empty)', r1: 'Rampage', r2: 'Dread Claws', l2: 'Evade', replaced: 'Square ability upgraded, no slot change', why: 'Eviscerate is a Hellion Sting upgrade node, not a new skill.' },
+      { level: 15, label: 'Mastermind respec', square: 'Hellion Sting (Eviscerate + Tail Spikes)', triangle: 'Sigil of Subversion', circle: 'Nether Step (Enhanced + Disciplined)', x: 'Summon Laalish', r1: 'Rampage (Enhanced)', r2: 'Dread Claws (Encircling Terror)', l2: 'Evade', replaced: 'Triangle filled with Sigil of Subversion. X filled with Summon Laalish (granted free by Mastermind Shard). R2 ability upgraded with Encircling Terror.', why: 'Mastermind Shard class quest grants Summon Laalish as a Soul Shard active. Sigil of Subversion adds Hex application until the Lv 34 swap.' },
+      { level: 20, label: 'Abyssal Titan', square: 'Hellion Sting', triangle: 'Sigil of Subversion', circle: 'Nether Step', x: 'Summon Laalish', r1: 'Rampage (Abyssal Titan)', r2: 'Dread Claws (Encircling Terror)', l2: 'Evade', replaced: 'R1 ability upgraded, no slot change', why: 'Rampage Abyssal Titan is a straight upgrade to base Rampage.' },
+      { level: 30, label: 'Blasphemous Fragment', square: 'Hellion Sting', triangle: 'Sigil of Subversion', circle: 'Nether Step', x: 'Summon Laalish', r1: 'Rampage (Abyssal Titan, applies Hex via Blasphemous Fragment)', r2: 'Dread Claws (Encircling Terror)', l2: 'Evade', replaced: 'No bar swap; Fragment slotted', why: 'Blasphemous Fragment is a class mechanic change, not a bar change.' },
+      { level: 34, label: 'Resource Engine respec', square: 'Command Fallen (Fallen Rush)', triangle: 'Dark Prison (Chain Aura)', circle: 'Nether Step (Recall Shadows)', x: 'Summon Laalish', r1: 'Rampage (Abyssal Titan)', r2: 'Dread Claws (Encircling Terror)', l2: 'Evade', replaced: 'Square swaps Hellion Sting for Command Fallen. Triangle swaps Sigil of Subversion for Dark Prison. Nether Step upgraded with Recall Shadows.', why: 'Maxroll Lv 34 respec: drop Hellion Sting and Sigil of Subversion. Pick up Command Fallen (Fallen Rush) for bulk Wrath generation on Square and Dark Prison (Chain Aura) for the defensive layer.' },
+      { level: 41, label: 'Metamorphosis online', square: 'Command Fallen', triangle: 'Metamorphosis (Terror Demon)', circle: 'Nether Step (Recall Shadows)', x: 'Summon Laalish', r1: 'Rampage (Abyssal Titan)', r2: 'Dread Claws (Encircling Terror)', l2: 'Evade', replaced: 'Dark Prison dropped from Triangle, replaced by Metamorphosis Terror Demon', why: 'Maxroll Lv 40 respec: drop Dark Prison and pick up Metamorphosis Terror Demon. Dark Prison instead automated with Neo plus Prid rune combo.' },
+      { level: 50, label: 'Mid endgame', square: 'Command Fallen', triangle: 'Metamorphosis (Terror Demon)', circle: 'Nether Step (Recall Shadows)', x: 'Summon Laalish', r1: 'Rampage (Abyssal Titan)', r2: 'Dread Claws (Encircling Terror)', l2: 'Evade', replaced: 'No bar swap', why: 'Bar is locked. Player is still ranking up actives.' },
+      { level: 70, label: 'Endgame Entry', square: 'Command Fallen (Fallen Rush)', triangle: 'Metamorphosis (Terror Demon)', circle: 'Nether Step (Recall Shadows)', x: 'Summon Laalish', r1: 'Rampage (Abyssal Titan)', r2: 'Dread Claws (Encircling Terror)', l2: 'Evade', replaced: 'No bar swap from Lv 41 through Lv 70', why: 'Endgame Entry milestone. All primary actives ranked high. Paragon unlocks at Lv 70.' },
+      { level: 'final', label: 'Mastermind Mature (Final Endgame)', square: 'Profane Sentinel', triangle: 'Metamorphosis (Terror Demon)', circle: 'Nether Step (Recall Shadows; becomes Evade itself when Footfalls of the Waning World is equipped)', x: 'Summon Laalish', r1: 'Rampage (Abyssal Titan)', r2: 'Dread Claws (Encircling Terror)', l2: 'Evade (or Sigil of Summons in prolonged boss fights when Footfalls frees the L2 slot via Nether Step becoming Evade)', replaced: 'Square swaps Command Fallen for Profane Sentinel. Optional: Sigil of Summons takes L2 in long fights once Footfalls is equipped.', why: 'Maxroll endgame swap: once Dominion paragon and 2x Lucky Hit Chance to Restore Resources rings are online, Profane Sentinel replaces Command Fallen because the Dominion plus Lucky Hit chain covers the Wrath economy.' },
+    ],
+  },
+
+  /* ==========================================
      PATCH METADATA
      ========================================== */
   patchMeta: {
@@ -630,6 +827,7 @@ window.D4_DATA = {
     releaseDate: '2026-04-28',
     sources: [
       { name: 'Maxroll', url: 'https://maxroll.gg/d4', role: 'Build guides, paragon, tier lists' },
+      { name: 'Maxroll Leveling', url: 'https://maxroll.gg/d4/build-guides/warlock-dread-claws-mastermind-leveling-guide', role: 'Per-level skill point allocation, respec waypoints at Lv 15/30/34/40' },
       { name: 'Icy Veins', url: 'https://www.icy-veins.com/d4', role: 'Build mechanics, leveling' },
       { name: 'Mobalytics', url: 'https://mobalytics.gg/diablo-4', role: 'Theorycrafting, variants' },
       { name: 'FextraLife wiki', url: 'https://diablo4.wiki.fextralife.com', role: 'Authoritative in-game names' },
@@ -766,12 +964,12 @@ window.D4_DATA = {
       id: 'p3',
       levelMin: 15, levelMax: 19,
       name: 'Mastermind Locked In',
-      summary: 'Class quest opens up the Soul Shard system. Dread Claws becomes Enveloping Terror, an AoE that circles both you and your demon.',
-      respec: { trigger: true, level: 15, label: 'Respec at 15: Enveloping Terror and Mastermind Shard' },
+      summary: 'Class quest opens up the Soul Shard system. Dread Claws becomes Encircling Terror, an AoE that circles both you and your demon.',
+      respec: { trigger: true, level: 15, label: 'Respec at 15: Encircling Terror and Mastermind Shard' },
       steps: [
         { id: 's1', text: 'Complete the Warlock class quest the moment it appears in your log', priority: 'high' },
         { id: 's2', text: 'Pick Mastermind Soul Shard, summon Laalish', priority: 'high' },
-        { id: 's3', text: 'Take Dread Claws: Enveloping Terror upgrade', priority: 'high' },
+        { id: 's3', text: 'Take Dread Claws: Encircling Terror upgrade', priority: 'high' },
         { id: 's4', text: 'Imprint Aspect of Deeper Shadows on your amulet', priority: 'high' },
         { id: 's5', text: 'Mark the Level 15 respec milestone complete', priority: 'med' },
       ],
@@ -822,7 +1020,7 @@ window.D4_DATA = {
         { id: 's1', text: 'Respec: drop Hellion Sting and Sigil of Subversion', priority: 'high' },
         { id: 's2', text: 'Pick Command Fallen: Fallen Rush for the resource generation chain', priority: 'high' },
         { id: 's3', text: 'Pick Dark Prison: Chain Aura for sustained area control', priority: 'high' },
-        { id: 's4', text: 'Take Nether Step: Shadow Recall for the summon pull and extra duration', priority: 'high' },
+        { id: 's4', text: 'Take Nether Step: Recall Shadows for the summon pull and extra duration', priority: 'high' },
         { id: 's5', text: 'Mark the Level 34 respec milestone complete', priority: 'med' },
       ],
       sources: ['maxroll', 'fextralife'],
