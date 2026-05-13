@@ -21,7 +21,6 @@
     warplans: 'd4_warlock_warplans_v1',
     talismans: 'd4_warlock_talismans_v1',
     mercs: 'd4_warlock_mercs_v1',
-    verified: 'd4_warlock_verified_v1',
     settings: 'd4_warlock_settings_v1',
     notes: 'd4_warlock_notes_v1',
   };
@@ -67,7 +66,6 @@
       hired: null,
       reinforcement: null,
     },
-    verified: {},
     settings: {},
     notes: '',
   };
@@ -1844,7 +1842,6 @@
       const root = document.getElementById('patchRoot');
       if (!root) return;
       const meta = (window.D4_DATA && window.D4_DATA.patchMeta) || {};
-      const verified = AppState.data.verified || {};
 
       const layers = [
         { key: 'skills', label: 'Skill names + upgrade variants', confidence: 'HIGH', source: 'FextraLife wiki' },
@@ -1871,12 +1868,10 @@
 
       html += '<section class="patch-section">';
       html += '  <h2 class="patch-section-name">Data Freshness</h2>';
-      html += '  <p class="patch-section-desc">Each row shows the source confidence and a checkbox for you to mark when you have verified the data in-game.</p>';
+      html += '  <p class="patch-section-desc">Source attribution and confidence rating per data layer.</p>';
       html += '  <div class="patch-layers">';
       for (const layer of layers) {
-        const isVerified = !!verified[layer.key];
-        html += '<div class="patch-layer ' + (isVerified ? 'is-verified' : '') + '">';
-        html += '  <label class="patch-layer-check"><input type="checkbox" class="patch-cb" data-verify="' + layer.key + '"' + (isVerified ? ' checked' : '') + ' /><span></span></label>';
+        html += '<div class="patch-layer">';
         html += '  <div class="patch-layer-text">';
         html += '    <div class="patch-layer-label">' + escapeHtml(layer.label) + '</div>';
         html += '    <div class="patch-layer-source">' + escapeHtml(layer.source) + '</div>';
@@ -1910,24 +1905,6 @@
       html += '</section>';
 
       root.innerHTML = html;
-      this.bind();
-    },
-
-    bound: false,
-    bind() {
-      if (this.bound) return;
-      this.bound = true;
-      const main = document.getElementById('main');
-      if (!main) return;
-      main.addEventListener('change', (e) => {
-        const t = e.target;
-        if (t && t.classList && t.classList.contains('patch-cb')) {
-          const key = t.getAttribute('data-verify');
-          AppState.data.verified[key] = t.checked;
-          AppState.save('verified');
-          Patch.render();
-        }
-      });
     },
   };
 
