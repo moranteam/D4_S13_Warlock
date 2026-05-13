@@ -834,7 +834,6 @@ window.D4_DATA = {
       { name: 'Game8', url: 'https://game8.co/games/Diablo-4', role: 'Tier lists, quick reference' },
       { name: 'Wowhead D4', url: 'https://www.wowhead.com/diablo-4', role: 'Item database' },
     ],
-    hotfixes: [],
   },
 
   /* ==========================================

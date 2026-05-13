@@ -1883,19 +1883,6 @@
       html += '</section>';
 
       html += '<section class="patch-section">';
-      html += '  <h2 class="patch-section-name">Hotfix Log</h2>';
-      if (!meta.hotfixes || !meta.hotfixes.length) {
-        html += '<div class="patch-empty">No hotfixes recorded since data compile. Check the official patch notes when Blizzard pushes a balance update.</div>';
-      } else {
-        html += '<ul class="patch-hotfixes">';
-        for (const h of meta.hotfixes) {
-          html += '<li><strong>' + escapeHtml(h.date) + ':</strong> ' + escapeHtml(h.summary) + '</li>';
-        }
-        html += '</ul>';
-      }
-      html += '</section>';
-
-      html += '<section class="patch-section">';
       html += '  <h2 class="patch-section-name">Sources</h2>';
       html += '  <ul class="patch-sources">';
       for (const s of (meta.sources || [])) {
