@@ -284,6 +284,8 @@
   // SIDEBAR (mobile toggle)
   // ========================================
   const Sidebar = {
+    LS_KEY: 'd4_warlock_sidebar_open_v1',
+
     init() {
       const toggle = document.getElementById('sidebarToggle');
       const backdrop = document.getElementById('sidebarBackdrop');
@@ -293,18 +295,28 @@
       if (backdrop) {
         backdrop.addEventListener('click', () => this.close());
       }
+      // Sidebar is collapsed by default on every viewport. If the user
+      // previously opened it, restore that state.
+      try {
+        if (localStorage.getItem(this.LS_KEY) === '1') this.open();
+      } catch (err) { /* localStorage unavailable, default closed */ }
+    },
+
+    open() {
+      const el = document.getElementById('sidebar');
+      const bd = document.getElementById('sidebarBackdrop');
+      if (el) el.classList.add('is-open');
+      if (bd) bd.classList.add('is-visible');
+      this.persist(true);
     },
 
     toggle() {
       const el = document.getElementById('sidebar');
-      const bd = document.getElementById('sidebarBackdrop');
-      if (!el || !bd) return;
-      const isOpen = el.classList.contains('is-open');
-      if (isOpen) {
+      if (!el) return;
+      if (el.classList.contains('is-open')) {
         this.close();
       } else {
-        el.classList.add('is-open');
-        bd.classList.add('is-visible');
+        this.open();
       }
     },
 
@@ -313,6 +325,13 @@
       const bd = document.getElementById('sidebarBackdrop');
       if (el) el.classList.remove('is-open');
       if (bd) bd.classList.remove('is-visible');
+      this.persist(false);
+    },
+
+    persist(isOpen) {
+      try {
+        localStorage.setItem(this.LS_KEY, isOpen ? '1' : '0');
+      } catch (err) { /* localStorage unavailable, state is session-only */ }
     },
   };
 

@@ -2054,14 +2054,10 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 
 /* Desktop (1024px+) */
 @media (min-width: 1024px) {
-  .sidebar {
-    transform: translateX(0);
-    box-shadow: none;
-  }
-  .sidebar-backdrop { display: none !important; }
-  .topbar-menu { display: none; }
-  .topbar { padding-left: calc(var(--sidebar-w) + 16px); }
-  .main { padding-left: calc(var(--sidebar-w) + 24px); padding-right: 24px; padding-bottom: 40px; }
+  /* Sidebar stays hidden by default on desktop; hamburger toggles it. */
+  .sidebar.is-open + .sidebar-backdrop,
+  .sidebar-backdrop.is-visible { display: block; }
+  .main { padding-left: 24px; padding-right: 24px; padding-bottom: 40px; }
   .bottombar { display: none; }
   .fab { bottom: 28px; right: 28px; }
   .topbar-current { text-align: center; padding-left: 0; }
