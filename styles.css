@@ -2725,3 +2725,71 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
     align-items: flex-start;
   }
 }
+
+/* ============================================
+   WALKTHROUGH PHASE COMPLETE TOGGLE (Sprint 2 Part C)
+   ============================================ */
+.wt-phase-complete-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-darker);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.wt-phase-complete-toggle:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent);
+}
+.wt-phase-complete-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.wt-phase-complete-toggle.is-on {
+  background: rgba(92, 184, 92, 0.12);
+  border-color: var(--good);
+  color: var(--good);
+}
+.wt-pcb-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+.wt-phase-complete-toggle.is-on .wt-pcb-check {
+  background: var(--good);
+  border-color: var(--good);
+  color: var(--bg);
+}
+.wt-pcb-label {
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  letter-spacing: 0.04em;
+}
+
+.wt-phase.is-phase-complete {
+  background: var(--bg-darker);
+  opacity: 0.78;
+}
+.wt-phase.is-phase-complete .wt-phase-title {
+  text-decoration: line-through;
+  color: var(--text-dim);
+}
+.wt-phase.is-phase-complete .wt-phase-summary {
+  color: var(--text-dim);
+}

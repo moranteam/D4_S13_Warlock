@@ -13,6 +13,8 @@
   const LS_KEYS = {
     character: 'd4_warlock_character_v1',
     walkthrough: 'd4_warlock_walkthrough_v1',
+    phaseComplete: 'd4_warlock_phase_complete_v1',
+    phaseToggleSnapshot: 'd4_warlock_phase_toggle_snapshot_v1',
     skills: 'd4_warlock_skills_v1',
     aspects: 'd4_warlock_aspects_v1',
     uniques: 'd4_warlock_uniques_v1',
@@ -41,6 +43,8 @@
       hardcore: false,
     },
     walkthrough: {},
+    phaseComplete: {},
+    phaseToggleSnapshot: {},
     skills: {
       respec: {
         lv15: false,
@@ -813,6 +817,7 @@
 
       const c = AppState.data.character;
       const wt = AppState.data.walkthrough;
+      const phaseComplete = AppState.data.phaseComplete || {};
       const respec = AppState.data.skills.respec || {};
       const currentPhaseId = this.getCurrentPhaseId(c.level, phases);
 
@@ -835,11 +840,17 @@
       for (const p of phases) {
         const isCurrent = p.id === currentPhaseId;
         const isPast = c.level > p.levelMax;
+        const isPhaseDone = !!phaseComplete[p.id];
         const phaseDone = p.steps.filter((s) => wt[p.id + ':' + s.id]).length;
         const phasePct = p.steps.length > 0 ? Math.round((phaseDone / p.steps.length) * 100) : 0;
         const stateClass = isCurrent ? 'is-current' : isPast ? 'is-past' : 'is-future';
+        const completeClass = isPhaseDone ? ' is-phase-complete' : '';
 
-        html += '<section class="wt-phase ' + stateClass + '" data-phase="' + p.id + '">';
+        html += '<section class="wt-phase ' + stateClass + completeClass + '" data-phase="' + p.id + '">';
+        html += '  <button class="wt-phase-complete-toggle' + (isPhaseDone ? ' is-on' : '') + '" type="button" data-phase-complete="' + p.id + '" aria-pressed="' + (isPhaseDone ? 'true' : 'false') + '">';
+        html += '    <span class="wt-pcb-check"><i class="fa-solid ' + (isPhaseDone ? 'fa-check' : 'fa-square') + '" aria-hidden="true"></i></span>';
+        html += '    <span class="wt-pcb-label">' + (isPhaseDone ? 'Phase Complete (tap to undo)' : 'Mark Phase Complete') + '</span>';
+        html += '  </button>';
         html += '  <header class="wt-phase-head">';
         html += '    <div class="wt-phase-meta">';
         html += '      <span class="wt-phase-range">Lv ' + p.levelMin + (p.levelMax >= 999 ? '+' : ' to ' + p.levelMax) + '</span>';
@@ -917,16 +928,63 @@
       });
 
       main.addEventListener('click', (e) => {
-        const btn = e.target.closest && e.target.closest('[data-respec]');
-        if (btn) {
-          const n = btn.getAttribute('data-respec');
+        const respecBtn = e.target.closest && e.target.closest('[data-respec]');
+        if (respecBtn) {
+          const n = respecBtn.getAttribute('data-respec');
           const key = 'lv' + n;
           AppState.data.skills.respec[key] = true;
           AppState.save('skills');
           Toast.show('Respec ' + n + ' acknowledged', 'success');
           Walkthrough.render();
+          return;
+        }
+        const phaseBtn = e.target.closest && e.target.closest('[data-phase-complete]');
+        if (phaseBtn) {
+          const phaseId = phaseBtn.getAttribute('data-phase-complete');
+          Walkthrough.togglePhaseComplete(phaseId);
+          return;
         }
       });
+    },
+
+    togglePhaseComplete(phaseId) {
+      const phases = (window.D4_DATA && window.D4_DATA.walkthrough) || [];
+      const phase = phases.find((p) => p.id === phaseId);
+      if (!phase) return;
+      const wt = AppState.data.walkthrough;
+      const pc = AppState.data.phaseComplete;
+      const snap = AppState.data.phaseToggleSnapshot;
+      const wasOn = !!pc[phaseId];
+
+      if (!wasOn) {
+        const snapshot = {};
+        for (const s of phase.steps) {
+          const key = phaseId + ':' + s.id;
+          snapshot[s.id] = !!wt[key];
+          wt[key] = true;
+        }
+        snap[phaseId] = snapshot;
+        pc[phaseId] = true;
+        Toast.show('Phase complete: ' + phase.name, 'success');
+      } else {
+        const snapshot = snap[phaseId] || {};
+        for (const s of phase.steps) {
+          const key = phaseId + ':' + s.id;
+          if (snapshot[s.id] === false) {
+            wt[key] = false;
+          }
+        }
+        delete snap[phaseId];
+        pc[phaseId] = false;
+        Toast.show('Phase reopened: ' + phase.name, 'info');
+      }
+
+      AppState.save('walkthrough');
+      AppState.save('phaseComplete');
+      AppState.save('phaseToggleSnapshot');
+      Walkthrough.render();
+      Dashboard.render();
+      Nav.updateBadges();
     },
   };
 
