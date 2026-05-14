@@ -2793,3 +2793,49 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 .wt-phase.is-phase-complete .wt-phase-summary {
   color: var(--text-dim);
 }
+
+/* ============================================
+   WALKTHROUGH AUTO-CURRENT-PHASE HIGHLIGHT (Sprint 2 Part D)
+   ============================================ */
+.wt-phase {
+  position: relative;
+}
+.wt-phase.is-current {
+  border-left: 4px solid var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-light), 0 0 24px rgba(255, 69, 0, 0.18), 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+.wt-phase.is-incomplete-past {
+  border-color: var(--warn);
+  opacity: 0.9;
+}
+.wt-phase-status-banner {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.wt-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+.wt-status-current {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(196, 30, 58, 0.45);
+}
+.wt-status-incomplete {
+  background: rgba(245, 197, 66, 0.12);
+  color: var(--warn);
+  border-color: var(--warn);
+}
+
+/* Legacy "You are here" chip no longer rendered; rule kept hidden in case
+   any cached HTML still contains it. */
+.wt-here-chip { display: none; }

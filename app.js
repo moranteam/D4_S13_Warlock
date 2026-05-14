@@ -841,12 +841,23 @@
         const isCurrent = p.id === currentPhaseId;
         const isPast = c.level > p.levelMax;
         const isPhaseDone = !!phaseComplete[p.id];
+        const isIncompletePast = isPast && !isPhaseDone;
         const phaseDone = p.steps.filter((s) => wt[p.id + ':' + s.id]).length;
         const phasePct = p.steps.length > 0 ? Math.round((phaseDone / p.steps.length) * 100) : 0;
         const stateClass = isCurrent ? 'is-current' : isPast ? 'is-past' : 'is-future';
         const completeClass = isPhaseDone ? ' is-phase-complete' : '';
+        const incompleteClass = isIncompletePast ? ' is-incomplete-past' : '';
 
-        html += '<section class="wt-phase ' + stateClass + completeClass + '" data-phase="' + p.id + '">';
+        html += '<section class="wt-phase ' + stateClass + completeClass + incompleteClass + '" data-phase="' + p.id + '">';
+        if (isCurrent || isIncompletePast) {
+          html += '<div class="wt-phase-status-banner">';
+          if (isCurrent) {
+            html += '<span class="wt-status-badge wt-status-current"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i> CURRENT</span>';
+          } else if (isIncompletePast) {
+            html += '<span class="wt-status-badge wt-status-incomplete"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> INCOMPLETE</span>';
+          }
+          html += '</div>';
+        }
         html += '  <button class="wt-phase-complete-toggle' + (isPhaseDone ? ' is-on' : '') + '" type="button" data-phase-complete="' + p.id + '" aria-pressed="' + (isPhaseDone ? 'true' : 'false') + '">';
         html += '    <span class="wt-pcb-check"><i class="fa-solid ' + (isPhaseDone ? 'fa-check' : 'fa-square') + '" aria-hidden="true"></i></span>';
         html += '    <span class="wt-pcb-label">' + (isPhaseDone ? 'Phase Complete (tap to undo)' : 'Mark Phase Complete') + '</span>';
@@ -854,7 +865,6 @@
         html += '  <header class="wt-phase-head">';
         html += '    <div class="wt-phase-meta">';
         html += '      <span class="wt-phase-range">Lv ' + p.levelMin + (p.levelMax >= 999 ? '+' : ' to ' + p.levelMax) + '</span>';
-        if (isCurrent) html += '<span class="wt-here-chip">You are here</span>';
         html += '      <span class="wt-conf wt-conf-' + (p.confidence || 'MEDIUM').toLowerCase() + '">' + (p.confidence || 'MEDIUM') + '</span>';
         html += '    </div>';
         html += '    <h2 class="wt-phase-title">' + escapeHtml(p.name) + '</h2>';
