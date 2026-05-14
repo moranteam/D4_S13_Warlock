@@ -2427,3 +2427,301 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
     font-size: 0.78rem;
   }
 }
+
+/* ============================================
+   CONTROLLER (Sprint 2 Part B)
+   ============================================ */
+.controller-root {
+  display: block;
+  margin-top: var(--gap-lg);
+}
+.controller-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ctl-head {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.ctl-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+.ctl-subtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.ctl-head-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.ctl-milestone-chip,
+.ctl-next-chip {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+}
+.ctl-milestone-chip {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.ctl-next-chip {
+  color: var(--text-dim);
+}
+.ctl-callout {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text);
+}
+.ctl-callout-upcoming {
+  background: rgba(245, 197, 66, 0.08);
+  border-left-color: var(--warn);
+}
+.ctl-callout i {
+  font-size: 1rem;
+  margin-top: 2px;
+  color: var(--accent);
+}
+.ctl-callout-upcoming i {
+  color: var(--warn);
+}
+.ctl-callout-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+.ctl-callout-text {
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.ctl-svg-wrap {
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+}
+.dualsense-svg {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+}
+.ds-body {
+  fill: var(--bg-card-alt);
+  stroke: var(--border-strong);
+  stroke-width: 2;
+}
+.ds-trigger,
+.ds-bumper {
+  fill: var(--bg-darker);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+}
+.ds-trigger.is-bound,
+.ds-bumper.is-bound {
+  fill: var(--accent-light);
+  stroke: var(--accent);
+}
+.ds-trigger-label,
+.ds-bumper-label {
+  fill: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+}
+.ds-touchpad {
+  fill: rgba(0, 0, 0, 0.4);
+  stroke: var(--border);
+  stroke-width: 1;
+}
+.ds-touchpad-label {
+  fill: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+.ds-lightbar {
+  fill: var(--accent);
+  opacity: 0.55;
+}
+.ds-dpad rect {
+  fill: var(--bg-darker);
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+.ds-btn {
+  fill: var(--bg-darker);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+}
+.ds-btn.is-bound {
+  fill: var(--accent-light);
+  stroke: var(--accent);
+}
+.ds-glyph {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  fill: var(--text);
+  pointer-events: none;
+}
+.ds-stick {
+  fill: var(--bg-darker);
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+}
+.ds-stick-inner {
+  fill: var(--bg-card);
+}
+.ds-ps {
+  fill: none;
+  stroke: var(--text-dim);
+  stroke-width: 1.5;
+}
+
+.ctl-bindings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+}
+.ctl-binding {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+.ctl-binding.is-bound {
+  border-color: var(--border-strong);
+}
+.ctl-binding.is-empty {
+  opacity: 0.55;
+}
+.ctl-bind-glyph {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--bg-card);
+  flex-shrink: 0;
+}
+.ctl-binding.is-bound .ctl-bind-glyph {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.ctl-bind-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.ctl-bind-btn {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.ctl-bind-skill {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.9rem;
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+.ctl-caveat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+
+.ctl-all {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ctl-all-toggle {
+  align-self: flex-start;
+}
+.ctl-all-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.ctl-all-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  min-width: 700px;
+}
+.ctl-all-table th,
+.ctl-all-table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.ctl-all-table th {
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--bg-darker);
+}
+.ctl-all-table tr.is-current td {
+  background: var(--accent-light);
+  color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .ctl-head-right {
+    align-items: flex-start;
+  }
+}

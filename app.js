@@ -253,6 +253,7 @@
       if (this.current === 'leveling-path') {
         Walkthrough.render();
         SkillTimeline.render();
+        Controller.render();
       }
       if (this.current === 'skills-reference') {
         Skills.render();
@@ -605,6 +606,7 @@
       Dashboard.render();
       Walkthrough.render();
       SkillTimeline.render();
+      Controller.render();
       Skills.render();
       Shards.render();
       Aspects.render();
@@ -1135,6 +1137,202 @@
         }
         this.saveExpanded();
         this.render();
+      });
+    },
+  };
+
+  // ========================================
+  // PS5 CONTROLLER RENDERER (Sprint 2 Part B)
+  // ========================================
+  const Controller = {
+    bound: false,
+    showAllMilestones: false,
+
+    render() {
+      const root = document.getElementById('controllerRoot');
+      if (!root) return;
+      const cb = (window.D4_DATA && window.D4_DATA.controllerBindings) || null;
+      if (!cb || !Array.isArray(cb.milestones) || !cb.milestones.length) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-gamepad placeholder-icon"></i><div class="placeholder-title">No controller data</div><div class="placeholder-text">window.D4_DATA.controllerBindings is empty or missing.</div></div>';
+        return;
+      }
+
+      const currentLevel = (AppState.data.character && AppState.data.character.level) || 1;
+      const milestones = cb.milestones;
+
+      let currentIdx = 0;
+      for (let i = 0; i < milestones.length; i++) {
+        const m = milestones[i];
+        if (typeof m.level === 'number' && m.level <= currentLevel) {
+          currentIdx = i;
+        }
+      }
+      const currentM = milestones[currentIdx];
+
+      let nextM = null;
+      for (let i = currentIdx + 1; i < milestones.length; i++) {
+        if (typeof milestones[i].level === 'number') { nextM = milestones[i]; break; }
+      }
+
+      let callout = null;
+      const cleanText = (currentM.replaced || '');
+      const isRecentSignificant = cleanText && !/^no bar swap/i.test(cleanText) && cleanText !== 'Initial slot';
+      if (typeof currentM.level === 'number' && (currentLevel - currentM.level) <= 2 && isRecentSignificant) {
+        callout = { kind: 'recent', level: currentM.level, text: cleanText };
+      }
+      if (!callout && nextM && typeof nextM.level === 'number' && (nextM.level - currentLevel) <= 2 && nextM.replaced && !/^no bar swap/i.test(nextM.replaced)) {
+        callout = { kind: 'upcoming', level: nextM.level, text: nextM.replaced };
+      }
+
+      let html = '';
+      html += '<div class="controller-card">';
+      html += '  <header class="ctl-head">';
+      html += '    <div class="ctl-head-left">';
+      html += '      <h2 class="ctl-title">Controller Bindings</h2>';
+      html += '      <p class="ctl-subtitle">PS5 DualSense layout, Maxroll canonical placement.</p>';
+      html += '    </div>';
+      html += '    <div class="ctl-head-right">';
+      const milestoneLabel = (typeof currentM.level === 'number' ? ('Lv ' + currentM.level) : 'Final Endgame');
+      html += '      <div class="ctl-milestone-chip">Milestone: ' + escapeHtml(milestoneLabel) + ' (' + escapeHtml(currentM.label || '') + ')</div>';
+      if (nextM) {
+        const delta = nextM.level - currentLevel;
+        const deltaLabel = delta > 0 ? (delta + ' to go') : 'now';
+        html += '      <div class="ctl-next-chip">Next update at Lv ' + nextM.level + ' (' + escapeHtml(deltaLabel) + ')</div>';
+      }
+      html += '    </div>';
+      html += '  </header>';
+
+      if (callout) {
+        const kindLabel = callout.kind === 'recent' ? 'Replaced This Update' : ('Upcoming at Lv ' + callout.level);
+        const ico = callout.kind === 'recent' ? 'fa-rotate' : 'fa-clock';
+        html += '<div class="ctl-callout ctl-callout-' + callout.kind + '">';
+        html += '  <i class="fa-solid ' + ico + '" aria-hidden="true"></i>';
+        html += '  <div>';
+        html += '    <div class="ctl-callout-label">' + escapeHtml(kindLabel) + '</div>';
+        html += '    <div class="ctl-callout-text">' + escapeHtml(callout.text) + '</div>';
+        html += '  </div>';
+        html += '</div>';
+      }
+
+      html += this.renderSvg(currentM);
+
+      html += '<div class="ctl-bindings">';
+      const slots = [
+        { key: 'square', glyph: '■', label: 'Square' },
+        { key: 'triangle', glyph: '▲', label: 'Triangle' },
+        { key: 'circle', glyph: '●', label: 'Circle' },
+        { key: 'x', glyph: '✖', label: 'X' },
+        { key: 'r1', glyph: 'R1', label: 'R1' },
+        { key: 'r2', glyph: 'R2', label: 'R2' },
+        { key: 'l2', glyph: 'L2', label: 'L2' },
+      ];
+      for (const s of slots) {
+        const v = currentM[s.key] || '(empty)';
+        const isEmpty = v === '(empty)';
+        html += '<div class="ctl-binding ' + (isEmpty ? 'is-empty' : 'is-bound') + '" data-btn="' + s.key + '">';
+        html += '  <div class="ctl-bind-glyph">' + escapeHtml(s.glyph) + '</div>';
+        html += '  <div class="ctl-bind-body">';
+        html += '    <div class="ctl-bind-btn">' + escapeHtml(s.label) + '</div>';
+        html += '    <div class="ctl-bind-skill">' + escapeHtml(v) + '</div>';
+        html += '  </div>';
+        html += '</div>';
+      }
+      html += '</div>';
+
+      html += '<div class="ctl-caveat"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Button placement is Maxroll canonical. Sprint 3 will let you customize.</span></div>';
+
+      html += '<div class="ctl-all">';
+      html += '  <button class="btn btn-ghost ctl-all-toggle" type="button" data-ctl-toggle="all">' + (this.showAllMilestones ? 'Hide All Milestones' : 'View All Milestones') + '</button>';
+      if (this.showAllMilestones) {
+        html += '<div class="ctl-all-scroll">';
+        html += '  <table class="ctl-all-table">';
+        html += '    <thead><tr><th>Level</th><th>Label</th><th>Square</th><th>Triangle</th><th>Circle</th><th>X</th><th>R1</th><th>R2</th><th>L2</th></tr></thead>';
+        html += '    <tbody>';
+        for (let i = 0; i < milestones.length; i++) {
+          const m = milestones[i];
+          const isCur = i === currentIdx;
+          const lvLabel = typeof m.level === 'number' ? ('Lv ' + m.level) : 'Final';
+          html += '<tr class="' + (isCur ? 'is-current' : '') + '">';
+          html += '<td>' + escapeHtml(lvLabel) + '</td>';
+          html += '<td>' + escapeHtml(m.label || '') + '</td>';
+          html += '<td>' + escapeHtml(m.square || '') + '</td>';
+          html += '<td>' + escapeHtml(m.triangle || '') + '</td>';
+          html += '<td>' + escapeHtml(m.circle || '') + '</td>';
+          html += '<td>' + escapeHtml(m.x || '') + '</td>';
+          html += '<td>' + escapeHtml(m.r1 || '') + '</td>';
+          html += '<td>' + escapeHtml(m.r2 || '') + '</td>';
+          html += '<td>' + escapeHtml(m.l2 || '') + '</td>';
+          html += '</tr>';
+        }
+        html += '    </tbody>';
+        html += '  </table>';
+        html += '</div>';
+      }
+      html += '</div>';
+
+      html += '</div>';
+
+      root.innerHTML = html;
+      this.bind();
+    },
+
+    renderSvg(m) {
+      const isBound = (v) => v && v !== '(empty)';
+      const cls = (v) => isBound(v) ? 'ds-btn is-bound' : 'ds-btn';
+      const trigCls = (v) => isBound(v) ? 'ds-trigger is-bound' : 'ds-trigger';
+      const bumpCls = (v) => isBound(v) ? 'ds-bumper is-bound' : 'ds-bumper';
+      let svg = '';
+      svg += '<div class="ctl-svg-wrap">';
+      svg += '<svg viewBox="0 0 800 440" class="dualsense-svg" role="img" aria-label="DualSense controller binding overview">';
+      svg += '<rect x="100" y="10" width="170" height="30" rx="14" class="' + trigCls(m.l2) + '"/>';
+      svg += '<rect x="530" y="10" width="170" height="30" rx="14" class="' + trigCls(m.r2) + '"/>';
+      svg += '<text x="185" y="30" class="ds-trigger-label" text-anchor="middle">L2</text>';
+      svg += '<text x="615" y="30" class="ds-trigger-label" text-anchor="middle">R2</text>';
+      svg += '<rect x="120" y="44" width="150" height="26" rx="12" class="ds-bumper"/>';
+      svg += '<rect x="530" y="44" width="150" height="26" rx="12" class="' + bumpCls(m.r1) + '"/>';
+      svg += '<text x="195" y="62" class="ds-bumper-label" text-anchor="middle">L1</text>';
+      svg += '<text x="605" y="62" class="ds-bumper-label" text-anchor="middle">R1</text>';
+      svg += '<rect x="100" y="80" width="600" height="220" rx="40" class="ds-body"/>';
+      svg += '<rect x="110" y="270" width="170" height="150" rx="60" class="ds-body"/>';
+      svg += '<rect x="520" y="270" width="170" height="150" rx="60" class="ds-body"/>';
+      svg += '<rect x="320" y="106" width="160" height="2" rx="1" class="ds-lightbar"/>';
+      svg += '<rect x="320" y="110" width="160" height="90" rx="10" class="ds-touchpad"/>';
+      svg += '<text x="400" y="160" class="ds-touchpad-label" text-anchor="middle">TOUCHPAD</text>';
+      svg += '<g class="ds-dpad" transform="translate(220 180)">';
+      svg += '  <rect x="-30" y="-10" width="20" height="20" rx="3"/>';
+      svg += '  <rect x="10" y="-10" width="20" height="20" rx="3"/>';
+      svg += '  <rect x="-10" y="-30" width="20" height="20" rx="3"/>';
+      svg += '  <rect x="-10" y="10" width="20" height="20" rx="3"/>';
+      svg += '</g>';
+      svg += '<circle cx="540" cy="180" r="24" class="' + cls(m.square) + '"/>';
+      svg += '<text x="540" y="188" class="ds-glyph" text-anchor="middle">■</text>';
+      svg += '<circle cx="580" cy="140" r="24" class="' + cls(m.triangle) + '"/>';
+      svg += '<text x="580" y="148" class="ds-glyph" text-anchor="middle">▲</text>';
+      svg += '<circle cx="620" cy="180" r="24" class="' + cls(m.circle) + '"/>';
+      svg += '<text x="620" y="188" class="ds-glyph" text-anchor="middle">●</text>';
+      svg += '<circle cx="580" cy="220" r="24" class="' + cls(m.x) + '"/>';
+      svg += '<text x="580" y="228" class="ds-glyph" text-anchor="middle">✖</text>';
+      svg += '<circle cx="260" cy="320" r="32" class="ds-stick"/>';
+      svg += '<circle cx="260" cy="320" r="14" class="ds-stick-inner"/>';
+      svg += '<circle cx="540" cy="320" r="32" class="ds-stick"/>';
+      svg += '<circle cx="540" cy="320" r="14" class="ds-stick-inner"/>';
+      svg += '<circle cx="400" cy="240" r="9" class="ds-ps"/>';
+      svg += '</svg>';
+      svg += '</div>';
+      return svg;
+    },
+
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      document.addEventListener('click', (e) => {
+        const t = e.target;
+        if (!t || !t.closest) return;
+        const toggle = t.closest('[data-ctl-toggle]');
+        if (toggle && toggle.getAttribute('data-ctl-toggle') === 'all') {
+          this.showAllMilestones = !this.showAllMilestones;
+          this.render();
+        }
       });
     },
   };
@@ -2191,6 +2389,6 @@
   }
 
   // Expose for debugging
-  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, SkillTimeline, Skills, Shards, Aspects, Paragon, Uniques, Bosses, Endbuild, Talismans, WarPlans, Mercenary, Patch, Toast, Modal, Nav };
+  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, SkillTimeline, Controller, Skills, Shards, Aspects, Paragon, Uniques, Bosses, Endbuild, Talismans, WarPlans, Mercenary, Patch, Toast, Modal, Nav };
 
 })();
