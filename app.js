@@ -252,7 +252,7 @@
       // stack their content vertically.
       if (this.current === 'leveling-path') {
         Walkthrough.render();
-        // skillTimelineRoot and controllerRoot are Sprint 2 placeholders.
+        SkillTimeline.render();
       }
       if (this.current === 'skills-reference') {
         Skills.render();
@@ -604,6 +604,7 @@
     renderAll() {
       Dashboard.render();
       Walkthrough.render();
+      SkillTimeline.render();
       Skills.render();
       Shards.render();
       Aspects.render();
@@ -923,6 +924,217 @@
           Toast.show('Respec ' + n + ' acknowledged', 'success');
           Walkthrough.render();
         }
+      });
+    },
+  };
+
+  // ========================================
+  // SKILL TIMELINE RENDERER (Sprint 2 Part A)
+  // ========================================
+  const SkillTimeline = {
+    LS_KEY: 'd4_warlock_timeline_expanded_v1',
+    bound: false,
+    lastCurrentLevel: null,
+    expanded: null,
+
+    loadExpanded() {
+      try {
+        const raw = localStorage.getItem(this.LS_KEY);
+        if (!raw) return { levels: {}, respecs: {} };
+        const parsed = JSON.parse(raw);
+        return {
+          levels: parsed.levels && typeof parsed.levels === 'object' ? parsed.levels : {},
+          respecs: parsed.respecs && typeof parsed.respecs === 'object' ? parsed.respecs : {},
+        };
+      } catch (err) {
+        return { levels: {}, respecs: {} };
+      }
+    },
+
+    saveExpanded() {
+      try {
+        localStorage.setItem(this.LS_KEY, JSON.stringify(this.expanded));
+      } catch (err) {
+        console.warn('Failed to save timeline expansion state:', err);
+      }
+    },
+
+    render() {
+      const root = document.getElementById('skillTimelineRoot');
+      if (!root) return;
+      const path = (window.D4_DATA && window.D4_DATA.levelingPath) || null;
+      if (!path || !Array.isArray(path.levels) || !path.levels.length) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-hammer placeholder-icon"></i><div class="placeholder-title">No leveling data</div><div class="placeholder-text">window.D4_DATA.levelingPath is empty or missing.</div></div>';
+        return;
+      }
+      if (this.expanded === null) this.expanded = this.loadExpanded();
+
+      const currentLevel = (AppState.data.character && AppState.data.character.level) || 1;
+      const respecStates = path.respecStates || {};
+
+      let html = '';
+      html += '<div class="skill-timeline-card">';
+      html += '  <header class="st-head">';
+      html += '    <h2 class="st-title">Skill Timeline</h2>';
+      html += '    <p class="st-subtitle">Per-level skill point allocation, Lv 1 to 70. Click any row to expand notes.</p>';
+      html += '    <div class="st-legend">';
+      html += '      <span class="st-legend-item"><span class="st-dot st-dot-current"></span>Current Lv ' + currentLevel + '</span>';
+      html += '      <span class="st-legend-item"><span class="st-dot st-dot-high"></span>High confidence</span>';
+      html += '      <span class="st-legend-item"><span class="st-dot st-dot-medium"></span>Medium confidence</span>';
+      html += '    </div>';
+      html += '  </header>';
+      html += '  <ol class="st-list" id="stList">';
+
+      for (const row of path.levels) {
+        const lv = row.level;
+        const isCurrent = lv === currentLevel;
+        const isRespec = !!row.respec;
+        const isEndgame = lv === 70;
+        const conf = (row.confidence || 'MEDIUM').toLowerCase();
+        const lvKey = String(lv);
+        const expanded = isRespec ? !!this.expanded.respecs[lvKey] : !!this.expanded.levels[lvKey];
+
+        const classList = [
+          'st-row',
+          'st-conf-' + conf,
+          isCurrent ? 'is-current' : '',
+          isRespec ? 'is-respec' : '',
+          isEndgame ? 'is-endgame' : '',
+          expanded ? 'is-open' : '',
+        ].filter(Boolean).join(' ');
+
+        const toggleTok = (isRespec ? 'respec' : 'lv') + lv;
+        const confChar = conf === 'high' ? 'H' : conf === 'medium' ? '?' : 'L';
+        const confLabel = (row.confidence || 'MEDIUM') + ' confidence';
+
+        html += '<li class="' + classList + '" data-level="' + lv + '"' + (isCurrent ? ' id="stRowCurrent"' : '') + '>';
+        if (isRespec) {
+          html += '<div class="st-respec-divider" aria-hidden="true"></div>';
+        }
+        html += '<button class="st-row-toggle" type="button" data-toggle="' + toggleTok + '" aria-expanded="' + (expanded ? 'true' : 'false') + '">';
+        html += '  <span class="st-row-num">' + lv + '</span>';
+        html += '  <span class="st-row-body">';
+        html += '    <span class="st-row-tags">';
+        if (isCurrent) html += '<span class="st-tag st-tag-current">CURRENT</span>';
+        if (isRespec) html += '<span class="st-tag st-tag-respec">RESPEC</span>';
+        if (isEndgame) html += '<span class="st-tag st-tag-endgame">ENDGAME</span>';
+        html += '    </span>';
+        html += '    <span class="st-row-spent">' + escapeHtml(row.pointSpent) + '</span>';
+        html += '    <span class="st-row-cum">' + escapeHtml(row.cumulative) + '</span>';
+        html += '  </span>';
+        html += '  <span class="st-row-meta">';
+        html += '    <span class="st-conf-pill st-conf-pill-' + conf + '" title="' + confLabel + '" aria-label="' + confLabel + '">' + confChar + '</span>';
+        html += '    <i class="st-chevron fa-solid fa-chevron-down" aria-hidden="true"></i>';
+        html += '  </span>';
+        html += '</button>';
+
+        if (expanded) {
+          html += '<div class="st-row-detail">';
+          html += '  <p class="st-notes">' + escapeHtml(row.notes || '') + '</p>';
+          if (isRespec && respecStates[lvKey]) {
+            html += this.renderRespecBlock(respecStates[lvKey]);
+          }
+          if (isEndgame && path.endgameTarget) {
+            html += this.renderEndgameBlock(path.endgameTarget);
+          }
+          html += '</div>';
+        }
+
+        html += '</li>';
+      }
+
+      html += '  </ol>';
+      html += '</div>';
+
+      root.innerHTML = html;
+      this.bind();
+
+      if (this.lastCurrentLevel !== currentLevel && Router.current === 'leveling-path') {
+        this.lastCurrentLevel = currentLevel;
+        const target = root.querySelector('#stRowCurrent');
+        if (target) {
+          requestAnimationFrame(() => {
+            try {
+              target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            } catch (err) {
+              target.scrollIntoView();
+            }
+          });
+        }
+      }
+    },
+
+    renderRespecBlock(rd) {
+      let html = '<div class="st-respec-block">';
+      html += '  <div><span class="st-meta-key">Trigger:</span> ' + escapeHtml(rd.trigger || '') + '</div>';
+      html += '  <div><span class="st-meta-key">Total points to allocate:</span> ' + escapeHtml(String(rd.totalPoints || '')) + '</div>';
+      if (Array.isArray(rd.skills) && rd.skills.length) {
+        html += '  <table class="st-respec-table">';
+        html += '    <thead><tr><th>Skill</th><th>Rank</th><th>Upgrades</th></tr></thead>';
+        html += '    <tbody>';
+        for (const s of rd.skills) {
+          html += '<tr><td>' + escapeHtml(s.name) + '</td><td>' + escapeHtml(String(s.rank)) + '</td><td>' + escapeHtml((s.upgrades || []).join(', ')) + '</td></tr>';
+        }
+        html += '    </tbody>';
+        html += '  </table>';
+      }
+      if (Array.isArray(rd.dropped) && rd.dropped.length) {
+        html += '  <div><span class="st-meta-key">Dropped:</span> ' + escapeHtml(rd.dropped.join(', ')) + '</div>';
+      }
+      if (rd.passives) html += '  <div><span class="st-meta-key">Passives:</span> ' + escapeHtml(rd.passives) + '</div>';
+      if (rd.soulShard) html += '  <div><span class="st-meta-key">Soul Shard:</span> ' + escapeHtml(rd.soulShard) + '</div>';
+      if (rd.fragment) html += '  <div><span class="st-meta-key">Fragment:</span> ' + escapeHtml(rd.fragment) + '</div>';
+      if (rd.barEffect) html += '  <div class="st-respec-effect"><span class="st-meta-key">Bar effect:</span> ' + escapeHtml(rd.barEffect) + '</div>';
+      html += '</div>';
+      return html;
+    },
+
+    renderEndgameBlock(t) {
+      if (!t) return '';
+      let html = '<div class="st-endgame-block">';
+      html += '<div class="st-endgame-heading">Endgame Target Bar (Lv 70 state)</div>';
+      html += '<table class="st-respec-table">';
+      html += '<thead><tr><th>Slot</th><th>Skill</th><th>Rank</th><th>Upgrades</th></tr></thead>';
+      html += '<tbody>';
+      const rows = [
+        ['Core', t.core],
+        ['Mobility', t.mobility],
+        ['Defensive', t.defensive],
+        ['Demonology 1', t.demonology1],
+        ['Demonology 2 (endgame swap)', t.demonology2Endgame],
+        ['Ultimate', t.ultimate],
+      ];
+      for (const pair of rows) {
+        const slot = pair[0];
+        const v = pair[1];
+        if (!v) continue;
+        html += '<tr><td>' + escapeHtml(slot) + '</td><td>' + escapeHtml(v.skill || '') + '</td><td>' + escapeHtml(String(v.rank || '')) + '</td><td>' + escapeHtml((v.upgrades || []).join(', ')) + '</td></tr>';
+      }
+      html += '</tbody></table>';
+      if (t.classMechanic) html += '<div><span class="st-meta-key">Class Mechanic:</span> ' + escapeHtml(t.classMechanic) + '</div>';
+      if (t.passives) html += '<div><span class="st-meta-key">Passives:</span> ' + escapeHtml(t.passives) + '</div>';
+      if (t.pointMath) html += '<div class="st-respec-effect"><span class="st-meta-key">Point math:</span> ' + escapeHtml(t.pointMath) + '</div>';
+      html += '</div>';
+      return html;
+    },
+
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest && e.target.closest('.st-row-toggle');
+        if (!btn) return;
+        const tok = btn.getAttribute('data-toggle');
+        if (!tok) return;
+        if (tok.indexOf('respec') === 0) {
+          const n = tok.slice('respec'.length);
+          this.expanded.respecs[n] = !this.expanded.respecs[n];
+        } else if (tok.indexOf('lv') === 0) {
+          const n = tok.slice(2);
+          this.expanded.levels[n] = !this.expanded.levels[n];
+        }
+        this.saveExpanded();
+        this.render();
       });
     },
   };
@@ -1979,6 +2191,6 @@
   }
 
   // Expose for debugging
-  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, Skills, Shards, Aspects, Paragon, Uniques, Bosses, Endbuild, Talismans, WarPlans, Mercenary, Patch, Toast, Modal, Nav };
+  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, SkillTimeline, Skills, Shards, Aspects, Paragon, Uniques, Bosses, Endbuild, Talismans, WarPlans, Mercenary, Patch, Toast, Modal, Nav };
 
 })();

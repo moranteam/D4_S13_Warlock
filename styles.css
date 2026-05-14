@@ -2153,3 +2153,277 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================
+   SKILL TIMELINE (Sprint 2 Part A)
+   ============================================ */
+.skill-timeline-root {
+  display: block;
+  margin-top: var(--gap-lg);
+}
+.skill-timeline-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.st-head {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+.st-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+.st-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0 0 12px;
+}
+.st-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+.st-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.st-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+}
+.st-dot-current { background: var(--accent); }
+.st-dot-high { background: var(--good); }
+.st-dot-medium { background: var(--warn); }
+
+.st-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  scroll-behavior: smooth;
+}
+.st-row {
+  position: relative;
+  display: block;
+  border-bottom: 1px solid var(--border);
+}
+.st-row:last-child { border-bottom: none; }
+.st-row.st-conf-medium .st-row-toggle { opacity: 0.78; }
+.st-row.st-conf-high .st-row-toggle { opacity: 1; }
+.st-row.is-current {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+}
+.st-row.is-current .st-row-toggle { opacity: 1; }
+.st-row.is-respec {
+  background: rgba(139, 0, 0, 0.08);
+}
+.st-row.is-respec.is-current {
+  background: linear-gradient(90deg, var(--accent-light), rgba(139, 0, 0, 0.08));
+}
+.st-respec-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-strong), transparent);
+  margin: 0;
+}
+.st-row.is-endgame {
+  border: 1px solid var(--rarity-legendary);
+  background: rgba(200, 127, 58, 0.08);
+}
+.st-row-toggle {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 12px;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 10px 12px;
+  text-align: left;
+  color: var(--text);
+  cursor: pointer;
+  align-items: center;
+  font: inherit;
+}
+.st-row-toggle:hover {
+  background: var(--bg-hover);
+}
+.st-row-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.st-row-num {
+  position: sticky;
+  left: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+  background: var(--bg-card-alt);
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  min-width: 48px;
+}
+.st-row.is-current .st-row-num {
+  color: var(--accent);
+  background: rgba(196, 30, 58, 0.18);
+}
+.st-row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.st-row-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.st-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.st-tag-current {
+  background: var(--accent);
+  color: #fff;
+}
+.st-tag-respec {
+  background: var(--accent-strong);
+  color: #fff;
+}
+.st-tag-endgame {
+  background: var(--rarity-legendary);
+  color: #0d0608;
+}
+.st-row-spent {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.92rem;
+  word-break: break-word;
+}
+.st-row-cum {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  word-break: break-word;
+}
+.st-row-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-dim);
+}
+.st-conf-pill {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.st-conf-pill-high { background: var(--good); color: var(--bg); }
+.st-conf-pill-medium { background: var(--warn); color: var(--bg); }
+.st-conf-pill-low { background: var(--bad); color: #fff; }
+.st-chevron {
+  font-size: 0.78rem;
+  transition: transform 0.2s ease;
+}
+.st-row.is-open .st-chevron {
+  transform: rotate(180deg);
+}
+.st-row-detail {
+  padding: 0 16px 14px 84px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.st-notes {
+  margin: 0;
+  line-height: 1.5;
+}
+.st-respec-block,
+.st-endgame-block {
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+.st-meta-key {
+  color: var(--text-dim);
+  font-weight: 600;
+  margin-right: 4px;
+}
+.st-respec-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+.st-respec-table th,
+.st-respec-table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+.st-respec-table th {
+  color: var(--text-dim);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.st-respec-effect {
+  color: var(--text);
+}
+.st-endgame-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--rarity-legendary);
+}
+
+@media (max-width: 480px) {
+  .st-row-toggle {
+    grid-template-columns: 48px 1fr auto;
+    padding: 8px;
+    gap: 8px;
+  }
+  .st-row-num {
+    min-width: 40px;
+    font-size: 0.95rem;
+  }
+  .st-row-detail {
+    padding: 0 8px 12px 8px;
+  }
+  .st-respec-table th,
+  .st-respec-table td {
+    padding: 4px 6px;
+    font-size: 0.78rem;
+  }
+}
