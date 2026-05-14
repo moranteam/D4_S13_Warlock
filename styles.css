@@ -2839,3 +2839,110 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 /* Legacy "You are here" chip no longer rendered; rule kept hidden in case
    any cached HTML still contains it. */
 .wt-here-chip { display: none; }
+
+/* ============================================
+   LEVELING PATH HEADER + CROSS-REFS (Sprint 2 Part E)
+   ============================================ */
+.lph-root {
+  display: block;
+  margin-bottom: var(--gap-lg);
+}
+.lph-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-card-alt));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 18px 18px 14px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.lph-intro {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.lph-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+}
+.lph-stat {
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.lph-stat-key {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.lph-stat-val {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  word-break: break-word;
+  line-height: 1.25;
+}
+.lph-progress {
+  height: 6px;
+  background: var(--bg-darker);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.lph-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-strong), var(--accent), var(--accent-hot));
+  transition: width 0.4s ease;
+}
+
+.wt-jump-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  align-self: flex-start;
+  color: var(--accent);
+  font-size: 0.82rem;
+  text-decoration: none;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  padding: 4px 0;
+}
+.wt-jump-link:hover {
+  text-decoration: underline;
+}
+.wt-jump-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.st-row-jump {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.st-row-jump:hover {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+.st-row-jump:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

@@ -255,6 +255,7 @@
       // Existing module objects are preserved; the new sections just
       // stack their content vertically.
       if (this.current === 'leveling-path') {
+        LevelingPathHeader.render();
         Walkthrough.render();
         SkillTimeline.render();
         Controller.render();
@@ -608,6 +609,7 @@
 
     renderAll() {
       Dashboard.render();
+      LevelingPathHeader.render();
       Walkthrough.render();
       SkillTimeline.render();
       Controller.render();
@@ -871,6 +873,7 @@
         html += '    <p class="wt-phase-summary">' + escapeHtml(p.summary) + '</p>';
         html += '    <div class="wt-phase-bar"><div class="wt-phase-fill" style="width:' + phasePct + '%"></div></div>';
         html += '    <div class="wt-phase-progress">' + phaseDone + ' / ' + p.steps.length + ' steps</div>';
+        html += '    <a class="wt-jump-link" href="#stRow' + p.levelMin + '" data-jump="timeline:' + p.levelMin + '"><i class="fa-solid fa-arrow-down-long" aria-hidden="true"></i> Jump to Skill Timeline (Lv ' + p.levelMin + ')</a>';
         html += '  </header>';
 
         if (p.respec && p.respec.trigger) {
@@ -1077,7 +1080,8 @@
         const confChar = conf === 'high' ? 'H' : conf === 'medium' ? '?' : 'L';
         const confLabel = (row.confidence || 'MEDIUM') + ' confidence';
 
-        html += '<li class="' + classList + '" data-level="' + lv + '"' + (isCurrent ? ' id="stRowCurrent"' : '') + '>';
+        const rowIdAttr = ' id="stRow' + lv + '"' + (isCurrent ? ' data-current="1"' : '');
+        html += '<li class="' + classList + '" data-level="' + lv + '"' + rowIdAttr + '>';
         if (isRespec) {
           html += '<div class="st-respec-divider" aria-hidden="true"></div>';
         }
@@ -1094,6 +1098,7 @@
         html += '  </span>';
         html += '  <span class="st-row-meta">';
         html += '    <span class="st-conf-pill st-conf-pill-' + conf + '" title="' + confLabel + '" aria-label="' + confLabel + '">' + confChar + '</span>';
+        html += '    <span class="st-row-jump" data-jump="controller" role="button" tabindex="0" title="Jump to Controller bindings"><i class="fa-solid fa-gamepad" aria-hidden="true"></i></span>';
         html += '    <i class="st-chevron fa-solid fa-chevron-down" aria-hidden="true"></i>';
         html += '  </span>';
         html += '</button>';
@@ -1121,7 +1126,7 @@
 
       if (this.lastCurrentLevel !== currentLevel && Router.current === 'leveling-path') {
         this.lastCurrentLevel = currentLevel;
-        const target = root.querySelector('#stRowCurrent');
+        const target = root.querySelector('[data-current="1"]');
         if (target) {
           requestAnimationFrame(() => {
             try {
@@ -1192,6 +1197,7 @@
       if (this.bound) return;
       this.bound = true;
       document.addEventListener('click', (e) => {
+        if (e.target.closest && e.target.closest('[data-jump]')) return;
         const btn = e.target.closest && e.target.closest('.st-row-toggle');
         if (!btn) return;
         const tok = btn.getAttribute('data-toggle');
@@ -1402,6 +1408,88 @@
           this.render();
         }
       });
+    },
+  };
+
+  // ========================================
+  // LEVELING PATH HEADER (Sprint 2 Part E)
+  // ========================================
+  const LevelingPathHeader = {
+    bound: false,
+
+    render() {
+      const root = document.getElementById('levelingPathHeaderRoot');
+      if (!root) return;
+      const c = AppState.data.character || { level: 1 };
+      const phases = (window.D4_DATA && window.D4_DATA.walkthrough) || [];
+      const cb = (window.D4_DATA && window.D4_DATA.controllerBindings) || null;
+      const lv = c.level || 1;
+
+      let phaseName = '(none)';
+      for (const p of phases) {
+        if (lv >= p.levelMin && lv <= p.levelMax) { phaseName = p.name; break; }
+      }
+
+      let milestoneLabel = '(none)';
+      if (cb && Array.isArray(cb.milestones)) {
+        let cur = null;
+        for (const m of cb.milestones) {
+          if (typeof m.level === 'number' && m.level <= lv) cur = m;
+        }
+        if (cur) milestoneLabel = 'Lv ' + cur.level + ' (' + cur.label + ')';
+      }
+
+      const pct = Math.min(100, Math.round((lv / 70) * 100));
+
+      let html = '';
+      html += '<div class="lph-card">';
+      html += '  <p class="lph-intro">Your path from 1 to 70. Walkthrough by phase, exact skill points per level, PS5 controller bindings as you level up.</p>';
+      html += '  <div class="lph-stats">';
+      html += '    <div class="lph-stat"><div class="lph-stat-key">Current Level</div><div class="lph-stat-val">' + lv + '</div></div>';
+      html += '    <div class="lph-stat"><div class="lph-stat-key">Current Phase</div><div class="lph-stat-val">' + escapeHtml(phaseName) + '</div></div>';
+      html += '    <div class="lph-stat"><div class="lph-stat-key">Controller Milestone</div><div class="lph-stat-val">' + escapeHtml(milestoneLabel) + '</div></div>';
+      html += '    <div class="lph-stat"><div class="lph-stat-key">Through Leveling</div><div class="lph-stat-val">' + pct + '%</div></div>';
+      html += '  </div>';
+      html += '  <div class="lph-progress" aria-hidden="true"><div class="lph-progress-fill" style="width:' + pct + '%"></div></div>';
+      html += '</div>';
+
+      root.innerHTML = html;
+      this.bind();
+    },
+
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      document.addEventListener('click', (e) => {
+        const jumpEl = e.target.closest && e.target.closest('[data-jump]');
+        if (!jumpEl) return;
+        const tok = jumpEl.getAttribute('data-jump');
+        if (!tok) return;
+        e.preventDefault();
+        LevelingPathHeader.scrollToToken(tok);
+      });
+    },
+
+    scrollToToken(tok) {
+      let targetId = null;
+      if (tok === 'controller') {
+        targetId = 'controllerRoot';
+      } else if (tok.indexOf('timeline:') === 0) {
+        const lv = tok.slice('timeline:'.length);
+        targetId = 'stRow' + lv;
+      } else if (tok === 'timeline') {
+        targetId = 'skillTimelineRoot';
+      } else if (tok === 'walkthrough') {
+        targetId = 'walkthroughRoot';
+      }
+      if (!targetId) return;
+      const el = document.getElementById(targetId);
+      if (!el) return;
+      try {
+        el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      } catch (err) {
+        el.scrollIntoView();
+      }
     },
   };
 
@@ -2457,6 +2545,6 @@
   }
 
   // Expose for debugging
-  window.D4 = { AppState, Router, QuickUpdate, Dashboard, Walkthrough, SkillTimeline, Controller, Skills, Shards, Aspects, Paragon, Uniques, Bosses, Endbuild, Talismans, WarPlans, Mercenary, Patch, Toast, Modal, Nav };
+  window.D4 = { AppState, Router, QuickUpdate, Dashboard, LevelingPathHeader, Walkthrough, SkillTimeline, Controller, Skills, Shards, Aspects, Paragon, Uniques, Bosses, Endbuild, Talismans, WarPlans, Mercenary, Patch, Toast, Modal, Nav };
 
 })();
