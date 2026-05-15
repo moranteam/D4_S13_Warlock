@@ -609,7 +609,7 @@
         effect: 'Recast Skills (Rampage etc.) apply Hex on targets. Increases damage enemies take from Abyss Demonology Skills by x20 percent.',
         confidence: 'HIGH',
       },
-      synergy: 'Mastermind generates Shadowform stacks via Recast skills. Blasphemous makes the Recast cycle also apply Hex, which amplifies all subsequent Abyss damage from Dread Claws, Rampage, and Profane Sentinel. The compounded multipliers reach roughly x15 damage per Mobalytics estimation.',
+      synergy: 'Mastermind generates Shadowform stacks via Recast skills. Blasphemous makes the Recast cycle also apply Hex, which amplifies all subsequent Abyss damage from Dread Claws, Rampage, and Profane Sentinel. Mobalytics (2026-05-15) sharpens the multiplier: 11 Greater Demons (4 from the Shard, 5 Profane Sentinel, 1 Abyssal Titan, 1 Sigil of Summons) yields roughly 330 percent damage through Beru of Horazon\'s Chains. Confidence MEDIUM, single source but self consistent.',
     },
 
     /* ============================================================
@@ -651,6 +651,11 @@
           { n: 5, skill: 'Sigil of Summons', role: 'Ritualism proc', notes: 'For boss fights' },
           { n: 6, skill: 'Profane Sentinel', role: 'Maintain 5 up', notes: 'Standard recast' },
         ],
+      },
+      optimizedPush: {
+        label: 'Optimized Push Variant (Mobalytics 2026-05-15)',
+        confidence: 'MEDIUM',
+        rotation: 'Cast Sigil to activate Beru of the Nameless Ritual for 200 percent damage and 40 percent damage reduction, then swap Sigil for Endless Barrage Bombardment and cast every 10 seconds. Highest single target ceiling, more demanding rotation.',
       },
       lv70SwapMoment: {
         label: 'Lv 70 swap moment',
@@ -709,21 +714,28 @@
         reinforcement: { name: 'Aldkin', confidence: 'MEDIUM' },
       },
       variants: [
-        { label: 'Maxroll Canonical', hired: 'Raheir', reinforcement: 'Aldkin', source: 'Maxroll endgame', confidence: 'MEDIUM' },
-        { label: 'Icy Veins Variant', hired: 'Raheir', reinforcement: 'Varyana', source: 'Icy Veins', confidence: 'MEDIUM' },
-        { label: 'Mobalytics Variant', hired: 'Varyana', reinforcement: 'Aldkin', source: 'Mobalytics', confidence: 'MEDIUM' },
+        { label: 'Maxroll Canonical (endgame)', hired: 'Raheir', reinforcement: 'Aldkin', source: 'Maxroll endgame', confidence: 'MEDIUM' },
+        { label: 'Icy Veins Variant (endgame)', hired: 'Raheir', reinforcement: 'Varyana', source: 'Icy Veins', confidence: 'MEDIUM' },
+        { label: 'Mobalytics Variant (endgame)', hired: 'Varyana', reinforcement: 'Aldkin', source: 'Mobalytics', confidence: 'MEDIUM' },
+        { label: 'Mobalytics Leveling', hired: 'Subo', reinforcement: 'Aldkin', source: 'Mobalytics Dread Claws Leveling (Raxxanterax)', confidence: 'MEDIUM', phase: 'leveling' },
       ],
-      controversy: 'The 3 canonical sources disagree on the hired pick. Maxroll itself acknowledges Varyana as a viable alt hire for healing. The UI shows the controversy so you can pick by preference.',
+      levelingPick: {
+        hired: { name: 'Subo', confidence: 'MEDIUM' },
+        reinforcement: { name: 'Aldkin', confidence: 'MEDIUM' },
+        note: 'For the leveling phase Mobalytics recommends Subo hired for Map Hack, Movement Speed, and Vulnerability, with Aldkin reinforcement. Switch to the endgame hired pick (Raheir canonical) at 70.',
+      },
+      controversy: 'The 3 canonical endgame sources disagree on the hired pick. Maxroll itself acknowledges Varyana as a viable alt hire for healing. For leveling, Mobalytics adds Subo as a distinct recommendation. The UI shows all options so you pick by phase and preference.',
       skills: {
         Raheir: ['Ground Slam', 'Raheir\'s Aegis', 'Bastion', 'Inspiration'],
         Aldkin: ['Field of Languish (key skill, applies DR on player skill cast)'],
         Varyana: ['Bloodlust (triggers on any Skill cast in combat)', 'Taste of Flesh (1 percent life heal on hit)'],
-        Subo: ['Out of scope, no canonical source confirms this pick'],
+        Subo: ['Map Hack utility', 'Movement Speed', 'Vulnerability application (Mobalytics leveling pick)'],
       },
       reasoning: {
-        Raheir: 'Defensive front line plus Inspiration damage amp.',
-        Aldkin: 'Field of Languish triggers on every player skill cast, applying a damage reduction aura.',
+        Raheir: 'Defensive front line plus Inspiration damage amp. Endgame canonical.',
+        Aldkin: 'Field of Languish triggers on every player skill cast, applying a damage reduction aura. Works leveling and endgame.',
         Varyana: 'Attack Speed buff plus 1 percent Life Heal on hit. Strong sustain option.',
+        Subo: 'Leveling pick. Map Hack speeds clears, Movement Speed and Vulnerability help the leveling grind. Mobalytics Dread Claws Leveling, confidence MEDIUM.',
       },
     },
 
@@ -815,7 +827,7 @@
       { rank: 4, stat: 'Maximum Resource (Wrath)', target: '~280 with Summon Vollach active', confidence: 'MEDIUM' },
       { rank: 5, stat: 'Attack Speed', target: '~86 percent with Rallying Reversal, Chains, Varyana up', confidence: 'MEDIUM' },
       { rank: 6, stat: 'All Damage / Shadow Damage Multiplier', target: '~100 percent', confidence: 'MEDIUM' },
-      { rank: 7, stat: 'Willpower', target: '~2100', confidence: 'MEDIUM' },
+      { rank: 7, stat: 'Willpower', target: '~2100. Scales all Warlock damage at 12.5 percent per 100 points (Icy Veins)', confidence: 'MEDIUM' },
       { rank: 8, stat: 'Weapon Damage', target: 'Push past Willpower 2150 then pivot here', confidence: 'MEDIUM' },
       { rank: 9, stat: 'All Resistance', target: '70 percent on Hard, 80 percent target overall', confidence: 'HIGH' },
       { rank: 10, stat: 'Armor', target: '10000 plus community standard', confidence: 'LOW' },

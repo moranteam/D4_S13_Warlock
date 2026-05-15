@@ -113,3 +113,45 @@ If Blizzard ships a balance patch mid overhaul, re run this full pipeline:
 5. Commit as a single "patch refresh" mini sprint
 
 This is fully automatable.
+
+## V2.1 Refresh, 2026-05-15
+
+Three additional sources supplied by Charlie and reconciled:
+- Mobalytics Dread Claws Leveling (Raxxanterax, 2026-05-10), NEW
+- Mobalytics Endgame refresh (Sanctum, 2026-05-15), update of the 2026-05-14 snapshot
+- Icy Veins Warlock Leveling (GhazzyTV, Cashlarond, 2026-04-24), NEW but generic
+
+### Resolution 11: Subo mercenary, leveling phase
+Previously Subo was LOW confidence, skipped, not in any canonical source. Mobalytics
+Dread Claws Leveling now explicitly recommends Subo hired (Map Hack, Movement Speed,
+Vulnerability) plus Aldkin reinforcement for the LEVELING phase. Resolution: add Subo
+as a leveling phase hired option at MEDIUM confidence. Endgame canonical stays Raheir
+hired plus Aldkin reinforcement (Maxroll). The two phases are distinct.
+
+### Resolution 12: Optimized Push skill bar variant
+Mobalytics refresh adds an Optimized Push variant with a specific boss rotation: cast
+Sigil to activate Beru of the Nameless Ritual (200 percent damage, 40 percent DR),
+swap Sigil for Endless Barrage Bombardment, cast every 10 seconds. Added as a MEDIUM
+confidence Mobalytics variant. Maxroll canonical final bar unchanged.
+
+### Resolution 13: Greater Demon damage math
+Mobalytics refresh gives precise figures: 11 Greater Demons (4 Shard, 5 Profane
+Sentinel, 1 Abyssal Titan, 1 Sigil of Summons) yields roughly 330 percent damage via
+Beru of Horazon's Chains. This sharpens the earlier "~15x" estimate. Soul shard
+synergy note updated, confidence MEDIUM (single source, self consistent).
+
+### Resolution 14: Willpower scaling number
+Icy Veins generic Warlock leveling guide states Willpower scales all Warlock damage at
+12.5 percent per 100 points. Adopted as a stat caps note, MEDIUM confidence (single
+source, build agnostic, consistent with the Willpower target).
+
+### Resolution 15: Leveling aspect per slot list
+Mobalytics leveling provides a 10 slot leveling aspect priority. More granular than
+Maxroll leveling's shorter list. Documented in the raw source for reference. Not
+promoted into canonical data because it is leveling phase only and Maxroll remains
+canonical for leveling. Available if a leveling aspect view is built later.
+
+### Non resolution: Terror Swarm naming
+Mobalytics leveling skill point order names "Terror Swarm" which does not match the
+canonical skill names in data.js. Treated as a source naming discrepancy. Canonical
+leveling skill data NOT changed.
