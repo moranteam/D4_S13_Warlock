@@ -275,10 +275,10 @@
         Uniques.render();
         Bosses.render();
       }
-      // gear-comparison: Sprint 3 placeholder, no module to render yet.
+      // gear-comparison: Sprint 3 Part B will mount GearCompare here.
       if (this.current === 'slot-reference') {
         Talismans.render();
-        // runesGemsRoot is a Sprint 5 placeholder.
+        RunesGems.render();
       }
       if (this.current === 'about') {
         Patch.render();
@@ -621,6 +621,7 @@
       Bosses.render();
       Endbuild.render();
       Talismans.render();
+      RunesGems.render();
       WarPlans.render();
       Mercenary.render();
       Patch.render();
@@ -2273,6 +2274,151 @@
           Talismans.render();
         }
       });
+    },
+  };
+
+  // ========================================
+  // RUNES AND GEMS RENDERER
+  // ========================================
+  const RunesGems = {
+    render() {
+      const root = document.getElementById('runesGemsRoot');
+      if (!root) return;
+      const rg = window.D4_RUNES_GEMS;
+      if (!rg || !rg.gemsPerSlot) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-gem placeholder-icon"></i><div class="placeholder-title">No runes and gems data</div><div class="placeholder-text">runesgems.js may have failed to load. Check the console.</div></div>';
+        return;
+      }
+
+      let html = '';
+
+      html += '<section class="rg-section">';
+      html += '  <h2 class="rg-section-name">Runeword System</h2>';
+      html += '  <div class="rg-card">';
+      html += '    <p class="rg-card-lead">' + escapeHtml(rg.runewordSystem.summary) + '</p>';
+      html += '    <ul class="rg-rules">';
+      for (const r of rg.runewordSystem.rules) {
+        html += '<li>' + escapeHtml(r) + '</li>';
+      }
+      html += '    </ul>';
+      html += '    <div class="rg-card-meta"><i class="fa-solid fa-bullseye" aria-hidden="true"></i> ' + escapeHtml(rg.runewordSystem.buildAllocation) + '</div>';
+      html += '  </div>';
+      html += '</section>';
+
+      html += '<section class="rg-section">';
+      html += '  <h2 class="rg-section-name">Gems per Slot</h2>';
+      for (const g of rg.gemsPerSlot) {
+        html += '<div class="rg-group">';
+        html += '  <div class="rg-group-head"><span class="rg-group-name">' + escapeHtml(g.group) + '</span><span class="rg-group-scope">' + escapeHtml(g.scope) + '</span></div>';
+        html += '  <div class="rg-rows">';
+        for (const row of g.rows) {
+          html += '<div class="rg-row">';
+          html += '  <div class="rg-row-head"><span class="rg-row-slot">' + escapeHtml(row.slot) + '</span><span class="aspect-priority rg-conf-' + row.confidence.toLowerCase() + '">' + row.confidence + '</span></div>';
+          html += '  <div class="rg-row-body">';
+          html += '    <div class="rg-kv"><span class="rg-k">Recommended</span><span class="rg-v rg-v-strong">' + escapeHtml(row.recommended) + '</span></div>';
+          html += '    <div class="rg-kv"><span class="rg-k">Alternative</span><span class="rg-v">' + escapeHtml(row.alternative) + '</span></div>';
+          html += '    <div class="rg-kv"><span class="rg-k">Effect</span><span class="rg-v">' + escapeHtml(row.effect) + '</span></div>';
+          html += '    <div class="rg-kv"><span class="rg-k">Why</span><span class="rg-v rg-v-dim">' + escapeHtml(row.reasoning) + '</span></div>';
+          html += '  </div>';
+          html += '</div>';
+        }
+        html += '  </div>';
+        html += '</div>';
+      }
+      html += '</section>';
+
+      html += '<section class="rg-section">';
+      html += '  <h2 class="rg-section-name">Rune Combos</h2>';
+
+      html += '  <div class="rg-combo-group">';
+      html += '    <div class="rg-combo-head"><span class="rg-combo-title">HIGH Confidence</span><span class="rg-combo-note">Maxroll, Mobalytics endgame, or Icy Veins endgame cited</span></div>';
+      html += '    <div class="rg-combo-grid">';
+      for (const c of rg.runeCombos.high) {
+        html += '<div class="rg-combo rg-combo-tier-' + c.tier.toLowerCase() + '">';
+        html += '  <div class="rg-combo-pair"><span class="rg-rune-ritual">' + escapeHtml(c.ritual) + '</span><span class="rg-combo-plus">+</span><span class="rg-rune-invoke">' + escapeHtml(c.invocation) + '</span><span class="rg-combo-tier">' + c.tier + '</span></div>';
+        html += '  <div class="rg-combo-effect">' + escapeHtml(c.effect) + '</div>';
+        html += '  <div class="rg-combo-source"><i class="fa-solid fa-link" aria-hidden="true"></i> ' + escapeHtml(c.source) + '</div>';
+        html += '</div>';
+      }
+      html += '    </div>';
+      html += '  </div>';
+
+      html += '  <div class="rg-combo-group">';
+      html += '    <div class="rg-combo-head"><span class="rg-combo-title">MEDIUM Confidence</span><span class="rg-combo-note">Mechanics documented, build pairing unverified</span></div>';
+      html += '    <div class="rg-combo-grid">';
+      for (const c of rg.runeCombos.medium) {
+        html += '<div class="rg-combo rg-combo-tier-' + c.tier.toLowerCase() + ' rg-combo-medium">';
+        html += '  <div class="rg-combo-pair"><span class="rg-rune-ritual">' + escapeHtml(c.ritual) + '</span><span class="rg-combo-plus">+</span><span class="rg-rune-invoke">' + escapeHtml(c.invocation) + '</span><span class="rg-combo-tier">' + c.tier + '</span></div>';
+        html += '  <div class="rg-combo-effect">' + escapeHtml(c.effect) + '</div>';
+        html += '  <div class="rg-combo-source"><i class="fa-solid fa-link" aria-hidden="true"></i> ' + escapeHtml(c.source) + '</div>';
+        html += '</div>';
+      }
+      html += '    </div>';
+      html += '  </div>';
+
+      html += '  <details class="rg-combo-collapse">';
+      html += '    <summary>LOW Confidence Combos (single source, documented for completeness)</summary>';
+      html += '    <div class="rg-combo-grid">';
+      for (const c of rg.runeCombos.low) {
+        html += '<div class="rg-combo rg-combo-low">';
+        html += '  <div class="rg-combo-pair"><span class="rg-rune-ritual">' + escapeHtml(c.ritual) + '</span><span class="rg-combo-plus">+</span><span class="rg-rune-invoke">' + escapeHtml(c.invocation) + '</span></div>';
+        html += '  <div class="rg-combo-effect">' + escapeHtml(c.effect) + '</div>';
+        html += '  <div class="rg-combo-source"><i class="fa-solid fa-link" aria-hidden="true"></i> ' + escapeHtml(c.source) + '</div>';
+        html += '</div>';
+      }
+      html += '    </div>';
+      html += '  </details>';
+
+      html += '  <details class="rg-combo-collapse">';
+      html += '    <summary>Excluded combos with citation</summary>';
+      for (const ex of rg.runeCombos.excluded) {
+        html += '<div class="rg-excluded">';
+        html += '  <div class="rg-excluded-name">' + escapeHtml(ex.combo) + '</div>';
+        html += '  <div class="rg-excluded-reason">' + escapeHtml(ex.reason) + '</div>';
+        html += '  <div class="rg-combo-source"><i class="fa-solid fa-link" aria-hidden="true"></i> ' + escapeHtml(ex.source) + '</div>';
+        html += '</div>';
+      }
+      html += '  </details>';
+
+      html += '  <div class="rg-notes">';
+      html += '    <div class="rg-note"><span class="rg-note-tag">Shadowform</span><span class="rg-note-body">' + escapeHtml(rg.runeNotes.shadowformProc) + '</span></div>';
+      html += '    <div class="rg-note"><span class="rg-note-tag">Vulnerable</span><span class="rg-note-body">' + escapeHtml(rg.runeNotes.vulnerableUptime) + '</span></div>';
+      html += '  </div>';
+      html += '</section>';
+
+      html += '<section class="rg-section">';
+      html += '  <h2 class="rg-section-name">Socket Recommendations Per Slot</h2>';
+      html += '  <div class="rg-rec-grid">';
+      for (const s of rg.socketRecsPerSlot) {
+        html += '<div class="rg-rec-row">';
+        html += '  <div class="rg-rec-head"><span class="rg-rec-slot">' + escapeHtml(s.slot) + '</span><span class="rg-rec-sockets">' + escapeHtml(String(s.sockets)) + ' socket' + (String(s.sockets) === '1' ? '' : 's') + '</span><span class="aspect-priority rg-conf-' + s.confidence.toLowerCase() + '">' + s.confidence + '</span></div>';
+        html += '  <div class="rg-rec-body">' + escapeHtml(s.contents) + '</div>';
+        html += '</div>';
+      }
+      html += '  </div>';
+      html += '</section>';
+
+      html += '<section class="rg-section">';
+      html += '  <h2 class="rg-section-name">Endgame Loadout Summary</h2>';
+      html += '  <div class="rg-loadout-grid">';
+      for (const l of rg.loadoutSummary) {
+        html += '<div class="rg-loadout-row">';
+        html += '  <div class="rg-loadout-slot">' + escapeHtml(l.slot) + '</div>';
+        html += '  <div class="rg-loadout-meta"><span class="rg-loadout-sockets">' + escapeHtml(String(l.sockets)) + ' socket' + (String(l.sockets) === '1' ? '' : 's') + '</span></div>';
+        html += '  <div class="rg-loadout-contents"><span class="rg-loadout-contents-label">Contents</span> ' + escapeHtml(l.contents) + '</div>';
+        html += '  <div class="rg-loadout-effect"><span class="rg-loadout-effect-label">Effect</span> ' + escapeHtml(l.effect) + '</div>';
+        html += '</div>';
+      }
+      html += '  </div>';
+      html += '  <div class="rg-totals">';
+      html += '    <div class="rg-total"><span class="rg-total-label">Runewords</span><span class="rg-total-value">' + escapeHtml(rg.loadoutTotals.runewords) + '</span></div>';
+      html += '    <div class="rg-total"><span class="rg-total-label">Weapon Gems</span><span class="rg-total-value">' + escapeHtml(rg.loadoutTotals.weaponGems) + '</span></div>';
+      html += '    <div class="rg-total"><span class="rg-total-label">Armor Gems</span><span class="rg-total-value">' + escapeHtml(rg.loadoutTotals.armorGems) + '</span></div>';
+      html += '    <div class="rg-total"><span class="rg-total-label">Jewelry Gems</span><span class="rg-total-value">' + escapeHtml(rg.loadoutTotals.jewelryGems) + '</span></div>';
+      html += '  </div>';
+      html += '</section>';
+
+      root.innerHTML = html;
     },
   };
 

@@ -2979,3 +2979,91 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
+/* ============================================================
+   RUNES AND GEMS (Sprint 5)
+   ============================================================ */
+.runes-gems-root { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+.rg-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.rg-section-name { font-family: var(--font-title); font-size: 1rem; margin: 0; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-secondary); }
+
+.rg-card { background: var(--bg-darker); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.rg-card-lead { margin: 0; font-size: 0.95rem; color: var(--text); }
+.rg-rules { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; color: var(--text-secondary); font-size: 0.86rem; }
+.rg-card-meta { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); padding-top: 6px; border-top: 1px dashed var(--border); display: flex; gap: 6px; align-items: flex-start; }
+
+.rg-group { display: flex; flex-direction: column; gap: 8px; padding-bottom: 8px; border-bottom: 1px dashed var(--border); }
+.rg-group:last-child { border-bottom: 0; padding-bottom: 0; }
+.rg-group-head { display: flex; flex-direction: column; gap: 2px; }
+.rg-group-name { font-weight: 700; font-size: 0.95rem; color: var(--accent); }
+.rg-group-scope { font-size: 0.8rem; color: var(--text-dim); }
+.rg-rows { display: flex; flex-direction: column; gap: 8px; }
+.rg-row { background: var(--bg-darker); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+.rg-row-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.rg-row-slot { font-weight: 600; font-size: 0.92rem; }
+.rg-row-body { display: flex; flex-direction: column; gap: 4px; }
+.rg-kv { display: grid; grid-template-columns: 110px 1fr; gap: 8px; font-size: 0.82rem; }
+.rg-k { color: var(--text-dim); font-family: var(--font-mono); text-transform: uppercase; font-size: 0.72rem; padding-top: 2px; }
+.rg-v { color: var(--text); }
+.rg-v-strong { font-weight: 600; color: var(--accent); }
+.rg-v-dim { color: var(--text-secondary); font-size: 0.82rem; }
+
+.rg-conf-high { background: rgba(46, 160, 67, 0.14); color: #2ea043; border: 1px solid rgba(46, 160, 67, 0.4); }
+.rg-conf-medium { background: rgba(210, 153, 34, 0.14); color: #d29922; border: 1px solid rgba(210, 153, 34, 0.4); }
+.rg-conf-low { background: rgba(196, 30, 58, 0.14); color: #f85149; border: 1px solid rgba(196, 30, 58, 0.4); }
+
+.rg-combo-group { display: flex; flex-direction: column; gap: 8px; }
+.rg-combo-head { display: flex; flex-direction: column; gap: 2px; }
+.rg-combo-title { font-weight: 700; font-size: 0.95rem; color: var(--accent); }
+.rg-combo-note { font-size: 0.78rem; color: var(--text-dim); }
+.rg-combo-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.rg-combo { background: var(--bg-darker); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+.rg-combo-pair { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.95rem; }
+.rg-rune-ritual { background: rgba(58, 134, 255, 0.16); color: #79b8ff; border: 1px solid rgba(58, 134, 255, 0.4); padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+.rg-rune-invoke { background: rgba(196, 30, 58, 0.16); color: var(--accent); border: 1px solid var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+.rg-combo-plus { color: var(--text-dim); }
+.rg-combo-tier { margin-left: auto; font-family: var(--font-mono); font-size: 0.78rem; padding: 2px 8px; border-radius: 4px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); }
+.rg-combo-tier-s .rg-combo-tier { background: rgba(255, 184, 0, 0.16); color: #ffb800; border-color: rgba(255, 184, 0, 0.4); }
+.rg-combo-tier-a .rg-combo-tier { background: rgba(46, 160, 67, 0.14); color: #2ea043; border-color: rgba(46, 160, 67, 0.4); }
+.rg-combo-tier-b .rg-combo-tier { background: rgba(210, 153, 34, 0.14); color: #d29922; border-color: rgba(210, 153, 34, 0.4); }
+.rg-combo-effect { font-size: 0.86rem; color: var(--text); line-height: 1.45; }
+.rg-combo-source { font-size: 0.74rem; color: var(--text-dim); font-family: var(--font-mono); display: flex; gap: 6px; align-items: flex-start; }
+.rg-combo-medium { border-color: rgba(210, 153, 34, 0.4); }
+.rg-combo-low { border-color: rgba(196, 30, 58, 0.3); opacity: 0.85; }
+
+.rg-combo-collapse { background: var(--bg-darker); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; }
+.rg-combo-collapse summary { cursor: pointer; font-size: 0.86rem; color: var(--text-secondary); font-weight: 600; padding: 4px 0; }
+.rg-combo-collapse[open] summary { color: var(--accent); border-bottom: 1px dashed var(--border); margin-bottom: 8px; padding-bottom: 8px; }
+.rg-excluded { padding: 8px 0; border-top: 1px dashed var(--border); }
+.rg-excluded:first-child { border-top: 0; }
+.rg-excluded-name { font-weight: 600; font-size: 0.92rem; color: var(--text); }
+.rg-excluded-reason { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45; padding: 4px 0; }
+
+.rg-notes { display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+.rg-note { display: flex; gap: 10px; padding: 8px 10px; background: var(--bg-darker); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); }
+.rg-note-tag { font-family: var(--font-mono); font-size: 0.74rem; font-weight: 700; color: var(--accent); text-transform: uppercase; flex-shrink: 0; padding-top: 2px; min-width: 80px; }
+.rg-note-body { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45; }
+
+.rg-rec-grid { display: flex; flex-direction: column; gap: 8px; }
+.rg-rec-row { background: var(--bg-darker); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; display: flex; flex-direction: column; gap: 4px; }
+.rg-rec-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.rg-rec-slot { font-weight: 600; font-size: 0.92rem; }
+.rg-rec-sockets { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); background: var(--bg-card); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); }
+.rg-rec-body { font-size: 0.86rem; color: var(--text); line-height: 1.45; }
+
+.rg-loadout-grid { display: flex; flex-direction: column; gap: 6px; }
+.rg-loadout-row { background: var(--bg-darker); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px; display: grid; grid-template-columns: 1fr; gap: 4px; }
+.rg-loadout-slot { font-weight: 700; font-size: 0.92rem; color: var(--accent); }
+.rg-loadout-meta { font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-dim); }
+.rg-loadout-contents, .rg-loadout-effect { font-size: 0.84rem; color: var(--text); }
+.rg-loadout-contents-label, .rg-loadout-effect-label { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; color: var(--text-dim); margin-right: 6px; }
+.rg-totals { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
+.rg-total { background: var(--bg-darker); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
+.rg-total-label { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; color: var(--text-dim); }
+.rg-total-value { font-size: 0.86rem; font-weight: 600; color: var(--text); }
+
+@media (min-width: 768px) {
+  .rg-combo-grid { grid-template-columns: repeat(2, 1fr); }
+  .rg-loadout-row { grid-template-columns: 1.4fr 0.8fr 1.6fr 1.6fr; align-items: center; }
+  .rg-totals { grid-template-columns: repeat(4, 1fr); }
+}
