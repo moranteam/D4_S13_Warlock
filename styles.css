@@ -3435,3 +3435,272 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
   .ec-section-jewelry .ec-grid { grid-template-columns: repeat(3, 1fr); }
   .ec-lookup-grid { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* ============================================================
+   SPRINT 5 REVISION: VISUAL FIRST ENDGAME
+   Rarity frames, paper-doll loadout, talisman wheel, rune sockets.
+   These rules override the earlier flat Sprint 5 styles.
+   ============================================================ */
+
+/* Rarity color is passed inline as --rar */
+.ec-rar-mythic    { --rar: #d2691e; }
+.ec-rar-unique    { --rar: #c8893f; }
+.ec-rar-legendary { --rar: #b8651f; }
+.ec-rar-rare      { --rar: #d4c44a; }
+.ec-rar-magic     { --rar: #5a8fd4; }
+.ec-rar-common    { --rar: #9aa0a6; }
+
+.ec-slot-svg { width: 100%; height: 100%; display: block; }
+
+/* ---- Gear loadout paper-doll (headline visual) ---- */
+.ec-loadout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  background:
+    radial-gradient(ellipse at center, rgba(196,30,58,0.10) 0%, transparent 70%),
+    var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.ec-ld-col { display: flex; flex-direction: column; gap: 8px; }
+.ec-ld-tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--bg-darker);
+  border: 1px solid var(--rar, var(--border));
+  border-left: 4px solid var(--rar, var(--accent));
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  min-height: 56px;
+  width: 100%;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.ec-ld-tile:hover {
+  transform: translateX(2px);
+  box-shadow: 0 0 0 1px var(--rar), 0 4px 16px rgba(0,0,0,0.4);
+}
+.ec-ld-icon {
+  width: 38px; height: 38px;
+  flex-shrink: 0;
+  color: var(--rar, var(--accent));
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--rar) 50%, transparent));
+}
+.ec-ld-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ec-ld-slotname { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); }
+.ec-ld-itemname { font-weight: 700; font-size: 0.9rem; color: var(--rar, var(--text)); line-height: 1.2; overflow: hidden; text-overflow: ellipsis; }
+.ec-ld-center {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; padding: 18px 12px; text-align: center;
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.ec-ld-crest { width: 64px; height: 64px; color: var(--accent); filter: drop-shadow(0 0 8px rgba(196,30,58,0.5)); }
+.ec-crest-svg { width: 100%; height: 100%; }
+.ec-ld-crest-name { font-family: var(--font-title); font-size: 1.05rem; color: var(--text); letter-spacing: 0.03em; }
+.ec-ld-hint { font-size: 0.76rem; color: var(--text-dim); }
+
+/* ---- Rune sockets strip ---- */
+.ec-runes, .rg-hero .ec-runes { display: flex; flex-direction: column; gap: 12px; }
+.ec-rune-pair {
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ec-rune-pair-slot { font-family: var(--font-mono); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); }
+.ec-rune-sockets { display: flex; align-items: center; gap: 6px; }
+.ec-rune-socket {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  width: 60px;
+}
+.ec-rune-svg {
+  width: 44px; height: 44px;
+  color: var(--accent);
+  filter: drop-shadow(0 0 5px rgba(196,30,58,0.45));
+}
+.ec-rune-name { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: var(--text); }
+.ec-rune-link { width: 16px; height: 2px; background: var(--accent); opacity: 0.6; }
+.ec-rune-tier { align-self: flex-start; }
+.ec-rune-effect { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45; }
+
+/* ---- Talisman radial wheel ---- */
+.ec-wheel { display: flex; justify-content: center; padding: 12px 0; }
+.ec-wheel-ring {
+  position: relative;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, rgba(210,153,34,0.10) 0%, transparent 65%),
+    var(--bg-darker);
+  border: 2px solid color-mix(in srgb, #d29922 40%, var(--border));
+}
+.ec-wheel-center {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 84px; height: 84px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px;
+  background: var(--bg-card);
+  border: 2px solid #d29922;
+  border-radius: 50%;
+  color: #d29922;
+}
+.ec-wheel-svg { width: 40px; height: 40px; }
+.ec-wheel-center-label { font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; color: #d29922; }
+.ec-wheel-node {
+  position: absolute; transform: translate(-50%, -50%);
+  width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-card);
+  border: 2px solid color-mix(in srgb, #d29922 55%, var(--border));
+  border-radius: 50%;
+  color: #d4c44a;
+}
+.ec-wheel-node-svg { width: 26px; height: 26px; }
+.ec-wheel-node span {
+  position: absolute; bottom: -6px; right: -6px;
+  width: 18px; height: 18px;
+  font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--accent); color: #fff; border-radius: 50%;
+}
+
+/* ---- Item card visual rebuild ---- */
+.ec-item {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 14px;
+  background: var(--bg-darker);
+  border: 1px solid var(--rar, var(--border));
+  border-radius: var(--radius);
+  padding: 14px;
+  align-items: start;
+}
+.ec-item-frame {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.ec-item-icon {
+  width: 72px; height: 72px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px;
+  color: var(--rar, var(--accent));
+  background:
+    radial-gradient(circle at center, color-mix(in srgb, var(--rar) 22%, transparent) 0%, transparent 70%),
+    var(--bg-card);
+  border: 2px solid var(--rar, var(--border));
+  border-radius: var(--radius-sm);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--rar) 40%, transparent));
+}
+.ec-item-rarity {
+  font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--rar, var(--text-dim));
+}
+.ec-item-alt { opacity: 0.92; }
+.ec-item-body { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.ec-item-head { display: flex; flex-direction: column; gap: 4px; }
+.ec-item-slot { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); }
+.ec-item-name { margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--rar, var(--text)); line-height: 1.2; }
+.ec-item-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.ec-tag-tier { font-family: var(--font-mono); font-size: 0.68rem; padding: 1px 8px; border-radius: 4px; background: color-mix(in srgb, var(--rar) 18%, transparent); border: 1px solid var(--rar); color: var(--rar); }
+
+.ec-affix-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.ec-affix { display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.92rem; }
+.ec-affix.is-must { border-left: 3px solid var(--accent); }
+.ec-affix.is-build-defining { border-left: 3px solid #ffb800; background: rgba(255,184,0,0.07); }
+.ec-affix-n {
+  font-family: var(--font-title); font-weight: 700;
+  color: #fff; background: var(--accent);
+  border-radius: 6px;
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 0.88rem;
+}
+.ec-affix.is-build-defining .ec-affix-n { background: #ffb800; color: #1a1a1a; }
+.ec-affix-stat { flex: 1; color: var(--text); min-width: 0; }
+.ec-affix-flag { font-family: var(--font-mono); font-size: 0.62rem; padding: 1px 6px; border-radius: 3px; font-weight: 700; }
+.ec-flag-must { background: var(--accent); color: #fff; }
+.ec-flag-defining { background: #ffb800; color: #1a1a1a; }
+
+.ec-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ec-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 9px; font-size: 0.78rem; color: var(--text); }
+.ec-chip-svg { width: 14px; height: 14px; color: var(--text-dim); }
+.ec-chip-aspect { border-left: 2px solid #ffb800; }
+.ec-chip-source { border-left: 2px solid #79b8ff; }
+.ec-chip-source i { color: #79b8ff; }
+.ec-chip-socket { border-left: 2px solid var(--accent); }
+
+.ec-deep { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; }
+.ec-deep summary { cursor: pointer; font-size: 0.78rem; color: var(--text-secondary); font-weight: 600; }
+.ec-deep[open] summary { color: var(--accent); border-bottom: 1px dashed var(--border); padding-bottom: 6px; margin-bottom: 8px; }
+.ec-deep-grid { display: flex; flex-direction: column; gap: 6px; }
+.ec-deep-kv { display: flex; justify-content: space-between; gap: 10px; font-size: 0.8rem; padding: 4px 0; border-bottom: 1px dashed var(--border); }
+.ec-deep-kv span { color: var(--text-dim); font-family: var(--font-mono); text-transform: uppercase; font-size: 0.68rem; }
+.ec-deep-kv strong { color: var(--text); text-align: right; }
+.ec-notes { margin: 8px 0 0; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+.ec-alt-aspects { margin-top: 8px; font-size: 0.82rem; color: var(--text-secondary); }
+.ec-alt-aspects ul { margin: 4px 0 0; padding-left: 18px; }
+
+/* Detail anchor flash when jumped to from the loadout */
+.ec-detail-anchor { scroll-margin-top: 16px; border-radius: var(--radius); transition: box-shadow 0.3s ease; }
+.ec-detail-anchor.is-flash { box-shadow: 0 0 0 2px var(--accent), 0 0 24px rgba(196,30,58,0.4); }
+
+/* ---- Runes and Gems hero (Slot Reference) ---- */
+.rg-hero, .tal-hero {
+  background:
+    radial-gradient(ellipse at top, rgba(196,30,58,0.10) 0%, transparent 60%),
+    var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 14px;
+  margin-bottom: 14px;
+}
+.rg-hero-title, .tal-hero-title { margin: 0; font-family: var(--font-title); font-size: 1.3rem; color: var(--text); }
+.rg-hero-label { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); margin-bottom: 8px; }
+.rg-gem-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.rg-gem-tile {
+  display: flex; flex-direction: column; gap: 4px;
+  background: var(--bg-darker); border: 1px solid var(--border);
+  border-left: 3px solid #d4c44a;
+  border-radius: var(--radius-sm); padding: 10px;
+}
+.rg-gem-tile.is-empty { opacity: 0.5; border-left-color: var(--border); }
+.rg-gem-icon { width: 28px; height: 28px; color: #d4c44a; }
+.rg-gem-svg { width: 100%; height: 100%; }
+.rg-gem-slot { font-weight: 700; font-size: 0.84rem; color: var(--text); }
+.rg-gem-contents { font-size: 0.78rem; color: var(--text-secondary); }
+.rg-textref, .tal-textref {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 14px; margin-bottom: 14px;
+}
+.rg-textref > summary, .tal-textref > summary {
+  cursor: pointer; font-weight: 700; font-size: 0.9rem; color: var(--text-secondary);
+  display: flex; align-items: center; gap: 8px; min-height: 40px;
+}
+.rg-textref[open] > summary, .tal-textref[open] > summary { color: var(--accent); border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 12px; }
+
+.tal-hero-summary { display: flex; flex-direction: column; gap: 6px; }
+.tal-hero-kv { display: flex; justify-content: space-between; gap: 10px; background: var(--bg-darker); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; }
+.tal-hero-kv span { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; color: var(--text-dim); }
+.tal-hero-kv strong { color: #d29922; text-align: right; font-size: 0.86rem; }
+
+/* Desktop: paper-doll becomes 3 columns flanking the crest */
+@media (min-width: 768px) {
+  .ec-loadout { grid-template-columns: 1fr 1.1fr 1fr; align-items: stretch; }
+  .ec-ld-center { padding: 24px 16px; }
+  .rg-gem-grid { grid-template-columns: repeat(3, 1fr); }
+  .ec-rune-pair { flex-direction: row; align-items: center; flex-wrap: wrap; }
+  .ec-rune-pair-slot { width: 80px; }
+}
+@media (min-width: 1024px) {
+  .rg-gem-grid { grid-template-columns: repeat(5, 1fr); }
+}

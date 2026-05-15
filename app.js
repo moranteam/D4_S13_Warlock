@@ -418,39 +418,91 @@
       .replace(/'/g, '&#39;');
   }
 
+  // Markup sink for the endgame views. Content is built only from static
+  // template literals plus escapeHtml() sanitized data, no user supplied
+  // HTML reaches this. Centralized so the trust boundary is one function.
+  function paint(el, markup) {
+    if (el) el.innerHTML = markup;
+  }
+
   // ========================================
   // SHARED RENDER TEMPLATES (Sprint 5)
   // 5 helpers used by the endgame overhaul views.
   // ========================================
+  // Diablo 4 rarity color system. Drives item frame colors.
+  const RARITY = {
+    mythic:    { key: 'mythic',    color: '#d2691e', label: 'Mythic' },
+    unique:    { key: 'unique',    color: '#c8893f', label: 'Unique' },
+    legendary: { key: 'legendary', color: '#b8651f', label: 'Legendary' },
+    rare:      { key: 'rare',      color: '#d4c44a', label: 'Rare' },
+    magic:     { key: 'magic',     color: '#5a8fd4', label: 'Magic' },
+    common:    { key: 'common',    color: '#9aa0a6', label: 'Common' },
+  };
+
+  function rarityOf(item) {
+    const t = ((item && item.type) || '').toLowerCase();
+    if (t.indexOf('mythic') !== -1) return RARITY.mythic;
+    if (t.indexOf('unique') !== -1) return RARITY.unique;
+    if (t.indexOf('legend') !== -1) return RARITY.legendary;
+    if (t.indexOf('rare') !== -1) return RARITY.rare;
+    if (t.indexOf('magic') !== -1) return RARITY.magic;
+    return RARITY.common;
+  }
+
+  // Inline SVG slot silhouettes. currentColor fill so CSS controls tint.
+  const SLOT_SVG = {
+    helm:    '<path d="M12 3C7.6 3 5 6.6 5 11v6h3v-4h8v4h3v-6c0-4.4-2.6-8-7-8z"/>',
+    chest:   '<path d="M5 5l3-2 4 2 4-2 3 2-1.5 15h-11z"/>',
+    gloves:  '<path d="M8 3v7l-2 1v6a4 4 0 004 4h2a4 4 0 004-4v-7h-2v3h-1V4h-2v6h-1V3z"/>',
+    pants:   '<path d="M6 3h12l-1 9-2 9h-3l-1-7-1 7H8L7 12z"/>',
+    boots:   '<path d="M9 3h3v9l6 3v4H6v-8l3-1z"/>',
+    amulet:  '<path d="M5 4l7 6 7-6-1.5 3-4 3.5 2 3a3.5 3.5 0 11-7 0l2-3-4-3.5z"/>',
+    ring:    '<path d="M12 5a7 7 0 100 14 7 7 0 000-14zm0 4.5a2.5 2.5 0 110 5 2.5 2.5 0 010-5z"/>',
+    dagger:  '<path d="M14 2l5 5-7 7 1 1-2 2-2-2-3 3-1-1 3-3-2-2 2-2 1 1 7-7z"/>',
+    focus:   '<path d="M12 3a9 9 0 100 18 9 9 0 000-18zm0 4.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"/>',
+    rune:    '<path d="M5 4h14v8.5c0 4.5-3.2 6.5-7 7.5-3.8-1-7-3-7-7.5z"/>',
+    gem:     '<path d="M12 2l7 6-7 14-7-14z"/>',
+    seal:    '<path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/>',
+  };
+
+  function slotSvg(name, cls) {
+    const body = SLOT_SVG[name] || SLOT_SVG.gem;
+    return '<svg class="' + (cls || 'ec-slot-svg') + '" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' + body + '</svg>';
+  }
+
   const Templates = {
-    /* Item card. Used for gear, talismans, unique charms, paragon glyphs. */
+    rarityOf,
+    slotSvg,
+
+    /* Visual stat-priority item card. Big rarity frame icon, prominent name,
+       large numbered priorities, text collapsed. Matches the Maxroll style. */
     renderItemCard(item, opts) {
       opts = opts || {};
       if (!item || !item.name) return '';
       const conf = (item.confidence || 'MEDIUM').toLowerCase();
-      const iconClass = opts.iconClass || 'fa-cube';
+      const svgName = opts.svgName || 'gem';
       const slotLabel = opts.slotLabel || '';
       const isAlt = !!opts.isAlt;
+      const r = rarityOf(item);
 
       let html = '';
-      html += '<article class="ec-item' + (isAlt ? ' ec-item-alt' : '') + '" data-tier="' + escapeHtml(item.tier || '') + '">';
-      html += '  <div class="ec-item-icon"><i class="fa-solid ' + iconClass + '" aria-hidden="true"></i></div>';
+      html += '<article class="ec-item ec-rar-' + r.key + (isAlt ? ' ec-item-alt' : '') + '" style="--rar:' + r.color + '">';
+      html += '  <div class="ec-item-frame">';
+      html += '    <div class="ec-item-icon">' + slotSvg(svgName, 'ec-slot-svg') + '</div>';
+      html += '    <span class="ec-item-rarity">' + r.label + '</span>';
+      html += '  </div>';
       html += '  <div class="ec-item-body">';
       html += '    <header class="ec-item-head">';
       if (slotLabel) html += '<div class="ec-item-slot">' + escapeHtml(slotLabel) + '</div>';
       html += '      <h3 class="ec-item-name">' + escapeHtml(item.name) + '</h3>';
       html += '      <div class="ec-item-tags">';
-      if (item.type) html += '<span class="ec-tag ec-tag-type">' + escapeHtml(item.type) + '</span>';
       if (item.tier) html += '<span class="ec-tag ec-tag-tier">' + escapeHtml(item.tier) + '</span>';
       html += '<span class="aspect-priority rg-conf-' + conf + '">' + (item.confidence || 'MEDIUM') + '</span>';
       html += '      </div>';
       html += '    </header>';
 
-      // Affix priorities (numbered list, Maxroll style)
       if (item.affixes && item.affixes.length) {
-        html += '    <div class="ec-affixes">';
-        html += '      <div class="ec-mini-label">Affix priority</div>';
-        html += '      <ol class="ec-affix-list">';
+        html += '    <ol class="ec-affix-list">';
         for (const a of item.affixes) {
           if (!a || !a.stat) continue;
           const mustClass = a.mustHave ? ' is-must' : '';
@@ -458,27 +510,27 @@
           html += '<li class="ec-affix' + mustClass + defClass + '">';
           html += '  <span class="ec-affix-n">' + (a.rank || '') + '</span>';
           html += '  <span class="ec-affix-stat">' + escapeHtml(a.stat) + '</span>';
-          if (a.mustHave) html += '<span class="ec-affix-flag ec-flag-must">MUST</span>';
-          if (a.buildDefining) html += '<span class="ec-affix-flag ec-flag-defining">BUILD DEFINING</span>';
+          if (a.buildDefining) html += '<span class="ec-affix-flag ec-flag-defining">KEY</span>';
+          else if (a.mustHave) html += '<span class="ec-affix-flag ec-flag-must">MUST</span>';
           html += '</li>';
         }
-        html += '      </ol>';
-        html += '    </div>';
+        html += '    </ol>';
       }
 
-      // Quick reference chips
       html += '    <div class="ec-chips">';
-      if (item.aspect) html += '<div class="ec-chip ec-chip-aspect"><span class="ec-chip-label">Aspect</span> ' + escapeHtml(item.aspect) + '</div>';
-      if (item.source && item.source.name) html += '<div class="ec-chip ec-chip-source"><span class="ec-chip-label">Source</span> ' + escapeHtml(item.source.name) + (item.source.type ? ' (' + escapeHtml(item.source.type) + ')' : '') + '</div>';
-      if (item.tempering) html += '<div class="ec-chip ec-chip-temper"><span class="ec-chip-label">Temper</span> ' + escapeHtml(item.tempering) + '</div>';
-      if (item.masterworkPrimary) html += '<div class="ec-chip ec-chip-mw"><span class="ec-chip-label">Masterwork</span> ' + escapeHtml(item.masterworkPrimary) + '</div>';
-      if (typeof item.sockets === 'number') html += '<div class="ec-chip ec-chip-socket"><span class="ec-chip-label">Sockets</span> ' + item.sockets + (item.socketContents && item.sockets > 0 ? ': ' + escapeHtml(item.socketContents) : '') + '</div>';
+      if (item.aspect) html += '<div class="ec-chip ec-chip-aspect">' + slotSvg('gem', 'ec-chip-svg') + ' ' + escapeHtml(item.aspect) + '</div>';
+      if (item.source && item.source.name) html += '<div class="ec-chip ec-chip-source"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ' + escapeHtml(item.source.name) + '</div>';
+      if (typeof item.sockets === 'number' && item.sockets > 0) html += '<div class="ec-chip ec-chip-socket">' + slotSvg('rune', 'ec-chip-svg') + ' ' + item.sockets + ' socket' + (item.sockets === 1 ? '' : 's') + '</div>';
       html += '    </div>';
 
-      // Click-to-expand for deep dive
-      if (item.notes || (item.aspectAlternatives && item.aspectAlternatives.length)) {
+      if (item.tempering || item.masterworkPrimary || item.notes || (item.aspectAlternatives && item.aspectAlternatives.length) || (item.socketContents && item.sockets > 0)) {
         html += '    <details class="ec-deep">';
         html += '      <summary>More detail</summary>';
+        html += '      <div class="ec-deep-grid">';
+        if (item.tempering) html += '<div class="ec-deep-kv"><span>Temper</span><strong>' + escapeHtml(item.tempering) + '</strong></div>';
+        if (item.masterworkPrimary) html += '<div class="ec-deep-kv"><span>Masterwork</span><strong>' + escapeHtml(item.masterworkPrimary) + '</strong></div>';
+        if (item.socketContents && item.sockets > 0) html += '<div class="ec-deep-kv"><span>Sockets</span><strong>' + escapeHtml(item.socketContents) + '</strong></div>';
+        html += '      </div>';
         if (item.notes) html += '<p class="ec-notes">' + escapeHtml(item.notes) + '</p>';
         if (item.aspectAlternatives && item.aspectAlternatives.length) {
           html += '<div class="ec-alt-aspects"><span class="ec-mini-label">Aspect alternatives</span><ul>';
@@ -493,22 +545,103 @@
       return html;
     },
 
+    /* Visual gear loadout, paper-doll style like the in game character screen.
+       10 slot tiles laid out around a center build crest. Tap a tile to
+       expand its detail card below. */
+    renderGearLoadout(gear, opts) {
+      opts = opts || {};
+      const tile = (key, slot) => {
+        if (!slot || !slot.primary) return '';
+        const r = rarityOf(slot.primary);
+        let h = '';
+        h += '<button type="button" class="ec-ld-tile ec-rar-' + r.key + '" data-ld-slot="' + escapeHtml(key) + '" style="--rar:' + r.color + '">';
+        h += '  <span class="ec-ld-icon">' + slotSvg(slot.svgName || 'gem', 'ec-slot-svg') + '</span>';
+        h += '  <span class="ec-ld-text">';
+        h += '    <span class="ec-ld-slotname">' + escapeHtml(slot.slot) + '</span>';
+        h += '    <span class="ec-ld-itemname">' + escapeHtml(slot.primary.name) + '</span>';
+        h += '  </span>';
+        h += '</button>';
+        return h;
+      };
+      const leftKeys = ['helm', 'chest', 'gloves', 'pants', 'boots'];
+      const rightKeys = ['amulet', 'ring1', 'ring2', 'mainHand', 'offhand'];
+      let html = '';
+      html += '<div class="ec-loadout">';
+      html += '  <div class="ec-ld-col ec-ld-left">';
+      for (const k of leftKeys) html += tile(k, gear[k]);
+      html += '  </div>';
+      html += '  <div class="ec-ld-center">';
+      html += '    <div class="ec-ld-crest">' + slotSvg('rune', 'ec-crest-svg') + '</div>';
+      html += '    <div class="ec-ld-crest-name">' + escapeHtml(opts.buildName || 'Dread Claws Mastermind') + '</div>';
+      html += '    <div class="ec-ld-hint">Tap any slot to see its stat priority</div>';
+      html += '  </div>';
+      html += '  <div class="ec-ld-col ec-ld-right">';
+      for (const k of rightKeys) html += tile(k, gear[k]);
+      html += '  </div>';
+      html += '</div>';
+      return html;
+    },
+
+    /* Radial talisman wheel. Seal in the center, charm slots around it.
+       Matches the in game talisman UI. */
+    renderTalismanWheel(tal, opts) {
+      opts = opts || {};
+      const charmCount = opts.charmCount || 6;
+      let html = '';
+      html += '<div class="ec-wheel">';
+      html += '  <div class="ec-wheel-ring">';
+      html += '    <div class="ec-wheel-center" title="Seal">';
+      html += '      ' + slotSvg('seal', 'ec-wheel-svg') + '';
+      html += '      <span class="ec-wheel-center-label">Seal</span>';
+      html += '    </div>';
+      for (let i = 0; i < charmCount; i++) {
+        const ang = (i / charmCount) * 2 * Math.PI - Math.PI / 2;
+        const x = 50 + 38 * Math.cos(ang);
+        const y = 50 + 38 * Math.sin(ang);
+        html += '<div class="ec-wheel-node" style="left:' + x.toFixed(1) + '%;top:' + y.toFixed(1) + '%">' + slotSvg('gem', 'ec-wheel-node-svg') + '<span>' + (i + 1) + '</span></div>';
+      }
+      html += '  </div>';
+      html += '</div>';
+      return html;
+    },
+
+    /* Rune socket strip. The connected D4 rune sockets like Cem-Ceh-Cir-Prid. */
+    renderRuneSockets(pairs) {
+      let html = '<div class="ec-runes">';
+      for (const p of (pairs || [])) {
+        const names = String(p.pair || '').split(' plus ');
+        html += '<div class="ec-rune-pair">';
+        html += '  <div class="ec-rune-pair-slot">' + escapeHtml(p.slot || '') + '</div>';
+        html += '  <div class="ec-rune-sockets">';
+        for (let i = 0; i < names.length; i++) {
+          html += '<div class="ec-rune-socket">' + slotSvg('rune', 'ec-rune-svg') + '<span class="ec-rune-name">' + escapeHtml(names[i].trim()) + '</span></div>';
+          if (i < names.length - 1) html += '<span class="ec-rune-link"></span>';
+        }
+        html += '  </div>';
+        if (p.tier) html += '<span class="ec-tier-badge ec-rune-tier">' + escapeHtml(p.tier) + '</span>';
+        html += '  <div class="ec-rune-effect">' + escapeHtml(p.effect || '') + '</div>';
+        html += '</div>';
+      }
+      html += '</div>';
+      return html;
+    },
+
     /* Primary vs backup comparison. Side by side desktop, accordion mobile. */
     renderComparisonPair(primary, backup, opts) {
       opts = opts || {};
       const slotLabel = opts.slotLabel || '';
-      const iconClass = opts.iconClass || 'fa-cube';
+      const svgName = opts.svgName || 'gem';
       let html = '';
       html += '<section class="ec-pair" data-section="' + escapeHtml(opts.section || '') + '">';
-      if (slotLabel) html += '  <header class="ec-pair-head"><i class="fa-solid ' + iconClass + '" aria-hidden="true"></i> ' + escapeHtml(slotLabel) + '</header>';
+      if (slotLabel) html += '  <header class="ec-pair-head">' + slotSvg(svgName, 'ec-pair-svg') + ' ' + escapeHtml(slotLabel) + '</header>';
       html += '  <div class="ec-pair-body">';
       html += '    <div class="ec-pair-col ec-pair-primary">';
       html += '      <div class="ec-pair-flag ec-pair-flag-primary"><i class="fa-solid fa-star" aria-hidden="true"></i> Primary</div>';
-      html += Templates.renderItemCard(primary, { iconClass, slotLabel: '' });
+      html += Templates.renderItemCard(primary, { svgName, slotLabel: '' });
       html += '    </div>';
       html += '    <details class="ec-pair-col ec-pair-backup">';
       html += '      <summary class="ec-pair-flag ec-pair-flag-backup"><i class="fa-solid fa-shuffle" aria-hidden="true"></i> Backup option</summary>';
-      html += Templates.renderItemCard(backup, { iconClass, slotLabel: '', isAlt: true });
+      html += Templates.renderItemCard(backup, { svgName, slotLabel: '', isAlt: true });
       html += '    </details>';
       html += '  </div>';
       html += '</section>';
@@ -2389,6 +2522,22 @@
 
       let html = '';
 
+      // Visual hero: radial talisman wheel matching the in game UI
+      html += '<section class="tal-hero">';
+      html += '  <h2 class="tal-hero-title">Talisman</h2>';
+      html += Templates.renderTalismanWheel(t, { charmCount: 6 });
+      const eg = window.D4_ENDGAME;
+      if (eg && eg.talismans) {
+        html += '  <div class="tal-hero-summary">';
+        html += '    <div class="tal-hero-kv"><span>Seal</span><strong>' + escapeHtml(eg.talismans.seal.canonical) + '</strong></div>';
+        html += '    <div class="tal-hero-kv"><span>Charm Set</span><strong>' + escapeHtml(eg.talismans.charmSet.primary) + '</strong></div>';
+        html += '  </div>';
+      }
+      html += '</section>';
+
+      html += '<details class="tal-textref">';
+      html += '  <summary><i class="fa-solid fa-table-list" aria-hidden="true"></i> Seal priority, charm targets, sets, full detail</summary>';
+
       html += '<div class="tal-card">';
       html += '  <div class="tal-card-title"><i class="fa-solid fa-key"></i> Unlock</div>';
       html += '  <p class="tal-card-text">' + escapeHtml(t.unlock) + '</p>';
@@ -2451,7 +2600,9 @@
       }
       html += '</section>';
 
-      root.innerHTML = html;
+      html += '</details>';
+
+      paint(root, html);
       this.bind();
     },
 
@@ -2497,6 +2648,36 @@
       }
 
       let html = '';
+
+      // Visual hero: rune sockets plus gem loadout, the scannable summary
+      html += '<section class="rg-hero">';
+      html += '  <h2 class="rg-hero-title">Runes, Gems and Sockets</h2>';
+      const eg = window.D4_ENDGAME;
+      if (eg && eg.runes && eg.runes.canonicalPairs) {
+        html += '  <div class="rg-hero-block">';
+        html += '    <div class="rg-hero-label">Equipped Runewords</div>';
+        html += Templates.renderRuneSockets(eg.runes.canonicalPairs);
+        html += '  </div>';
+      }
+      if (rg.loadoutSummary && rg.loadoutSummary.length) {
+        html += '  <div class="rg-hero-block">';
+        html += '    <div class="rg-hero-label">Gem and Socket Loadout</div>';
+        html += '    <div class="rg-gem-grid">';
+        for (const l of rg.loadoutSummary) {
+          const empty = String(l.contents).toLowerCase().indexOf('n/a') !== -1;
+          html += '<div class="rg-gem-tile' + (empty ? ' is-empty' : '') + '">';
+          html += '  <div class="rg-gem-icon">' + Templates.slotSvg(empty ? 'gem' : (String(l.contents).toLowerCase().indexOf('runeword') !== -1 ? 'rune' : 'gem'), 'rg-gem-svg') + '</div>';
+          html += '  <div class="rg-gem-slot">' + escapeHtml(l.slot) + '</div>';
+          html += '  <div class="rg-gem-contents">' + escapeHtml(l.contents) + '</div>';
+          html += '</div>';
+        }
+        html += '    </div>';
+        html += '  </div>';
+      }
+      html += '</section>';
+
+      html += '<details class="rg-textref">';
+      html += '  <summary><i class="fa-solid fa-table-list" aria-hidden="true"></i> Full reference tables (rune combos, gems per slot, socket recs)</summary>';
 
       html += '<section class="rg-section">';
       html += '  <h2 class="rg-section-name">Runeword System</h2>';
@@ -2624,7 +2805,9 @@
       html += '  </div>';
       html += '</section>';
 
-      root.innerHTML = html;
+      html += '</details>';
+
+      paint(root, html);
     },
   };
 
@@ -3014,54 +3197,76 @@
   // visual style. Uses Templates.renderComparisonPair.
   // ========================================
   const EndgameGear = {
+    bound: false,
+    svgMap: {
+      helm: 'helm', chest: 'chest', gloves: 'gloves', pants: 'pants', boots: 'boots',
+      amulet: 'amulet', ring1: 'ring', ring2: 'ring', mainHand: 'dagger', offhand: 'focus',
+    },
+
     render() {
       const root = document.getElementById('endgameGearRoot');
       if (!root) return;
       const eg = window.D4_ENDGAME;
       if (!eg || !eg.gear) {
-        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-scale-balanced placeholder-icon"></i><div class="placeholder-title">No endgame data</div><div class="placeholder-text">endgamedata.js may have failed to load. Check the console.</div></div>';
+        paint(root, '<div class="placeholder-card"><i class="fa-solid fa-scale-balanced placeholder-icon"></i><div class="placeholder-title">No endgame data</div><div class="placeholder-text">endgamedata.js may have failed to load. Check the console.</div></div>');
         return;
       }
 
-      const slotOrder = ['mainHand', 'offhand', 'helm', 'chest', 'gloves', 'pants', 'boots', 'amulet', 'ring1', 'ring2'];
+      const gear = {};
+      const slotKeys = ['helm', 'chest', 'gloves', 'pants', 'boots', 'amulet', 'ring1', 'ring2', 'mainHand', 'offhand'];
+      for (const k of slotKeys) {
+        if (eg.gear[k]) {
+          gear[k] = Object.assign({}, eg.gear[k], { svgName: this.svgMap[k] || 'gem' });
+        }
+      }
+
+      let html = '';
+
+      html += '<section class="ec-hero">';
+      html += '  <h2 class="ec-hero-title">Endgame Gear</h2>';
+      html += '  <p class="ec-hero-sub">Tap a slot in the loadout to jump to its stat priority. Rarity colored frames match the in game item colors.</p>';
+      html += '  <div class="ec-hero-meta">Patch ' + escapeHtml(eg.patch || '') + ' &middot; Reconciled ' + escapeHtml(eg.compiledAt || '') + '</div>';
+      html += '</section>';
+
+      html += Templates.renderGearLoadout(gear, { buildName: eg.build || 'Dread Claws Mastermind' });
+
+      if (eg.runes && eg.runes.canonicalPairs) {
+        html += '<section class="ec-section">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">' + ((eg.sections.runes || {}).emoji || '') + '</span><h2 class="ec-section-title">Runewords</h2></header>';
+        html += Templates.renderRuneSockets(eg.runes.canonicalPairs);
+        html += '</section>';
+      }
+
+      html += '<div class="ec-details" id="ecGearDetails">';
       const sectionMap = {
         weapons: ['mainHand', 'offhand'],
         armor: ['helm', 'chest', 'gloves', 'pants', 'boots'],
         jewelry: ['amulet', 'ring1', 'ring2'],
       };
-      const sectionEmoji = (eg.sections || {});
-
-      let html = '';
-      html += '<section class="ec-hero">';
-      html += '  <div class="ec-hero-band">Sprint 5 Mockup</div>';
-      html += '  <h2 class="ec-hero-title">Endgame Gear Targets</h2>';
-      html += '  <p class="ec-hero-sub">10 slot reference for the Dread Claws Mastermind build. Primary plus backup per slot. Tap a backup row to expand. Tap "More detail" inside any card for full notes and aspect alternatives.</p>';
-      html += '  <div class="ec-hero-meta">Patch ' + escapeHtml(eg.patch || '') + ' · Reconciled ' + escapeHtml(eg.compiledAt || '') + '</div>';
-      html += '</section>';
-
       for (const sec of ['weapons', 'armor', 'jewelry']) {
-        const keys = sectionMap[sec];
-        const meta = sectionEmoji[sec] || {};
+        const meta = (eg.sections || {})[sec] || {};
         html += '<section class="ec-section ec-section-' + sec + '">';
         html += '  <header class="ec-section-head">';
         html += '    <span class="ec-section-emoji" aria-hidden="true">' + (meta.emoji || '') + '</span>';
         html += '    <h2 class="ec-section-title">' + escapeHtml(meta.label || sec) + '</h2>';
         html += '  </header>';
         html += '  <div class="ec-grid">';
-        for (const k of keys) {
-          const slot = eg.gear[k];
+        for (const k of sectionMap[sec]) {
+          const slot = gear[k];
           if (!slot) continue;
+          html += '<div class="ec-detail-anchor" id="ecSlot-' + k + '">';
           html += Templates.renderComparisonPair(slot.primary, slot.backup, {
             slotLabel: slot.slot,
-            iconClass: slot.iconClass || 'fa-cube',
+            svgName: slot.svgName,
             section: sec,
           });
+          html += '</div>';
         }
         html += '  </div>';
         html += '</section>';
       }
+      html += '</div>';
 
-      // Stat caps reference card (folds in System addition 1)
       if (eg.statCaps && eg.statCaps.length) {
         html += '<section class="ec-section ec-section-stats">';
         html += '  <header class="ec-section-head">';
@@ -3076,7 +3281,6 @@
           html += '  <div class="ec-stat-cap-body">';
           html += '    <div class="ec-stat-cap-name">' + escapeHtml(s.stat) + '</div>';
           html += '    <div class="ec-stat-cap-target">Target ' + escapeHtml(s.target) + '</div>';
-          if (s.maxRoll) html += '<div class="ec-stat-cap-max">' + escapeHtml(s.maxRoll) + '</div>';
           html += '  </div>';
           html += '  <span class="aspect-priority rg-conf-' + conf + '">' + (s.confidence || 'MEDIUM') + '</span>';
           html += '</li>';
@@ -3085,16 +3289,26 @@
         html += '</section>';
       }
 
-      // Bottom band that points at Sprint 6 follow up
-      html += '<aside class="ec-followup">';
-      html += '  <i class="fa-solid fa-arrow-down-long" aria-hidden="true"></i>';
-      html += '  <div>';
-      html += '    <strong>The sections below this card will be rebuilt in this style in Sprint 6.</strong>';
-      html += '    <div class="ec-followup-sub">Existing renderers (Endgame Bar, Soul Shards, Paragon, War Plans, Mercenary) remain functional for now.</div>';
-      html += '  </div>';
-      html += '</aside>';
+      paint(root, html);
+      this.bind();
+    },
 
-      root.innerHTML = html;
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+      main.addEventListener('click', (e) => {
+        const tile = e.target.closest && e.target.closest('[data-ld-slot]');
+        if (!tile) return;
+        const key = tile.getAttribute('data-ld-slot');
+        const anchor = document.getElementById('ecSlot-' + key);
+        if (!anchor) return;
+        document.querySelectorAll('.ec-detail-anchor.is-flash').forEach((el) => el.classList.remove('is-flash'));
+        anchor.classList.add('is-flash');
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => anchor.classList.remove('is-flash'), 1600);
+      });
     },
   };
 
