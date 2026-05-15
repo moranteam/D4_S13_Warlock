@@ -25,6 +25,7 @@
     mercs: 'd4_warlock_mercs_v1',
     settings: 'd4_warlock_settings_v1',
     notes: 'd4_warlock_notes_v1',
+    gearCompare: 'd4_warlock_gearcompare_v1',
   };
 
   // ========================================
@@ -72,6 +73,10 @@
     },
     settings: {},
     notes: '',
+    gearCompare: {
+      activeSlot: 'daggers',
+      slots: {},
+    },
   };
 
   // ========================================
@@ -275,7 +280,9 @@
         Uniques.render();
         Bosses.render();
       }
-      // gear-comparison: Sprint 3 Part B will mount GearCompare here.
+      if (this.current === 'gear-comparison') {
+        GearCompare.render();
+      }
       if (this.current === 'slot-reference') {
         Talismans.render();
         RunesGems.render();
@@ -622,6 +629,7 @@
       Endbuild.render();
       Talismans.render();
       RunesGems.render();
+      GearCompare.render();
       WarPlans.render();
       Mercenary.render();
       Patch.render();
@@ -1408,7 +1416,7 @@
       }
       html += '</div>';
 
-      html += '<div class="ctl-caveat"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Button placement is Maxroll canonical. Sprint 3 will let you customize.</span></div>';
+      html += '<div class="ctl-caveat"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span>Button placement is Maxroll canonical. Customization is a candidate for a future pass.</span></div>';
 
       html += '<div class="ctl-all">';
       html += '  <button class="btn btn-ghost ctl-all-toggle" type="button" data-ctl-toggle="all">' + (this.showAllMilestones ? 'Hide All Milestones' : 'View All Milestones') + '</button>';
@@ -2419,6 +2427,270 @@
       html += '</section>';
 
       root.innerHTML = html;
+    },
+  };
+
+  // ========================================
+  // GEAR COMPARE RENDERER (Sprint 3 Part B)
+  // ========================================
+  const GearCompare = {
+    bound: false,
+
+    render() {
+      const root = document.getElementById('gearCompareRoot');
+      if (!root) return;
+      const gw = window.D4_GEAR_WEIGHTS;
+      if (!gw || !gw.slots) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-scale-balanced placeholder-icon"></i><div class="placeholder-title">No gear weights data</div><div class="placeholder-text">gearweights.js may have failed to load. Check the console.</div></div>';
+        return;
+      }
+      const state = AppState.data.gearCompare;
+      const slotKeys = Object.keys(gw.slots);
+      if (!slotKeys.includes(state.activeSlot)) state.activeSlot = slotKeys[0];
+      const activeKey = state.activeSlot;
+      const slot = gw.slots[activeKey];
+      const saved = state.slots[activeKey] || { selectedAffixes: {}, sockets: null, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false };
+
+      let html = '';
+
+      html += '<div class="gc-intro">';
+      html += '  <p class="gc-intro-text">Pick a slot. Tick every affix the drop rolled. The verdict updates live based on the weights and must-haves in <code>gearweights.js</code>.</p>';
+      html += '</div>';
+
+      html += '<div class="gc-slot-picker">';
+      for (const k of slotKeys) {
+        const s = gw.slots[k];
+        const isActive = k === activeKey;
+        html += '<button class="gc-slot-btn' + (isActive ? ' is-active' : '') + '" type="button" data-gc-slot="' + k + '">';
+        html += '  <span class="gc-slot-btn-name">' + escapeHtml(s.label) + '</span>';
+        const savedSlot = state.slots[k];
+        if (savedSlot && Object.keys(savedSlot.selectedAffixes || {}).filter((id) => savedSlot.selectedAffixes[id]).length > 0) {
+          html += '  <span class="gc-slot-btn-dot" aria-label="has saved entries"></span>';
+        }
+        html += '</button>';
+      }
+      html += '</div>';
+
+      html += '<section class="gc-slot-card">';
+      html += '  <div class="gc-slot-head">';
+      html += '    <h2 class="gc-slot-title">' + escapeHtml(slot.label) + '</h2>';
+      html += '    <div class="gc-slot-meta">';
+      html += '      <span class="aspect-priority rg-conf-' + slot.confidence.toLowerCase() + '">' + slot.confidence + '</span>';
+      html += '      <span class="gc-chip">' + slot.sockets + ' socket' + (slot.sockets === 1 ? '' : 's') + '</span>';
+      if (slot.topUnique) html += '      <span class="gc-chip gc-chip-unique">Top: ' + escapeHtml(slot.topUnique) + '</span>';
+      html += '    </div>';
+      html += '  </div>';
+      if (slot.note) html += '  <p class="gc-slot-note">' + escapeHtml(slot.note) + '</p>';
+      if (slot.buildDefiningTemper) html += '  <div class="gc-slot-define"><i class="fa-solid fa-anchor"></i> Build-defining temper: ' + escapeHtml(slot.buildDefiningTemper) + '</div>';
+      html += '</section>';
+
+      html += '<section class="gc-form">';
+      html += '  <h3 class="gc-form-title">Affixes on this drop</h3>';
+      html += '  <ul class="gc-affix-list">';
+      for (let i = 0; i < slot.affixes.length; i++) {
+        const a = slot.affixes[i];
+        const aId = 'a' + i;
+        const checked = !!(saved.selectedAffixes && saved.selectedAffixes[aId]);
+        const hasGA = !!(saved.hasGA && saved.hasGA[aId]);
+        html += '<li class="gc-affix' + (checked ? ' is-on' : '') + (a.mustHave ? ' is-must' : '') + '">';
+        html += '  <label class="gc-affix-label">';
+        html += '    <input type="checkbox" class="gc-affix-cb" data-gc-affix="' + aId + '"' + (checked ? ' checked' : '') + ' />';
+        html += '    <span class="gc-affix-body">';
+        html += '      <span class="gc-affix-head"><span class="gc-affix-name">' + escapeHtml(a.name) + '</span>';
+        if (a.mustHave) html += '<span class="gc-must">MUST</span>';
+        html += '<span class="gc-weight">w' + a.weight + '</span></span>';
+        html += '      <span class="gc-affix-target">Target: ' + escapeHtml(a.target) + '</span>';
+        if (a.notes) html += '      <span class="gc-affix-notes">' + escapeHtml(a.notes) + '</span>';
+        html += '    </span>';
+        html += '  </label>';
+        if (checked) {
+          html += '  <label class="gc-ga-toggle"><input type="checkbox" class="gc-ga-cb" data-gc-ga="' + aId + '"' + (hasGA ? ' checked' : '') + ' /> Greater Affix</label>';
+        }
+        html += '</li>';
+      }
+      html += '  </ul>';
+
+      html += '  <div class="gc-extras">';
+      html += '    <label class="gc-extra"><input type="checkbox" class="gc-temper-cb" data-gc-extra="temper"' + (saved.hasTemper ? ' checked' : '') + ' /> Build-defining temper rolled (' + escapeHtml(slot.buildDefiningTemper || 'n/a') + ')</label>';
+      const mwPrimary = slot.masterwork && slot.masterwork[0] ? slot.masterwork[0].stat : 'primary stat';
+      html += '    <label class="gc-extra"><input type="checkbox" class="gc-mw-cb" data-gc-extra="masterwork"' + (saved.hasMasterworkPrimary ? ' checked' : '') + ' /> Masterwork primary stat is ' + escapeHtml(mwPrimary) + '</label>';
+      html += '  </div>';
+
+      html += '  <div class="gc-actions">';
+      html += '    <button type="button" class="btn btn-ghost gc-clear" data-gc-clear="1">Clear slot</button>';
+      html += '  </div>';
+      html += '</section>';
+
+      // ---------- Verdict ----------
+      const verdict = this.computeVerdict(slot, saved);
+      html += '<section class="gc-verdict gc-verdict-' + verdict.tier + '">';
+      html += '  <div class="gc-verdict-head">';
+      html += '    <span class="gc-verdict-tag">' + verdict.label + '</span>';
+      html += '    <span class="gc-verdict-score">' + verdict.scorePct + '% match</span>';
+      html += '  </div>';
+      html += '  <p class="gc-verdict-reason">' + escapeHtml(verdict.reason) + '</p>';
+      if (verdict.missingMust.length) {
+        html += '  <div class="gc-verdict-missing">';
+        html += '    <span class="gc-vm-label">Missing must-have' + (verdict.missingMust.length === 1 ? '' : 's') + ':</span>';
+        html += '    <ul class="gc-vm-list">';
+        for (const m of verdict.missingMust) {
+          html += '<li>' + escapeHtml(m) + '</li>';
+        }
+        html += '    </ul>';
+        html += '  </div>';
+      }
+      if (verdict.gaBonus > 0) {
+        html += '  <div class="gc-verdict-bonus"><i class="fa-solid fa-star"></i> Greater Affix bonus applied (+' + verdict.gaBonus + ' points)</div>';
+      }
+      html += '  <details class="gc-verdict-breakdown">';
+      html += '    <summary>Score breakdown</summary>';
+      html += '    <ul class="gc-bd-list">';
+      html += '<li><span>Rolled weight</span><span>' + verdict.rolledWeight + ' / ' + verdict.maxWeight + '</span></li>';
+      html += '<li><span>Must-have coverage</span><span>' + verdict.mustHits + ' / ' + verdict.mustTotal + '</span></li>';
+      html += '<li><span>Greater Affix bonus</span><span>+' + verdict.gaBonus + '</span></li>';
+      html += '<li><span>Temper bonus</span><span>' + (saved.hasTemper ? '+5' : '0') + '</span></li>';
+      html += '<li><span>Masterwork bonus</span><span>' + (saved.hasMasterworkPrimary ? '+3' : '0') + '</span></li>';
+      html += '    </ul>';
+      html += '  </details>';
+      html += '</section>';
+
+      html += '<section class="gc-ref">';
+      html += '  <h3 class="gc-ref-title">Tempering reference</h3>';
+      html += '  <ul class="gc-ref-list">';
+      for (const t of slot.tempering) {
+        html += '<li class="gc-ref-row"><span class="aspect-priority rg-conf-' + t.priority.toLowerCase() + '">' + t.priority + '</span><span class="gc-ref-text"><strong>' + escapeHtml(t.manual) + '</strong>. ' + escapeHtml(t.why) + '</span></li>';
+      }
+      html += '  </ul>';
+      html += '  <h3 class="gc-ref-title">Masterwork priorities</h3>';
+      html += '  <ul class="gc-ref-list">';
+      for (const m of slot.masterwork) {
+        html += '<li class="gc-ref-row"><span class="gc-ref-n">' + m.priority + '</span><span class="gc-ref-text"><strong>' + escapeHtml(m.stat) + '</strong>. ' + escapeHtml(m.why) + '</span></li>';
+      }
+      html += '  </ul>';
+      html += '</section>';
+
+      root.innerHTML = html;
+      this.bind(root);
+    },
+
+    computeVerdict(slot, saved) {
+      const affixes = slot.affixes;
+      const selected = saved.selectedAffixes || {};
+      const ga = saved.hasGA || {};
+      let rolledWeight = 0;
+      let mustHits = 0;
+      let mustTotal = 0;
+      const missingMust = [];
+      let gaBonus = 0;
+      for (let i = 0; i < affixes.length; i++) {
+        const a = affixes[i];
+        const aId = 'a' + i;
+        if (a.mustHave) mustTotal++;
+        if (selected[aId]) {
+          rolledWeight += a.weight;
+          if (a.mustHave) mustHits++;
+          if (ga[aId]) gaBonus += 2;
+        } else if (a.mustHave) {
+          missingMust.push(a.name);
+        }
+      }
+      const maxWeight = affixes.reduce((n, a) => n + a.weight, 0);
+      const temperBonus = saved.hasTemper ? 5 : 0;
+      const mwBonus = saved.hasMasterworkPrimary ? 3 : 0;
+      const rawScore = rolledWeight + gaBonus + temperBonus + mwBonus;
+      const maxScore = maxWeight + (affixes.filter((a) => a.mustHave).length * 2) + 5 + 3;
+      const scorePct = maxScore > 0 ? Math.round((rawScore / maxScore) * 100) : 0;
+
+      let tier;
+      let label;
+      let reason;
+      const allMustHit = mustTotal === 0 || mustHits === mustTotal;
+
+      if (rolledWeight === 0 && !saved.hasTemper && !saved.hasMasterworkPrimary) {
+        tier = 'salvage';
+        label = 'SALVAGE';
+        reason = 'No affixes selected yet. Tick what the drop rolled to evaluate.';
+      } else if (scorePct >= 75 && allMustHit) {
+        tier = 'keep';
+        label = 'KEEP';
+        reason = 'High roll. Every must-have is present and the weighted score clears 75%. Slot it now or bank it for masterwork.';
+      } else if (scorePct >= 55 && mustHits >= Math.max(1, mustTotal - 1)) {
+        tier = 'imprint';
+        label = 'IMPRINT';
+        reason = 'Solid base. Hits enough of the priority affixes that an imprint or tempering pass is worth the materials.';
+      } else if (scorePct >= 40) {
+        tier = 'imprint';
+        label = 'BENCH';
+        reason = 'Below the imprint threshold but not garbage. Hold in stash if you have space, salvage if you need materials.';
+      } else {
+        tier = 'salvage';
+        label = 'SALVAGE';
+        reason = 'Low weighted score' + (missingMust.length ? ' and missing must-have affixes' : '') + '. Send to the salvage bench.';
+      }
+
+      return { tier, label, scorePct, reason, missingMust, gaBonus, rolledWeight, maxWeight, mustHits, mustTotal };
+    },
+
+    bind(root) {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+
+      main.addEventListener('click', (e) => {
+        const slotBtn = e.target.closest && e.target.closest('[data-gc-slot]');
+        if (slotBtn) {
+          const k = slotBtn.getAttribute('data-gc-slot');
+          AppState.data.gearCompare.activeSlot = k;
+          AppState.save('gearCompare');
+          GearCompare.render();
+          return;
+        }
+        const clearBtn = e.target.closest && e.target.closest('[data-gc-clear]');
+        if (clearBtn) {
+          const activeKey = AppState.data.gearCompare.activeSlot;
+          AppState.data.gearCompare.slots[activeKey] = { selectedAffixes: {}, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false };
+          AppState.save('gearCompare');
+          GearCompare.render();
+          Toast.show('Slot cleared', 'info');
+          return;
+        }
+      });
+
+      main.addEventListener('change', (e) => {
+        const t = e.target;
+        if (!t || !t.classList) return;
+        const activeKey = AppState.data.gearCompare.activeSlot;
+        if (!AppState.data.gearCompare.slots[activeKey]) {
+          AppState.data.gearCompare.slots[activeKey] = { selectedAffixes: {}, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false };
+        }
+        const slotState = AppState.data.gearCompare.slots[activeKey];
+        let changed = false;
+
+        if (t.classList.contains('gc-affix-cb')) {
+          const aId = t.getAttribute('data-gc-affix');
+          if (!slotState.selectedAffixes) slotState.selectedAffixes = {};
+          slotState.selectedAffixes[aId] = t.checked;
+          if (!t.checked && slotState.hasGA) slotState.hasGA[aId] = false;
+          changed = true;
+        } else if (t.classList.contains('gc-ga-cb')) {
+          const aId = t.getAttribute('data-gc-ga');
+          if (!slotState.hasGA) slotState.hasGA = {};
+          slotState.hasGA[aId] = t.checked;
+          changed = true;
+        } else if (t.classList.contains('gc-temper-cb')) {
+          slotState.hasTemper = t.checked;
+          changed = true;
+        } else if (t.classList.contains('gc-mw-cb')) {
+          slotState.hasMasterworkPrimary = t.checked;
+          changed = true;
+        }
+
+        if (changed) {
+          AppState.save('gearCompare');
+          GearCompare.render();
+        }
+      });
     },
   };
 
