@@ -2518,6 +2518,8 @@
 
       html += '  <div class="gc-actions">';
       html += '    <button type="button" class="btn btn-ghost gc-clear" data-gc-clear="1">Clear slot</button>';
+      html += '    <input type="text" class="gc-save-nickname" data-gc-nickname placeholder="Optional nickname (e.g. Tuesday drop)" maxlength="40" />';
+      html += '    <button type="button" class="btn btn-primary gc-save" data-gc-save="1"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save this drop</button>';
       html += '  </div>';
       html += '</section>';
 
@@ -2569,8 +2571,101 @@
       html += '  </ul>';
       html += '</section>';
 
+      // ---------- History ----------
+      const history = saved.history || [];
+      if (history.length > 0) {
+        html += '<section class="gc-history">';
+        html += '  <div class="gc-history-head">';
+        html += '    <h3 class="gc-history-title"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Saved drops for this slot (' + history.length + ')</h3>';
+        html += '    <button type="button" class="btn btn-ghost gc-history-clear" data-gc-history-clear="1">Clear history</button>';
+        html += '  </div>';
+        html += '  <ul class="gc-history-list">';
+        const sorted = history.slice().sort((a, b) => (b.ts || 0) - (a.ts || 0));
+        for (const h of sorted) {
+          const dt = new Date(h.ts || 0);
+          const dateStr = dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          html += '<li class="gc-history-row gc-verdict-' + (h.tier || 'salvage') + '">';
+          html += '  <button type="button" class="gc-history-load" data-gc-history-load="' + h.id + '">';
+          html += '    <span class="gc-history-tag">' + escapeHtml(h.label || 'SAVED') + '</span>';
+          html += '    <span class="gc-history-score">' + (h.scorePct || 0) + '%</span>';
+          if (h.nickname) html += '<span class="gc-history-nick">' + escapeHtml(h.nickname) + '</span>';
+          html += '    <span class="gc-history-ts">' + escapeHtml(dateStr) + '</span>';
+          html += '  </button>';
+          html += '  <button type="button" class="gc-history-del" data-gc-history-del="' + h.id + '" aria-label="Delete this entry"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>';
+          html += '</li>';
+        }
+        html += '  </ul>';
+        html += '</section>';
+      }
+
       root.innerHTML = html;
       this.bind(root);
+    },
+
+    saveCurrent() {
+      const activeKey = AppState.data.gearCompare.activeSlot;
+      const slotState = AppState.data.gearCompare.slots[activeKey] || {};
+      const gw = window.D4_GEAR_WEIGHTS;
+      if (!gw || !gw.slots[activeKey]) return;
+      const slot = gw.slots[activeKey];
+      const verdict = this.computeVerdict(slot, slotState);
+      const nicknameInput = document.querySelector('[data-gc-nickname]');
+      const nickname = nicknameInput ? (nicknameInput.value || '').trim() : '';
+      if (!slotState.history) slotState.history = [];
+      const entry = {
+        id: 'h' + Date.now() + Math.floor(Math.random() * 1000),
+        ts: Date.now(),
+        nickname,
+        tier: verdict.tier,
+        label: verdict.label,
+        scorePct: verdict.scorePct,
+        snapshot: {
+          selectedAffixes: Object.assign({}, slotState.selectedAffixes || {}),
+          hasGA: Object.assign({}, slotState.hasGA || {}),
+          hasTemper: !!slotState.hasTemper,
+          hasMasterworkPrimary: !!slotState.hasMasterworkPrimary,
+        },
+      };
+      slotState.history.unshift(entry);
+      if (slotState.history.length > 50) slotState.history = slotState.history.slice(0, 50);
+      AppState.data.gearCompare.slots[activeKey] = slotState;
+      AppState.save('gearCompare');
+      Toast.show('Drop saved' + (nickname ? ': ' + nickname : ''), 'success');
+      GearCompare.render();
+    },
+
+    loadHistoryEntry(id) {
+      const activeKey = AppState.data.gearCompare.activeSlot;
+      const slotState = AppState.data.gearCompare.slots[activeKey];
+      if (!slotState || !slotState.history) return;
+      const entry = slotState.history.find((h) => h.id === id);
+      if (!entry || !entry.snapshot) return;
+      slotState.selectedAffixes = Object.assign({}, entry.snapshot.selectedAffixes || {});
+      slotState.hasGA = Object.assign({}, entry.snapshot.hasGA || {});
+      slotState.hasTemper = !!entry.snapshot.hasTemper;
+      slotState.hasMasterworkPrimary = !!entry.snapshot.hasMasterworkPrimary;
+      AppState.save('gearCompare');
+      Toast.show('Drop reloaded' + (entry.nickname ? ': ' + entry.nickname : ''), 'info');
+      GearCompare.render();
+    },
+
+    deleteHistoryEntry(id) {
+      const activeKey = AppState.data.gearCompare.activeSlot;
+      const slotState = AppState.data.gearCompare.slots[activeKey];
+      if (!slotState || !slotState.history) return;
+      slotState.history = slotState.history.filter((h) => h.id !== id);
+      AppState.save('gearCompare');
+      GearCompare.render();
+    },
+
+    clearHistory() {
+      const activeKey = AppState.data.gearCompare.activeSlot;
+      const slotState = AppState.data.gearCompare.slots[activeKey];
+      if (!slotState) return;
+      slotState.history = [];
+      AppState.save('gearCompare');
+      Toast.show('History cleared', 'info');
+      GearCompare.render();
     },
 
     computeVerdict(slot, saved) {
@@ -2649,10 +2744,31 @@
         const clearBtn = e.target.closest && e.target.closest('[data-gc-clear]');
         if (clearBtn) {
           const activeKey = AppState.data.gearCompare.activeSlot;
-          AppState.data.gearCompare.slots[activeKey] = { selectedAffixes: {}, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false };
+          const existing = AppState.data.gearCompare.slots[activeKey] || {};
+          AppState.data.gearCompare.slots[activeKey] = { selectedAffixes: {}, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false, history: existing.history || [] };
           AppState.save('gearCompare');
           GearCompare.render();
           Toast.show('Slot cleared', 'info');
+          return;
+        }
+        const saveBtn = e.target.closest && e.target.closest('[data-gc-save]');
+        if (saveBtn) {
+          GearCompare.saveCurrent();
+          return;
+        }
+        const loadBtn = e.target.closest && e.target.closest('[data-gc-history-load]');
+        if (loadBtn) {
+          GearCompare.loadHistoryEntry(loadBtn.getAttribute('data-gc-history-load'));
+          return;
+        }
+        const delBtn = e.target.closest && e.target.closest('[data-gc-history-del]');
+        if (delBtn) {
+          GearCompare.deleteHistoryEntry(delBtn.getAttribute('data-gc-history-del'));
+          return;
+        }
+        const histClearBtn = e.target.closest && e.target.closest('[data-gc-history-clear]');
+        if (histClearBtn) {
+          GearCompare.clearHistory();
           return;
         }
       });
@@ -2662,7 +2778,7 @@
         if (!t || !t.classList) return;
         const activeKey = AppState.data.gearCompare.activeSlot;
         if (!AppState.data.gearCompare.slots[activeKey]) {
-          AppState.data.gearCompare.slots[activeKey] = { selectedAffixes: {}, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false };
+          AppState.data.gearCompare.slots[activeKey] = { selectedAffixes: {}, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false, history: [] };
         }
         const slotState = AppState.data.gearCompare.slots[activeKey];
         let changed = false;
