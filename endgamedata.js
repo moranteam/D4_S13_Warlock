@@ -869,5 +869,60 @@
       ],
       additionalMechanicsBeyondSoulShards: 'None named in canonical sources beyond the above. eGamersWorld and BoostMatch fetches failed and may have had additional coverage.',
     },
+
+    /* ============================================================
+       HORADRIC CUBE (Lord of Hatred crafting station)
+       Source: Maxroll resources Horadric Cube, fetched 2026-05-15.
+       ============================================================ */
+    horadricCube: {
+      overview: 'The Horadric Cube returns from Diablo II as the Lord of Hatred endgame crafting station. It unlocks after completing the Lord of Hatred campaign and is located in Temis. Recipes consume Primordial Dust variants plus Tuning Prisms to modify items.',
+      unlock: 'Complete the Lord of Hatred campaign, then it is available in Temis.',
+      confidence: 'HIGH',
+
+      // The single most important correction for this build.
+      litanyClarification: {
+        headline: 'You cannot target craft Litany of Sable here.',
+        detail: 'The Upgrade to Unique recipe converts a Common item into a RANDOM Unique of the same type. There is no targeting. Upgrading a common dagger gives a random dagger Unique from the whole pool, not Litany specifically. For a targeted Litany of Sable, farm the Lair Boss (Astaroth or Harbinger of Hatred). Use the Cube for optimization, not initial acquisition of a specific Unique.',
+        confidence: 'HIGH',
+      },
+
+      // Recipes flagged for how this build uses them.
+      recipes: [
+        { name: 'Upgrade to Unique', fn: 'Common to a RANDOM Unique of the same type', materials: '1 Common (Ancestral Common gives Ancestral Unique), 1 Enhanced Primordial Dust, 10 Raw Primordial Dust', buildUse: 'A gamble, not a Litany craft. Only worth it for slots with a tiny Unique pool. Boss farm for specific items instead.', priority: 'LOW', confidence: 'HIGH' },
+        { name: 'Focused Reroll', fn: 'Change an affix within the same category', materials: '1 Magic/Rare/Legendary, 1 Refined Primordial Dust, 15 Raw Primordial Dust, Tuning Prism required', buildUse: 'The workhorse. Fix a near perfect legendary by rerolling an off affix into a build target (Crit Damage, Vulnerable, Attack Speed) using the Aggressive Tuning Prism.', priority: 'HIGH', confidence: 'HIGH' },
+        { name: 'Chaotic Reroll', fn: 'Change an affix to a different category', materials: '1 Magic/Rare/Legendary, 1 Refined Primordial Dust, 15 Raw Primordial Dust, Tuning Prism optional', buildUse: 'When a slot rolled a useless category entirely. Riskier than Focused Reroll, no category guarantee without a prism.', priority: 'MEDIUM', confidence: 'HIGH' },
+        { name: 'Transfigure Item', fn: 'Adds an extra affix, item becomes unmodifiable', materials: '1 Legendary/Unique/Mythic, 1 Volatile Primordial Dust, Tuning Prism optional', buildUse: 'End state polish. Use the Kullean prism for the amulet to imprint a Utility Aspect (this is how Aspect of Rallying Reversal lands on the amulet). Add sockets, masterwork, and the correct aspect BEFORE transfiguring, it locks the item.', priority: 'HIGH', confidence: 'HIGH' },
+        { name: 'Unique Power Reroll', fn: 'Randomize an Ancestral Unique power value', materials: '1 Ancestral Unique, 1 Attuned Primordial Dust, 100 Raw Primordial Dust', buildUse: 'Reroll Litany of Sable for a higher unique power value once you have the item. Expensive, save for a near BIS Litany.', priority: 'MEDIUM', confidence: 'HIGH' },
+        { name: 'Rune Crafting', fn: 'Craft a specific target Legendary Rune', materials: '1 specific Rare Rune, 5 any Rare Runes, 5 any Legendary Runes', buildUse: 'The targeted path to the runeword runes. Craft Neo, Prid, Nagu, Que directly instead of waiting on drops.', priority: 'HIGH', confidence: 'HIGH' },
+        { name: 'Reroll Set Charm', fn: 'Convert a Set Charm into a different one from the same set', materials: '1 Set Charm, 25 Raw Primordial Dust, 50 Infused Horadric Resin', buildUse: 'Reshape the Beru of Horazon Chains set toward the charm affixes you need (Demonology Ranks, All Stats).', priority: 'MEDIUM', confidence: 'HIGH' },
+        { name: 'Recycle Uniques', fn: '3 same Uniques to a random Unique of that type', materials: '3 same Unique/Mythic/Unique Charm', buildUse: 'Dump duplicate boss Uniques back into the pool for a reroll.', priority: 'LOW', confidence: 'HIGH' },
+        { name: 'Upgrade to Legendary', fn: 'Rare to Legendary with a random Legendary power', materials: '1 Rare, 1 Pure Primordial Dust, 10 Raw Primordial Dust, Tuning Prism optional', buildUse: 'Early gearing filler before Codex aspects are unlocked.', priority: 'LOW', confidence: 'HIGH' },
+        { name: 'Add Affix', fn: 'Adds a random affix', materials: '1 item, 1 Coarse Primordial Dust, 5 Raw Primordial Dust, Tuning Prism optional', buildUse: 'Fill an empty affix slot, narrow the category with a Tuning Prism.', priority: 'LOW', confidence: 'HIGH' },
+      ],
+
+      tuningPrisms: [
+        { name: 'Aggressive', covers: 'Mainstat, Weapon Damage, Attack Speed, Crit Chance, Crit Damage, Vulnerable Damage, All Damage, Elemental Damage', buildNote: 'The main prism for this build. Use on Focused Reroll for weapon, gloves, rings, amulet.', priority: 'HIGH' },
+        { name: 'Resourceful', covers: 'Lucky Hit restore Resource, Maximum Resource, Resource Cost Reduction, Resource Regeneration', buildNote: 'For the chest Wrath economy affixes.', priority: 'MEDIUM' },
+        { name: 'Adept\'s', covers: 'Mainstat, Skill Ranks', buildNote: 'Ranks to Dread Claws on gloves, Willpower elsewhere.', priority: 'MEDIUM' },
+        { name: 'Protector\'s', covers: 'Armor, Damage Reduction, Maximum Life, Resistances', buildNote: 'Defensive slots (pants, boots) and resistance caps.', priority: 'MEDIUM' },
+        { name: 'Kullean (Transfigure)', covers: 'Imprints a random Utility Aspect on a non unmodifiable amulet, rerollable', buildNote: 'How Aspect of Rallying Reversal gets onto the amulet.', priority: 'HIGH' },
+        { name: 'Chromatic', covers: 'Specific Resistances', buildNote: 'Patch a single failing resistance to hit the cap.', priority: 'LOW' },
+      ],
+
+      materials: {
+        primordialDust: ['Coarse', 'Raw', 'Refined', 'Volatile', 'Attuned', 'Enhanced', 'Pure'],
+        secondary: ['Infused Horadric Resin', 'Tuning Prisms (6 affix types plus Kullean and Entropic)'],
+        farmNote: 'Raw Primordial Dust drops from elite enemies starting around level 20. Higher dust tiers and Tuning Prisms come from endgame activities (Pit, Helltides, bosses). Exact per tier drop tables not enumerated in the source. Confidence MEDIUM on farm specifics.',
+      },
+
+      buildWorkflow: [
+        'Boss farm the targeted Uniques (Litany of Sable, Footfalls, Heir of Perdition). Do not gamble Upgrade to Unique for these.',
+        'Craft the runeword runes (Neo, Prid, Nagu, Que) with Rune Crafting instead of waiting on drops.',
+        'On a near BIS legendary with one off affix, use Focused Reroll plus the Aggressive Tuning Prism to fix it.',
+        'Once a piece is final (sockets in, masterworked, correct aspect), Transfigure it for the bonus affix. This locks the item, so do it last.',
+        'Amulet: Transfigure with the Kullean prism to land Aspect of Rallying Reversal.',
+        'Reroll Litany unique power with Unique Power Reroll only when the rest of the dagger is near perfect.',
+      ],
+    },
   };
 })();

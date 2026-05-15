@@ -290,6 +290,7 @@
       if (this.current === 'slot-reference') {
         Talismans.render();
         RunesGems.render();
+        HoradricCube.render();
       }
       if (this.current === 'about') {
         Patch.render();
@@ -963,6 +964,7 @@
       Endbuild.render();
       Talismans.render();
       RunesGems.render();
+      HoradricCube.render();
       Acquisition.render();
       GearCompare.render();
       WarPlans.render();
@@ -2816,6 +2818,99 @@
   };
 
   // ========================================
+  // HORADRIC CUBE RENDERER (Lord of Hatred crafting)
+  // ========================================
+  const HoradricCube = {
+    render() {
+      const root = document.getElementById('horadricCubeRoot');
+      if (!root) return;
+      const hc = window.D4_ENDGAME && window.D4_ENDGAME.horadricCube;
+      if (!hc) {
+        paint(root, '<div class="placeholder-card"><i class="fa-solid fa-cube placeholder-icon"></i><div class="placeholder-title">No Horadric Cube data</div><div class="placeholder-text">endgamedata.js may have failed to load.</div></div>');
+        return;
+      }
+      const priClass = (p) => 'rg-conf-' + String(p || 'MEDIUM').toLowerCase();
+      let html = '';
+
+      html += '<section class="hc-hero">';
+      html += '  <h2 class="hc-hero-title"><i class="fa-solid fa-cube" aria-hidden="true"></i> Horadric Cube</h2>';
+      html += '  <p class="hc-hero-sub">' + escapeHtml(hc.overview) + '</p>';
+      html += '  <div class="hc-hero-meta"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ' + escapeHtml(hc.unlock) + '</div>';
+      html += '</section>';
+
+      // The critical correction, surfaced loud
+      if (hc.litanyClarification) {
+        html += '<section class="hc-warn">';
+        html += '  <div class="hc-warn-head"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> ' + escapeHtml(hc.litanyClarification.headline) + '</div>';
+        html += '  <p class="hc-warn-body">' + escapeHtml(hc.litanyClarification.detail) + '</p>';
+        html += '</section>';
+      }
+
+      // Build workflow, the actionable order
+      if (hc.buildWorkflow && hc.buildWorkflow.length) {
+        html += '<section class="hc-section">';
+        html += '  <h3 class="hc-section-title">How this build uses the Cube</h3>';
+        html += '  <ol class="ec-step-list">';
+        let n = 1;
+        for (const step of hc.buildWorkflow) {
+          html += '<li class="ec-step"><span class="ec-step-n">' + (n++) + '</span><div class="ec-step-body"><div class="ec-step-text">' + escapeHtml(step) + '</div></div></li>';
+        }
+        html += '  </ol>';
+        html += '</section>';
+      }
+
+      // Recipes, sorted build priority HIGH first
+      if (hc.recipes && hc.recipes.length) {
+        const order = { HIGH: 0, MEDIUM: 1, LOW: 2 };
+        const recipes = hc.recipes.slice().sort((a, b) => (order[a.priority] || 9) - (order[b.priority] || 9));
+        html += '<section class="hc-section">';
+        html += '  <h3 class="hc-section-title">Recipes that matter for this build</h3>';
+        html += '  <div class="hc-recipes">';
+        for (const r of recipes) {
+          html += '<div class="hc-recipe hc-pri-' + String(r.priority || 'medium').toLowerCase() + '">';
+          html += '  <div class="hc-recipe-head"><span class="hc-recipe-name">' + escapeHtml(r.name) + '</span><span class="aspect-priority ' + priClass(r.priority) + '">' + escapeHtml(r.priority || 'MEDIUM') + '</span></div>';
+          html += '  <div class="hc-recipe-fn">' + escapeHtml(r.fn) + '</div>';
+          html += '  <div class="hc-recipe-use"><span class="hc-kv-label">Build use</span> ' + escapeHtml(r.buildUse) + '</div>';
+          html += '  <details class="hc-recipe-mat"><summary>Materials</summary><div>' + escapeHtml(r.materials) + '</div></details>';
+          html += '</div>';
+        }
+        html += '  </div>';
+        html += '</section>';
+      }
+
+      // Tuning prisms
+      if (hc.tuningPrisms && hc.tuningPrisms.length) {
+        html += '<details class="hc-fold">';
+        html += '  <summary><i class="fa-solid fa-prism" aria-hidden="true"></i> Tuning Prisms (affix category control)</summary>';
+        html += '  <div class="hc-prisms">';
+        for (const p of hc.tuningPrisms) {
+          html += '<div class="hc-prism hc-pri-' + String(p.priority || 'medium').toLowerCase() + '">';
+          html += '  <div class="hc-prism-name">' + escapeHtml(p.name) + '</div>';
+          html += '  <div class="hc-prism-covers">' + escapeHtml(p.covers) + '</div>';
+          html += '  <div class="hc-prism-note">' + escapeHtml(p.buildNote) + '</div>';
+          html += '</div>';
+        }
+        html += '  </div>';
+        html += '</details>';
+      }
+
+      // Materials
+      if (hc.materials) {
+        html += '<details class="hc-fold">';
+        html += '  <summary><i class="fa-solid fa-flask" aria-hidden="true"></i> Materials reference</summary>';
+        html += '  <div class="hc-mat-body">';
+        html += '    <div class="hc-mat-kv"><span>Primordial Dust tiers</span><strong>' + escapeHtml((hc.materials.primordialDust || []).join(', ')) + '</strong></div>';
+        html += '    <div class="hc-mat-kv"><span>Secondary</span><strong>' + escapeHtml((hc.materials.secondary || []).join(', ')) + '</strong></div>';
+        html += '    <p class="hc-mat-note">' + escapeHtml(hc.materials.farmNote || '') + '</p>';
+        html += '  </div>';
+        html += '</details>';
+      }
+
+      paint(root, html);
+    },
+  };
+
+  // ========================================
   // ACQUISITION ROADMAP (Sprint 8 pulled forward)
   // Data driven "Do These In Order" checklist generated from
   // endgamedata.js. Replaces the hand maintained QV Progress tab.
@@ -2861,7 +2956,7 @@
           steps.push({
             group: 'Build Defining', groupRank: 1,
             pri: 'Critical', task: 'Get ' + slot.primary.name + ' (' + slot.slot + ')',
-            how: sourceText(slot.primary) + '. ' + (slot.primary.notes || ''),
+            how: sourceText(slot.primary) + '. ' + (slot.primary.notes || '') + ' Boss farm this, do not gamble the Horadric Cube Upgrade to Unique, it gives a random Unique of the type, not this one.',
             key: 'bd-' + this.slug(slot.primary.name), slotKey: this.slotKeyMap[k] || null,
           });
         }
@@ -2893,7 +2988,7 @@
       // 4. Runewords
       if (eg.runes && eg.runes.canonicalPairs) {
         for (const p of eg.runes.canonicalPairs) {
-          steps.push({ group: 'Runewords', groupRank: 4, pri: p.tier || 'Runeword', task: 'Build the ' + p.pair + ' runeword (' + p.slot + ')', how: p.effect + ' ' + (eg.runes.farmNote || ''), key: 'rune-' + this.slug(p.slot) });
+          steps.push({ group: 'Runewords', groupRank: 4, pri: p.tier || 'Runeword', task: 'Build the ' + p.pair + ' runeword (' + p.slot + ')', how: p.effect + ' ' + (eg.runes.farmNote || '') + ' Targeted path: craft the runes with the Horadric Cube Rune Crafting recipe instead of waiting on drops.', key: 'rune-' + this.slug(p.slot) });
         }
       }
 
@@ -2924,6 +3019,7 @@
       // 8. Endgame polish
       steps.push({ group: 'Endgame Polish', groupRank: 8, pri: 'Temper', task: 'Temper every slot to its build defining recipe', how: 'Visit the Blacksmith. Each slot detail card lists the exact tempering manual.', key: 'polish-temper' });
       steps.push({ group: 'Endgame Polish', groupRank: 8, pri: 'Masterwork', task: 'Masterwork priority pieces, Weapon first', how: 'Requires Pit materials. Weapon, then Gloves, then Rings. Crit the masterwork primary stat on each slot.', key: 'polish-mw' });
+      steps.push({ group: 'Endgame Polish', groupRank: 8, pri: 'Cube', task: 'Horadric Cube optimization pass', how: 'Focused Reroll plus the Aggressive Tuning Prism to fix off affixes on near BIS legendaries, then Transfigure each finished piece last (it locks the item). See the Horadric Cube section in Slot Reference.', key: 'polish-cube' });
 
       let n = 1;
       for (const s of steps) s.n = n++;

@@ -3815,3 +3815,64 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
   min-height: 36px;
 }
 .acq-goto:hover { background: var(--accent-light); border-color: var(--accent); }
+
+/* ============================================================
+   HORADRIC CUBE (Lord of Hatred crafting)
+   ============================================================ */
+.horadric-cube-root { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+.hc-hero {
+  background: radial-gradient(ellipse at top, rgba(155,123,239,0.10) 0%, transparent 60%), var(--bg-card);
+  border: 1px solid var(--border); border-left: 4px solid #9b7bef;
+  border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 8px;
+}
+.hc-hero-title { margin: 0; font-family: var(--font-title); font-size: 1.25rem; color: var(--text); display: flex; align-items: center; gap: 10px; }
+.hc-hero-title i { color: #9b7bef; }
+.hc-hero-sub { margin: 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
+.hc-hero-meta { font-family: var(--font-mono); font-size: 0.78rem; color: #9b7bef; display: flex; align-items: center; gap: 6px; }
+
+.hc-warn {
+  background: rgba(232,91,91,0.08); border: 2px solid #e85b5b; border-radius: var(--radius);
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 6px;
+}
+.hc-warn-head { font-family: var(--font-title); font-size: 1rem; font-weight: 700; color: #f85149; display: flex; align-items: center; gap: 8px; }
+.hc-warn-body { margin: 0; font-size: 0.88rem; color: var(--text); line-height: 1.5; }
+
+.hc-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.hc-section-title { margin: 0; font-family: var(--font-title); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); }
+
+.hc-recipes { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.hc-recipe { background: var(--bg-darker); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.hc-recipe.hc-pri-high { border-left-color: #2ea043; }
+.hc-recipe.hc-pri-medium { border-left-color: #d29922; }
+.hc-recipe.hc-pri-low { border-left-color: var(--border); opacity: 0.85; }
+.hc-recipe-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.hc-recipe-name { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+.hc-recipe-fn { font-size: 0.84rem; color: var(--text-secondary); }
+.hc-recipe-use { font-size: 0.84rem; color: var(--text); line-height: 1.45; }
+.hc-kv-label { font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; color: var(--text-dim); margin-right: 4px; }
+.hc-recipe-mat { font-size: 0.8rem; }
+.hc-recipe-mat summary { cursor: pointer; color: var(--text-dim); font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; padding: 4px 0; }
+.hc-recipe-mat[open] summary { color: #9b7bef; }
+.hc-recipe-mat > div { font-size: 0.82rem; color: var(--text-secondary); padding-top: 4px; }
+
+.hc-fold { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
+.hc-fold > summary { cursor: pointer; font-weight: 700; font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; min-height: 40px; }
+.hc-fold[open] > summary { color: #9b7bef; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 12px; }
+.hc-fold > summary i { color: #9b7bef; }
+.hc-prisms { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.hc-prism { background: var(--bg-darker); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: var(--radius-sm); padding: 10px; }
+.hc-prism.hc-pri-high { border-left-color: #2ea043; }
+.hc-prism.hc-pri-medium { border-left-color: #d29922; }
+.hc-prism-name { font-weight: 700; font-size: 0.88rem; color: #9b7bef; }
+.hc-prism-covers { font-size: 0.8rem; color: var(--text-secondary); margin: 3px 0; }
+.hc-prism-note { font-size: 0.8rem; color: var(--text); }
+.hc-mat-body { display: flex; flex-direction: column; gap: 8px; }
+.hc-mat-kv { display: flex; flex-direction: column; gap: 2px; font-size: 0.84rem; }
+.hc-mat-kv span { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; color: var(--text-dim); }
+.hc-mat-kv strong { color: var(--text); }
+.hc-mat-note { margin: 0; font-size: 0.8rem; color: var(--text-dim); line-height: 1.45; }
+
+@media (min-width: 768px) {
+  .hc-recipes { grid-template-columns: repeat(2, 1fr); }
+  .hc-prisms { grid-template-columns: repeat(2, 1fr); }
+}
