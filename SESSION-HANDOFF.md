@@ -1,51 +1,64 @@
 # D4 Warlock God Run, Session Handoff
 
 Last updated: 2026-05-14
-Current sprint: Sprint 3 queued (Gear Comparison plus Walkthrough Catch Up)
+Current sprint: None active. All planned sprints shipped.
 Build target: Dread Claws Mastermind Warlock, Season 13 Lord of Hatred
 Character state: Level 54, Faith and Failings quest, Hard difficulty
 
 ## Next session start here
 
-Sprint 3 now carries two deliverables, ship them in order.
+The guide is feature complete for the originally planned scope. Every section listed in
+the 8 section nav renders real content, no placeholder cards remain in the UI. The next
+time you open this repo, you can either:
 
-First deliverable, Walkthrough Catch Up button. Add a single bulk action to the
-Walkthrough view in `app.js` under the existing Walkthrough module. Render a button at
-the top of the view labeled "Mark all complete through Level X" where X is the live
-`AppState.character.level`. On click, iterate every phase in the existing 9 phase
-walkthrough (`window.D4_DATA.walkthrough`), mark every step whose level gate is at or
-below the current character level as checked, persist to the existing walkthrough
-checkbox localStorage key from Sprint 2 Part C, then re-render the view. Confirm with a
-Toast showing how many steps were just checked. No new localStorage key needed. Ship
-this first so the user can fast forward past Level 54 of historical progress in one tap.
+1. Play through the build. Use the Walkthrough Catch Up button on the Leveling Path view
+   to bulk check every step in past phases the moment your character level changes.
+   Update level and quest progress through the Quick Update modal (slash key or FAB).
+2. Pick an enhancement from the Open items queue below if you want a new sprint.
 
-Second deliverable, Gear Comparison tool. Open `D4-WARLOCK-SPRINT3-MASTER-PROMPT.md` if
-present, otherwise draft it from the goal block below. The work mounts to the
-`#gearCompareRoot` placeholder inside `index.html` (currently shows the Sprint 3
-placeholder card around line 305). The new module reads slot priorities from
-`window.D4_GEAR_WEIGHTS` in `gearweights.js`, which is already loaded by `index.html`
-after `itemdata.js`. Wire the new `GearCompare` module into `Router.render()` in
-`app.js` under the `gear-comparison` case where the inline comment already marks the
-Sprint 3 slot. Keep the single file vanilla JS pattern, no React, no build step.
-Persist any per-slot stat entries under `d4_warlock_gearcompare_v1` to match the
-existing localStorage prefix convention.
+No master prompt drafted for a Sprint 4 yet. All open items are optional polish.
 
 ## Active sprint
 
-**Sprint 3: Gear Comparison Tool plus Walkthrough Catch Up** (queued, not started)
-
-Part A goal: Walkthrough Catch Up button. Reads `AppState.character.level`, bulk checks
-every walkthrough step whose level gate is at or below current level, persists to the
-existing Sprint 2 walkthrough checkbox key, toasts the count. Mounts at the top of the
-existing Walkthrough view, no new section needed.
-
-Part B goal: Manual stat entry per slot plus drop verdict tool that reads from
-`gearweights.js`. Mounts to the `gearCompareRoot` placeholder in the Gear Comparison
-section. Per-slot form inputs accept the affixes the player rolled, the tool weighs
-them against the canonical priorities in `window.D4_GEAR_WEIGHTS`, and returns a Keep,
-Salvage, or Imprint verdict plus a list of which target stats are missing.
+None. Sprint 3 closed on 2026-05-14.
 
 ## Shipped sprints
+
+### Sprint 3: Gear Comparison plus Walkthrough Catch Up (shipped 2026-05-14)
+
+Part A, Walkthrough Catch Up button:
+- Single bulk action at the top of the Walkthrough view
+- Marks every step in past phases (`levelMax < currentLevel`) complete in one tap
+- Auto-acknowledges any respec gate at or below current level
+- Reuses the Sprint 2 walkthrough and phaseComplete localStorage keys, no new persistence
+- Toast confirms steps, phases, and respecs touched
+- Current phase stays manual so in-progress steps are not falsely marked
+
+Part B prerequisite, Runes and Gems renderer (pulled forward from the original Sprint 5
+candidate):
+- `runesgems.js` data module with runeword rules, gems per slot (4 groups), rune combos
+  (HIGH, MEDIUM, LOW, excluded), socket recs per slot, endgame loadout summary
+- 5 section renderer in `app.js` with rune pair chips (Ritual blue, Invocation red),
+  tier badges, collapsed LOW and excluded panels
+- Sourced verbatim from `data-sources/runes-gems.md` (Resolution 8 and 9 of the
+  reconciliation log)
+
+Part B, Gear Comparison tool:
+- 11 slot picker buttons with saved-entry dots
+- Per-slot affix list with weight badges, must-have flags, Greater Affix toggles
+- Two extra factors: build-defining temper rolled, masterwork primary stat hit
+- Live computed verdict, four tiers: KEEP, IMPRINT, BENCH, SALVAGE
+- Verdict scoring: weighted sum of selected affixes plus GA bonus, temper bonus,
+  masterwork bonus, normalized against per-slot max
+- KEEP threshold 75 percent match plus all must-haves present
+- Missing must-haves listed explicitly
+- Score breakdown collapsed behind details summary
+- Per-slot state persists to `d4_warlock_gearcompare_v1`
+
+Files touched: `app.js`, `index.html`, `styles.css`, `runesgems.js` (new).
+
+Commit range: `37917d3` (Part A) through `5dd2477` (Part B Gear Compare), with
+`3ec0abe` adding the Runes and Gems renderer in the middle.
 
 ### Sprint 2: Leveling Path (shipped 2026-05-13)
 
@@ -97,17 +110,23 @@ adding the Sprint 1 master prompt to the repo afterward.
 
 ## Open items queue
 
-- Sprint 3 candidate: Gear Comparison tool, queued and described above
-- Sprint 4 candidate: Paragon planner (board rotation visualizer, glyph stepper grid).
-  Data exists in `paragon.js`, no renderer module yet beyond the existing Paragon view card.
-- Sprint 5 candidate: Runes and Gems reference. Placeholder mount `runesGemsRoot` already
-  in `index.html`. Data is in `data-sources/runes-gems.md`, not yet ported to a JS module.
-- Sprint candidate: Endgame Build visualizer beyond the current aggregator card
-- Aspect tracking, currently flat in the Gear Targets view, could move to a tracker
-- Codex of Power integration, no data layer yet
-- Mobile responsive pass once Sprint 3 lands so the gear compare form works on phone
-- 3 generic named aspects (Aggressive, Crushing, Demonic) were dropped in commit `e8fa70e`
-  for low confidence. Revisit once verified in game.
+All items below are optional polish, not blocking the guide from being usable.
+
+- Paragon planner enhancements. The Paragon view already has board cards, mark-built
+  toggles, glyph steppers, and stat target rows. An enhancement could add a board
+  rotation visualizer with node positions or a glyph leveling cost calculator.
+- Endgame Build visualizer beyond the current aggregator card. Could overlay the skill
+  bar, soul shard, fragment, glyph priority, and uniques in a single canvas view.
+- Codex of Power integration. No data layer exists for this yet. Would need fresh
+  research and a new reconciliation pass.
+- Aspect tracking enhancements. Currently flat in the Gear Targets view, could move to
+  a per-slot tracker with imprint history.
+- Mobile responsive QA pass. No blocking layout bugs known. Worth a tour on a phone to
+  catch any cramped sections.
+- 3 generic named aspects (Aggressive, Crushing, Demonic) were dropped in commit
+  `e8fa70e` for low confidence. Revisit once verified in game.
+- "Save this drop" history in Gear Compare. Tonight's tool persists the current entry
+  per slot but does not keep a log of past evaluations. Could add a stash log.
 
 ## Sticky decisions
 
@@ -117,7 +136,8 @@ adding the Sprint 1 master prompt to the repo afterward.
 - `localStorage` prefix: `d4_warlock_*_v1`
 - Data files: `data.js` (encounters, levels, skills, walkthrough, talismans, war plans,
   mercenary, patch meta), `itemdata.js` (uniques and aspects with slot priorities),
-  `gearweights.js` (stat priorities per slot), `paragon.js` (board and glyph data)
+  `gearweights.js` (stat priorities per slot), `paragon.js` (board and glyph data),
+  `runesgems.js` (rune combos, gems, sockets, loadout summary)
 - Character state tracking via `localStorage`, no server, no auth
 
 **Data sourcing**
@@ -141,7 +161,7 @@ The reconciliation set lives in `data-sources/`. Last touched dates:
 - `controller-bindings.md`, 2026-05-13
 - `gear-weights.md`, 2026-05-13
 - `leveling-skill-points.md`, 2026-05-13
-- `runes-gems.md`, 2026-05-13 (not yet ported to a JS module, Sprint 5 candidate)
+- `runes-gems.md`, 2026-05-13 (now also lives in `runesgems.js` as a window global)
 
 ## File structure
 
@@ -153,6 +173,7 @@ D4_S13_Warlock/
 ├── D4-WARLOCK-SPRINT1-MASTER-PROMPT.md
 ├── D4-WARLOCK-SPRINT2-MASTER-PROMPT.md
 ├── README.md
+├── SESSION-HANDOFF.md
 ├── app.js
 ├── data-sources/
 │   ├── RECONCILIATION.md
@@ -167,34 +188,21 @@ D4_S13_Warlock/
 ├── itemdata.js
 ├── manifest.json
 ├── paragon.js
+├── runesgems.js
 └── styles.css
 ```
-
-Top level file sizes at handoff:
-
-- `app.js` 111844 bytes
-- `styles.css` 83702 bytes
-- `data.js` 66233 bytes
-- `index.html` 24119 bytes
-- `gearweights.js` 22458 bytes
-- `itemdata.js` 12668 bytes
-- `D4-WARLOCK-SPRINT1-MASTER-PROMPT.md` 10895 bytes
-- `D4-WARLOCK-SPRINT2-MASTER-PROMPT.md` 10712 bytes
-- `README.md` 7348 bytes
-- `paragon.js` 5047 bytes
-- `manifest.json` 569 bytes
 
 ## Recent commit log
 
 ```
+5dd2477 Sprint 3 Part B: Gear Comparison tool shipped
+3ec0abe Sprint 3 Part B prerequisite: Runes and Gems renderer shipped (was Sprint 5)
+37917d3 Sprint 3 Part A: Walkthrough Catch Up button
+ccfbdf7 docs: update handoff with Sprint 3 Catch Up Part A and Lv 54 state
+67cd5fb docs: add SESSION-HANDOFF.md rolling handoff doc
 27f3a6d Add Sprint 2 master prompt to repo
 1536be9 Sprint 2 complete: Leveling Path module shipped
 9726ef9 Sprint 2 Part E: Leveling Path header + cross-references
 a0ba3ac Sprint 2 Part D: Walkthrough auto-current-phase highlight
 3c976c6 Sprint 2 Part C: Walkthrough phase-level checkboxes
-00b0847 Sprint 2 Part B: PS5 Controller renderer
-3905ea6 Sprint 2 Part A: Skill Timeline renderer
-96a448c Add Sprint 1 master prompt to repo, gitignore .DS_Store
-c93d982 Sprint 1 D4 reversal: sidebar visible by default on desktop
-a7ee177 Sprint 1 Part E: README rewritten to match reality
 ```
