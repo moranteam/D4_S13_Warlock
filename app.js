@@ -269,6 +269,7 @@
         Skills.render();
       }
       if (this.current === 'endgame-build') {
+        EndgameGear.render();
         Endbuild.render();
         Shards.render();
         Paragon.render();
@@ -416,6 +417,202 @@
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
   }
+
+  // ========================================
+  // SHARED RENDER TEMPLATES (Sprint 5)
+  // 5 helpers used by the endgame overhaul views.
+  // ========================================
+  const Templates = {
+    /* Item card. Used for gear, talismans, unique charms, paragon glyphs. */
+    renderItemCard(item, opts) {
+      opts = opts || {};
+      if (!item || !item.name) return '';
+      const conf = (item.confidence || 'MEDIUM').toLowerCase();
+      const iconClass = opts.iconClass || 'fa-cube';
+      const slotLabel = opts.slotLabel || '';
+      const isAlt = !!opts.isAlt;
+
+      let html = '';
+      html += '<article class="ec-item' + (isAlt ? ' ec-item-alt' : '') + '" data-tier="' + escapeHtml(item.tier || '') + '">';
+      html += '  <div class="ec-item-icon"><i class="fa-solid ' + iconClass + '" aria-hidden="true"></i></div>';
+      html += '  <div class="ec-item-body">';
+      html += '    <header class="ec-item-head">';
+      if (slotLabel) html += '<div class="ec-item-slot">' + escapeHtml(slotLabel) + '</div>';
+      html += '      <h3 class="ec-item-name">' + escapeHtml(item.name) + '</h3>';
+      html += '      <div class="ec-item-tags">';
+      if (item.type) html += '<span class="ec-tag ec-tag-type">' + escapeHtml(item.type) + '</span>';
+      if (item.tier) html += '<span class="ec-tag ec-tag-tier">' + escapeHtml(item.tier) + '</span>';
+      html += '<span class="aspect-priority rg-conf-' + conf + '">' + (item.confidence || 'MEDIUM') + '</span>';
+      html += '      </div>';
+      html += '    </header>';
+
+      // Affix priorities (numbered list, Maxroll style)
+      if (item.affixes && item.affixes.length) {
+        html += '    <div class="ec-affixes">';
+        html += '      <div class="ec-mini-label">Affix priority</div>';
+        html += '      <ol class="ec-affix-list">';
+        for (const a of item.affixes) {
+          if (!a || !a.stat) continue;
+          const mustClass = a.mustHave ? ' is-must' : '';
+          const defClass = a.buildDefining ? ' is-build-defining' : '';
+          html += '<li class="ec-affix' + mustClass + defClass + '">';
+          html += '  <span class="ec-affix-n">' + (a.rank || '') + '</span>';
+          html += '  <span class="ec-affix-stat">' + escapeHtml(a.stat) + '</span>';
+          if (a.mustHave) html += '<span class="ec-affix-flag ec-flag-must">MUST</span>';
+          if (a.buildDefining) html += '<span class="ec-affix-flag ec-flag-defining">BUILD DEFINING</span>';
+          html += '</li>';
+        }
+        html += '      </ol>';
+        html += '    </div>';
+      }
+
+      // Quick reference chips
+      html += '    <div class="ec-chips">';
+      if (item.aspect) html += '<div class="ec-chip ec-chip-aspect"><span class="ec-chip-label">Aspect</span> ' + escapeHtml(item.aspect) + '</div>';
+      if (item.source && item.source.name) html += '<div class="ec-chip ec-chip-source"><span class="ec-chip-label">Source</span> ' + escapeHtml(item.source.name) + (item.source.type ? ' (' + escapeHtml(item.source.type) + ')' : '') + '</div>';
+      if (item.tempering) html += '<div class="ec-chip ec-chip-temper"><span class="ec-chip-label">Temper</span> ' + escapeHtml(item.tempering) + '</div>';
+      if (item.masterworkPrimary) html += '<div class="ec-chip ec-chip-mw"><span class="ec-chip-label">Masterwork</span> ' + escapeHtml(item.masterworkPrimary) + '</div>';
+      if (typeof item.sockets === 'number') html += '<div class="ec-chip ec-chip-socket"><span class="ec-chip-label">Sockets</span> ' + item.sockets + (item.socketContents && item.sockets > 0 ? ': ' + escapeHtml(item.socketContents) : '') + '</div>';
+      html += '    </div>';
+
+      // Click-to-expand for deep dive
+      if (item.notes || (item.aspectAlternatives && item.aspectAlternatives.length)) {
+        html += '    <details class="ec-deep">';
+        html += '      <summary>More detail</summary>';
+        if (item.notes) html += '<p class="ec-notes">' + escapeHtml(item.notes) + '</p>';
+        if (item.aspectAlternatives && item.aspectAlternatives.length) {
+          html += '<div class="ec-alt-aspects"><span class="ec-mini-label">Aspect alternatives</span><ul>';
+          for (const a of item.aspectAlternatives) html += '<li>' + escapeHtml(a) + '</li>';
+          html += '</ul></div>';
+        }
+        html += '    </details>';
+      }
+
+      html += '  </div>';
+      html += '</article>';
+      return html;
+    },
+
+    /* Primary vs backup comparison. Side by side desktop, accordion mobile. */
+    renderComparisonPair(primary, backup, opts) {
+      opts = opts || {};
+      const slotLabel = opts.slotLabel || '';
+      const iconClass = opts.iconClass || 'fa-cube';
+      let html = '';
+      html += '<section class="ec-pair" data-section="' + escapeHtml(opts.section || '') + '">';
+      if (slotLabel) html += '  <header class="ec-pair-head"><i class="fa-solid ' + iconClass + '" aria-hidden="true"></i> ' + escapeHtml(slotLabel) + '</header>';
+      html += '  <div class="ec-pair-body">';
+      html += '    <div class="ec-pair-col ec-pair-primary">';
+      html += '      <div class="ec-pair-flag ec-pair-flag-primary"><i class="fa-solid fa-star" aria-hidden="true"></i> Primary</div>';
+      html += Templates.renderItemCard(primary, { iconClass, slotLabel: '' });
+      html += '    </div>';
+      html += '    <details class="ec-pair-col ec-pair-backup">';
+      html += '      <summary class="ec-pair-flag ec-pair-flag-backup"><i class="fa-solid fa-shuffle" aria-hidden="true"></i> Backup option</summary>';
+      html += Templates.renderItemCard(backup, { iconClass, slotLabel: '', isAlt: true });
+      html += '    </details>';
+      html += '  </div>';
+      html += '</section>';
+      return html;
+    },
+
+    /* Ordered step list. Used for paragon, glyph leveling, difficulty path. */
+    renderStepList(steps, opts) {
+      opts = opts || {};
+      const persistKey = opts.persistKey || null;
+      let html = '';
+      html += '<ol class="ec-step-list">';
+      for (const s of (steps || [])) {
+        const rank = s.rank || s.step || s.n || '';
+        const text = s.action || s.target || s.note || s.label || s.text || '';
+        const sub = s.note && (s.target || s.action) ? s.note : '';
+        const conf = s.confidence ? s.confidence.toLowerCase() : '';
+        html += '<li class="ec-step">';
+        html += '  <span class="ec-step-n">' + escapeHtml(String(rank)) + '</span>';
+        html += '  <div class="ec-step-body">';
+        if (s.level) html += '<div class="ec-step-label">' + escapeHtml(s.level) + '</div>';
+        html += '    <div class="ec-step-text">' + escapeHtml(text) + '</div>';
+        if (sub) html += '<div class="ec-step-sub">' + escapeHtml(sub) + '</div>';
+        if (conf) html += '<span class="aspect-priority rg-conf-' + conf + ' ec-step-conf">' + s.confidence + '</span>';
+        html += '  </div>';
+        html += '</li>';
+      }
+      html += '</ol>';
+      return html;
+    },
+
+    /* Tier grouped list. Used for runes, mercs, pit, war plans, activities. */
+    renderTierList(items, tierField, opts) {
+      opts = opts || {};
+      tierField = tierField || 'tier';
+      const tiers = {};
+      const tierOrder = [];
+      for (const it of (items || [])) {
+        const t = it[tierField] || 'n/a';
+        if (!tiers[t]) {
+          tiers[t] = [];
+          tierOrder.push(t);
+        }
+        tiers[t].push(it);
+      }
+      const labelField = opts.labelField || 'name';
+      const subField = opts.subField || 'role';
+      let html = '<div class="ec-tier-list">';
+      for (const t of tierOrder) {
+        html += '<div class="ec-tier-group ec-tier-' + escapeHtml(String(t).toLowerCase().replace(/[^a-z0-9]/g, '')) + '">';
+        html += '  <div class="ec-tier-head"><span class="ec-tier-badge">' + escapeHtml(String(t)) + '</span></div>';
+        html += '  <ul class="ec-tier-rows">';
+        for (const it of tiers[t]) {
+          const label = it[labelField] || it.activity || it.pair || it.name || '';
+          const sub = it[subField] || it.effect || it.note || '';
+          const conf = it.confidence ? it.confidence.toLowerCase() : '';
+          html += '<li class="ec-tier-row">';
+          html += '  <span class="ec-tier-row-name">' + escapeHtml(label) + '</span>';
+          if (sub) html += '<span class="ec-tier-row-sub">' + escapeHtml(sub) + '</span>';
+          if (conf) html += '<span class="aspect-priority rg-conf-' + conf + '">' + it.confidence + '</span>';
+          html += '</li>';
+        }
+        html += '  </ul>';
+        html += '</div>';
+      }
+      html += '</div>';
+      return html;
+    },
+
+    /* Filterable searchable grid. Used for acquisition lookup, codex. */
+    renderLookupGrid(items, filters, opts) {
+      opts = opts || {};
+      const id = opts.id || 'ec-lookup';
+      const labelKey = opts.labelKey || 'name';
+      const subKey = opts.subKey || 'sources';
+      let html = '<div class="ec-lookup" id="' + escapeHtml(id) + '">';
+      html += '  <div class="ec-lookup-controls">';
+      html += '    <input type="search" class="ec-lookup-search" placeholder="Search ' + escapeHtml(opts.searchPlaceholder || 'items') + '..." data-' + escapeHtml(id) + '-search />';
+      if (filters && filters.length) {
+        for (const f of filters) {
+          html += '<select class="ec-lookup-filter" data-' + escapeHtml(id) + '-filter="' + escapeHtml(f.key) + '">';
+          html += '<option value="">' + escapeHtml(f.label || 'All') + '</option>';
+          for (const opt of (f.options || [])) {
+            html += '<option value="' + escapeHtml(opt) + '">' + escapeHtml(opt) + '</option>';
+          }
+          html += '</select>';
+        }
+      }
+      html += '  </div>';
+      html += '  <div class="ec-lookup-grid">';
+      for (const it of (items || [])) {
+        const label = it[labelKey] || '';
+        const sub = it[subKey];
+        const subText = Array.isArray(sub) ? sub.join(', ') : (sub || '');
+        html += '<div class="ec-lookup-cell" data-label="' + escapeHtml(String(label).toLowerCase()) + '">';
+        html += '  <div class="ec-lookup-name">' + escapeHtml(label) + '</div>';
+        if (subText) html += '<div class="ec-lookup-sub">' + escapeHtml(subText) + '</div>';
+        html += '</div>';
+      }
+      html += '  </div>';
+      html += '</div>';
+      return html;
+    },
+  };
 
   // ========================================
   // MODAL
@@ -626,6 +823,7 @@
       Paragon.render();
       Uniques.render();
       Bosses.render();
+      EndgameGear.render();
       Endbuild.render();
       Talismans.render();
       RunesGems.render();
@@ -2807,6 +3005,96 @@
           GearCompare.render();
         }
       });
+    },
+  };
+
+  // ========================================
+  // ENDGAME GEAR RENDERER (Sprint 5)
+  // Renders the 10 slot gear targets in the new Maxroll inspired
+  // visual style. Uses Templates.renderComparisonPair.
+  // ========================================
+  const EndgameGear = {
+    render() {
+      const root = document.getElementById('endgameGearRoot');
+      if (!root) return;
+      const eg = window.D4_ENDGAME;
+      if (!eg || !eg.gear) {
+        root.innerHTML = '<div class="placeholder-card"><i class="fa-solid fa-scale-balanced placeholder-icon"></i><div class="placeholder-title">No endgame data</div><div class="placeholder-text">endgamedata.js may have failed to load. Check the console.</div></div>';
+        return;
+      }
+
+      const slotOrder = ['mainHand', 'offhand', 'helm', 'chest', 'gloves', 'pants', 'boots', 'amulet', 'ring1', 'ring2'];
+      const sectionMap = {
+        weapons: ['mainHand', 'offhand'],
+        armor: ['helm', 'chest', 'gloves', 'pants', 'boots'],
+        jewelry: ['amulet', 'ring1', 'ring2'],
+      };
+      const sectionEmoji = (eg.sections || {});
+
+      let html = '';
+      html += '<section class="ec-hero">';
+      html += '  <div class="ec-hero-band">Sprint 5 Mockup</div>';
+      html += '  <h2 class="ec-hero-title">Endgame Gear Targets</h2>';
+      html += '  <p class="ec-hero-sub">10 slot reference for the Dread Claws Mastermind build. Primary plus backup per slot. Tap a backup row to expand. Tap "More detail" inside any card for full notes and aspect alternatives.</p>';
+      html += '  <div class="ec-hero-meta">Patch ' + escapeHtml(eg.patch || '') + ' · Reconciled ' + escapeHtml(eg.compiledAt || '') + '</div>';
+      html += '</section>';
+
+      for (const sec of ['weapons', 'armor', 'jewelry']) {
+        const keys = sectionMap[sec];
+        const meta = sectionEmoji[sec] || {};
+        html += '<section class="ec-section ec-section-' + sec + '">';
+        html += '  <header class="ec-section-head">';
+        html += '    <span class="ec-section-emoji" aria-hidden="true">' + (meta.emoji || '') + '</span>';
+        html += '    <h2 class="ec-section-title">' + escapeHtml(meta.label || sec) + '</h2>';
+        html += '  </header>';
+        html += '  <div class="ec-grid">';
+        for (const k of keys) {
+          const slot = eg.gear[k];
+          if (!slot) continue;
+          html += Templates.renderComparisonPair(slot.primary, slot.backup, {
+            slotLabel: slot.slot,
+            iconClass: slot.iconClass || 'fa-cube',
+            section: sec,
+          });
+        }
+        html += '  </div>';
+        html += '</section>';
+      }
+
+      // Stat caps reference card (folds in System addition 1)
+      if (eg.statCaps && eg.statCaps.length) {
+        html += '<section class="ec-section ec-section-stats">';
+        html += '  <header class="ec-section-head">';
+        html += '    <span class="ec-section-emoji" aria-hidden="true">\u{1F4CA}</span>';
+        html += '    <h2 class="ec-section-title">Stat Caps and Breakpoints</h2>';
+        html += '  </header>';
+        html += '  <ul class="ec-stat-cap-list">';
+        for (const s of eg.statCaps) {
+          const conf = (s.confidence || 'MEDIUM').toLowerCase();
+          html += '<li class="ec-stat-cap-row">';
+          html += '  <span class="ec-stat-cap-rank">' + escapeHtml(String(s.rank)) + '</span>';
+          html += '  <div class="ec-stat-cap-body">';
+          html += '    <div class="ec-stat-cap-name">' + escapeHtml(s.stat) + '</div>';
+          html += '    <div class="ec-stat-cap-target">Target ' + escapeHtml(s.target) + '</div>';
+          if (s.maxRoll) html += '<div class="ec-stat-cap-max">' + escapeHtml(s.maxRoll) + '</div>';
+          html += '  </div>';
+          html += '  <span class="aspect-priority rg-conf-' + conf + '">' + (s.confidence || 'MEDIUM') + '</span>';
+          html += '</li>';
+        }
+        html += '  </ul>';
+        html += '</section>';
+      }
+
+      // Bottom band that points at Sprint 6 follow up
+      html += '<aside class="ec-followup">';
+      html += '  <i class="fa-solid fa-arrow-down-long" aria-hidden="true"></i>';
+      html += '  <div>';
+      html += '    <strong>The sections below this card will be rebuilt in this style in Sprint 6.</strong>';
+      html += '    <div class="ec-followup-sub">Existing renderers (Endgame Bar, Soul Shards, Paragon, War Plans, Mercenary) remain functional for now.</div>';
+      html += '  </div>';
+      html += '</aside>';
+
+      root.innerHTML = html;
     },
   };
 

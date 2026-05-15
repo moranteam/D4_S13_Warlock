@@ -3175,3 +3175,263 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 .gc-history-ts { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); margin-left: auto; flex-shrink: 0; }
 .gc-history-del { background: transparent; border: 0; color: var(--text-dim); padding: 0 12px; cursor: pointer; min-width: 40px; transition: color 0.15s, background 0.15s; }
 .gc-history-del:hover { color: #f85149; background: rgba(196, 30, 58, 0.08); }
+
+/* ============================================================
+   ENDGAME OVERHAUL TEMPLATES (Sprint 5)
+   Maxroll inspired gear grid plus shared render templates.
+   ============================================================ */
+
+/* Root container */
+.endgame-gear-root { display: flex; flex-direction: column; gap: 18px; margin-bottom: 18px; }
+
+/* Hero banner at the top */
+.ec-hero {
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-darker) 100%);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ec-hero-band {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  background: var(--accent-light);
+  display: inline-block;
+  align-self: flex-start;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+}
+.ec-hero-title { margin: 4px 0 0; font-family: var(--font-title); font-size: 1.6rem; color: var(--text); letter-spacing: 0.02em; }
+.ec-hero-sub { margin: 0; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5; max-width: 720px; }
+.ec-hero-meta { font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-dim); margin-top: 6px; }
+
+/* Section blocks with emoji headers */
+.ec-section { display: flex; flex-direction: column; gap: 12px; }
+.ec-section-head { display: flex; align-items: center; gap: 12px; padding: 4px 0; border-bottom: 2px solid var(--border); }
+.ec-section-emoji { font-size: 1.6rem; line-height: 1; }
+.ec-section-title { margin: 0; font-family: var(--font-title); font-size: 1.2rem; color: var(--text); letter-spacing: 0.04em; }
+
+/* Section accent colors (one per system) */
+.ec-section-weapons .ec-section-head { border-bottom-color: #c41e3a; }
+.ec-section-armor .ec-section-head { border-bottom-color: #2ea043; }
+.ec-section-jewelry .ec-section-head { border-bottom-color: #d29922; }
+.ec-section-stats .ec-section-head { border-bottom-color: #58a6ff; }
+
+/* Slot grid (1 col mobile, 2 col desktop for weapons and jewelry, 1 col for armor) */
+.ec-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+
+/* Comparison pair */
+.ec-pair { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.ec-pair-head { font-family: var(--font-title); font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); display: flex; align-items: center; gap: 8px; padding-bottom: 8px; border-bottom: 1px dashed var(--border); }
+.ec-pair-head i { color: var(--accent); }
+.ec-pair-body { display: flex; flex-direction: column; gap: 10px; }
+.ec-pair-col { display: flex; flex-direction: column; gap: 0; }
+.ec-pair-flag {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+.ec-pair-flag-primary { background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent); border-bottom: 0; }
+.ec-pair-flag-backup { background: var(--bg-darker); color: var(--text-secondary); border: 1px solid var(--border); border-bottom: 0; cursor: pointer; min-height: 36px; }
+.ec-pair-flag-backup:hover { background: var(--bg-card); }
+.ec-pair-backup[open] .ec-pair-flag-backup { border-bottom: 1px dashed var(--border); border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+.ec-pair-backup .ec-item-alt { border-top-left-radius: 0; border-top-right-radius: 0; }
+
+/* Item card (renderItemCard output) */
+.ec-item {
+  background: var(--bg-darker);
+  border: 1px solid var(--accent);
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 12px 14px;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 12px;
+  align-items: flex-start;
+}
+.ec-pair-flag-primary + .ec-item { border-radius: 0 var(--radius) var(--radius) var(--radius); }
+.ec-item-alt { border-color: var(--border); }
+.ec-item-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--accent);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+.ec-item-alt .ec-item-icon { color: var(--text-secondary); }
+.ec-item-body { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.ec-item-head { display: flex; flex-direction: column; gap: 4px; }
+.ec-item-slot { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.04em; }
+.ec-item-name { margin: 0; font-size: 1.02rem; font-weight: 700; color: var(--text); line-height: 1.25; word-break: break-word; }
+.ec-item-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.ec-tag { font-family: var(--font-mono); font-size: 0.7rem; padding: 1px 8px; border-radius: 4px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); }
+.ec-tag-type { color: #79b8ff; border-color: rgba(88, 166, 255, 0.4); }
+.ec-tag-tier { color: var(--accent); border-color: var(--accent); }
+
+/* Affix list (numbered, Maxroll style) */
+.ec-affixes { display: flex; flex-direction: column; gap: 4px; }
+.ec-mini-label { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; color: var(--text-dim); letter-spacing: 0.06em; }
+.ec-affix-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.ec-affix { display: flex; align-items: center; gap: 8px; padding: 4px 8px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.86rem; }
+.ec-affix.is-must { border-left: 3px solid var(--accent); }
+.ec-affix.is-build-defining { border-left: 3px solid #ffb800; background: rgba(255, 184, 0, 0.06); }
+.ec-affix-n {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.74rem;
+}
+.ec-affix.is-build-defining .ec-affix-n { color: #ffb800; background: rgba(255, 184, 0, 0.12); border-color: #ffb800; }
+.ec-affix-stat { color: var(--text); flex: 1; min-width: 0; }
+.ec-affix-flag { font-family: var(--font-mono); font-size: 0.66rem; padding: 1px 6px; border-radius: 3px; font-weight: 700; }
+.ec-flag-must { background: var(--accent); color: #fff; }
+.ec-flag-defining { background: #ffb800; color: #1a1a1a; }
+
+/* Chips row (aspect, source, temper, masterwork, socket) */
+.ec-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ec-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ec-chip-label { font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; color: var(--text-dim); letter-spacing: 0.04em; }
+.ec-chip-aspect { border-left: 2px solid #ffb800; }
+.ec-chip-source { border-left: 2px solid #79b8ff; }
+.ec-chip-temper { border-left: 2px solid #2ea043; }
+.ec-chip-mw { border-left: 2px solid #d29922; }
+.ec-chip-socket { border-left: 2px solid #f85149; }
+
+/* Click to expand deep dive */
+.ec-deep { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; }
+.ec-deep summary { cursor: pointer; font-size: 0.78rem; color: var(--text-secondary); font-weight: 600; padding: 4px 0; }
+.ec-deep[open] summary { color: var(--accent); border-bottom: 1px dashed var(--border); margin-bottom: 8px; padding-bottom: 6px; }
+.ec-notes { margin: 0; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+.ec-alt-aspects { margin-top: 8px; font-size: 0.82rem; color: var(--text-secondary); }
+.ec-alt-aspects ul { margin: 4px 0 0; padding-left: 18px; }
+
+/* Stat cap reference */
+.ec-stat-cap-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.ec-stat-cap-row { display: flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; }
+.ec-stat-cap-rank {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ec-stat-cap-body { flex: 1; min-width: 0; }
+.ec-stat-cap-name { font-weight: 600; font-size: 0.92rem; color: var(--text); }
+.ec-stat-cap-target { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); }
+.ec-stat-cap-max { font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-dim); }
+
+/* Follow up band */
+.ec-followup {
+  background: var(--bg-darker);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+}
+.ec-followup i { color: var(--accent); font-size: 1.4rem; }
+.ec-followup strong { color: var(--text); display: block; margin-bottom: 4px; }
+.ec-followup-sub { font-size: 0.78rem; color: var(--text-dim); }
+
+/* Step list template (used in Sprint 6 and 7) */
+.ec-step-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.ec-step { display: flex; gap: 10px; padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.ec-step-n { font-family: var(--font-mono); font-weight: 700; color: var(--accent); background: var(--accent-light); border: 1px solid var(--accent); border-radius: 999px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.82rem; }
+.ec-step-body { flex: 1; min-width: 0; }
+.ec-step-label { font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-dim); text-transform: uppercase; }
+.ec-step-text { font-size: 0.9rem; color: var(--text); }
+.ec-step-sub { font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px; }
+.ec-step-conf { margin-top: 4px; align-self: flex-start; }
+
+/* Tier list template (used in Sprint 6 and 7) */
+.ec-tier-list { display: flex; flex-direction: column; gap: 10px; }
+.ec-tier-group { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; }
+.ec-tier-head { display: flex; align-items: center; gap: 8px; padding-bottom: 6px; border-bottom: 1px dashed var(--border); margin-bottom: 6px; }
+.ec-tier-badge { font-family: var(--font-title); font-weight: 700; font-size: 1rem; padding: 2px 12px; border-radius: var(--radius-sm); background: var(--accent-light); color: var(--accent); border: 1px solid var(--accent); }
+.ec-tier-s, .ec-tier-splus { }
+.ec-tier-splus .ec-tier-badge { background: rgba(255, 184, 0, 0.16); color: #ffb800; border-color: #ffb800; }
+.ec-tier-s .ec-tier-badge { background: rgba(46, 160, 67, 0.16); color: #2ea043; border-color: #2ea043; }
+.ec-tier-a .ec-tier-badge { background: rgba(210, 153, 34, 0.14); color: #d29922; border-color: #d29922; }
+.ec-tier-b .ec-tier-badge { background: var(--bg-darker); color: var(--text-secondary); border-color: var(--border); }
+.ec-tier-rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.ec-tier-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: var(--bg-darker); border-radius: var(--radius-sm); font-size: 0.86rem; flex-wrap: wrap; }
+.ec-tier-row-name { font-weight: 600; color: var(--text); }
+.ec-tier-row-sub { color: var(--text-secondary); font-size: 0.78rem; flex: 1; min-width: 100px; }
+
+/* Lookup grid template (used in Sprint 8) */
+.ec-lookup { display: flex; flex-direction: column; gap: 10px; }
+.ec-lookup-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+.ec-lookup-search, .ec-lookup-filter { min-height: 40px; padding: 6px 10px; background: var(--bg-darker); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 0.86rem; }
+.ec-lookup-search { flex: 1; min-width: 200px; }
+.ec-lookup-grid { display: grid; grid-template-columns: 1fr; gap: 6px; }
+.ec-lookup-cell { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; }
+.ec-lookup-cell.is-hidden { display: none; }
+.ec-lookup-name { font-weight: 600; color: var(--text); font-size: 0.9rem; }
+.ec-lookup-sub { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; }
+
+/* Desktop layouts */
+@media (min-width: 768px) {
+  .ec-section-weapons .ec-grid,
+  .ec-section-jewelry .ec-grid { grid-template-columns: repeat(2, 1fr); }
+  .ec-pair-body { flex-direction: row; align-items: stretch; gap: 12px; }
+  .ec-pair-col { flex: 1; }
+  .ec-pair-primary { flex: 1.1; }
+  .ec-pair-backup { flex: 0.9; }
+  .ec-pair-backup[open] { flex: 1.1; }
+  .ec-lookup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .ec-section-weapons .ec-grid { grid-template-columns: repeat(2, 1fr); }
+  .ec-section-armor .ec-grid { grid-template-columns: repeat(2, 1fr); }
+  .ec-section-jewelry .ec-grid { grid-template-columns: repeat(3, 1fr); }
+  .ec-lookup-grid { grid-template-columns: repeat(3, 1fr); }
+}
