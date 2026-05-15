@@ -505,8 +505,18 @@
       html += '      </div>';
       html += '    </header>';
 
+      // Source chip stays at the top, it answers "where do I get this"
+      if (item.source && item.source.name) {
+        html += '    <div class="ec-chips">';
+        html += '<div class="ec-chip ec-chip-source"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ' + escapeHtml(item.source.name) + (item.source.type ? ' (' + escapeHtml(item.source.type) + ')' : '') + '</div>';
+        html += '    </div>';
+      }
+
+      // Consolidated, always visible sub-sections per slot
       if (item.affixes && item.affixes.length) {
-        html += '    <ol class="ec-affix-list">';
+        html += '    <div class="ec-block">';
+        html += '      <div class="ec-block-label">Stat Priority</div>';
+        html += '      <ol class="ec-affix-list">';
         for (const a of item.affixes) {
           if (!a || !a.stat) continue;
           const mustClass = a.mustHave ? ' is-must' : '';
@@ -518,30 +528,49 @@
           else if (a.mustHave) html += '<span class="ec-affix-flag ec-flag-must">MUST</span>';
           html += '</li>';
         }
-        html += '    </ol>';
+        html += '      </ol>';
+        html += '    </div>';
       }
 
-      html += '    <div class="ec-chips">';
-      if (item.aspect) html += '<div class="ec-chip ec-chip-aspect">' + slotSvg('gem', 'ec-chip-svg') + ' ' + escapeHtml(item.aspect) + '</div>';
-      if (item.source && item.source.name) html += '<div class="ec-chip ec-chip-source"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ' + escapeHtml(item.source.name) + '</div>';
-      if (typeof item.sockets === 'number' && item.sockets > 0) html += '<div class="ec-chip ec-chip-socket">' + slotSvg('rune', 'ec-chip-svg') + ' ' + item.sockets + ' socket' + (item.sockets === 1 ? '' : 's') + '</div>';
+      // Aspect (primary plus backups)
+      html += '    <div class="ec-block ec-block-aspect">';
+      html += '      <div class="ec-block-label">Aspect</div>';
+      if (item.aspect) {
+        html += '      <div class="ec-bk-best"><span class="ec-bk-tag">Best</span> ' + escapeHtml(item.aspect) + '</div>';
+        if (item.aspectAlternatives && item.aspectAlternatives.length) {
+          html += '      <div class="ec-bk-alt"><span class="ec-bk-tag ec-bk-tag-alt">Backups</span> ' + item.aspectAlternatives.map((a) => escapeHtml(a)).join(', ') + '</div>';
+        }
+      } else {
+        html += '      <div class="ec-bk-na">Unique power, no aspect to imprint</div>';
+      }
       html += '    </div>';
 
-      if (item.tempering || item.masterworkPrimary || item.notes || (item.aspectAlternatives && item.aspectAlternatives.length) || (item.socketContents && item.sockets > 0)) {
-        html += '    <details class="ec-deep">';
-        html += '      <summary>More detail</summary>';
-        html += '      <div class="ec-deep-grid">';
-        if (item.tempering) html += '<div class="ec-deep-kv"><span>Temper</span><strong>' + escapeHtml(item.tempering) + '</strong></div>';
-        if (item.masterworkPrimary) html += '<div class="ec-deep-kv"><span>Masterwork</span><strong>' + escapeHtml(item.masterworkPrimary) + '</strong></div>';
-        if (item.socketContents && item.sockets > 0) html += '<div class="ec-deep-kv"><span>Sockets</span><strong>' + escapeHtml(item.socketContents) + '</strong></div>';
-        html += '      </div>';
-        if (item.notes) html += '<p class="ec-notes">' + escapeHtml(item.notes) + '</p>';
-        if (item.aspectAlternatives && item.aspectAlternatives.length) {
-          html += '<div class="ec-alt-aspects"><span class="ec-mini-label">Aspect alternatives</span><ul>';
-          for (const a of item.aspectAlternatives) html += '<li>' + escapeHtml(a) + '</li>';
-          html += '</ul></div>';
+      // Tempering plus Masterwork side by side
+      html += '    <div class="ec-block-row">';
+      if (item.tempering) {
+        html += '<div class="ec-block ec-block-temper"><div class="ec-block-label">Tempering</div><div class="ec-block-val">' + escapeHtml(item.tempering) + '</div></div>';
+      }
+      if (item.masterworkPrimary) {
+        html += '<div class="ec-block ec-block-mw"><div class="ec-block-label">Masterwork crit</div><div class="ec-block-val">' + escapeHtml(item.masterworkPrimary) + '</div></div>';
+      }
+      html += '    </div>';
+
+      // Sockets (best plus backup gem or runeword)
+      html += '    <div class="ec-block ec-block-socket">';
+      html += '      <div class="ec-block-label">Sockets ' + (typeof item.sockets === 'number' ? '(' + item.sockets + ')' : '') + '</div>';
+      if (typeof item.sockets === 'number' && item.sockets > 0) {
+        const best = item.socketContents || (opts.socketBest || 'See runes and gems reference');
+        html += '      <div class="ec-bk-best"><span class="ec-bk-tag">Best</span> ' + escapeHtml(best) + '</div>';
+        if (opts.socketBackup) {
+          html += '      <div class="ec-bk-alt"><span class="ec-bk-tag ec-bk-tag-alt">Backup</span> ' + escapeHtml(opts.socketBackup) + '</div>';
         }
-        html += '    </details>';
+      } else {
+        html += '      <div class="ec-bk-na">No sockets on this slot in D4</div>';
+      }
+      html += '    </div>';
+
+      if (item.notes) {
+        html += '    <details class="ec-deep"><summary>Why this</summary><p class="ec-notes">' + escapeHtml(item.notes) + '</p></details>';
       }
 
       html += '  </div>';
@@ -635,17 +664,18 @@
       opts = opts || {};
       const slotLabel = opts.slotLabel || '';
       const svgName = opts.svgName || 'gem';
+      const socketBackup = opts.socketBackup || '';
       let html = '';
       html += '<section class="ec-pair" data-section="' + escapeHtml(opts.section || '') + '">';
       if (slotLabel) html += '  <header class="ec-pair-head">' + slotSvg(svgName, 'ec-pair-svg') + ' ' + escapeHtml(slotLabel) + '</header>';
       html += '  <div class="ec-pair-body">';
       html += '    <div class="ec-pair-col ec-pair-primary">';
       html += '      <div class="ec-pair-flag ec-pair-flag-primary"><i class="fa-solid fa-star" aria-hidden="true"></i> Primary</div>';
-      html += Templates.renderItemCard(primary, { svgName, slotLabel: '' });
+      html += Templates.renderItemCard(primary, { svgName, slotLabel: '', socketBackup });
       html += '    </div>';
       html += '    <details class="ec-pair-col ec-pair-backup">';
       html += '      <summary class="ec-pair-flag ec-pair-flag-backup"><i class="fa-solid fa-shuffle" aria-hidden="true"></i> Backup option</summary>';
-      html += Templates.renderItemCard(backup, { svgName, slotLabel: '', isAlt: true });
+      html += Templates.renderItemCard(backup, { svgName, slotLabel: '', isAlt: true, socketBackup });
       html += '    </details>';
       html += '  </div>';
       html += '</section>';
@@ -3610,6 +3640,27 @@
       helm: 'helm', chest: 'chest', gloves: 'gloves', pants: 'pants', boots: 'boots',
       amulet: 'amulet', ring1: 'ring', ring2: 'ring', mainHand: 'dagger', offhand: 'focus',
     },
+    // endgame gear key -> runesgems.js gemsPerSlot row label, for the backup gem
+    gemSlotMap: {
+      mainHand: '1H Dagger (Litany of Sable)', offhand: 'Focus (offhand)',
+      helm: 'Helm', chest: 'Chest', gloves: 'Gloves', pants: 'Pants', boots: 'Boots',
+      amulet: 'Amulet', ring1: 'Ring 1 (Lurid Pact slot)', ring2: 'Ring 2 (Demonic Aspect or Starless Skies slot)',
+    },
+
+    socketBackupFor(gearKey) {
+      const rg = window.D4_RUNES_GEMS;
+      const label = this.gemSlotMap[gearKey];
+      if (!rg || !rg.gemsPerSlot || !label) return '';
+      for (const grp of rg.gemsPerSlot) {
+        for (const row of (grp.rows || [])) {
+          if (row.slot === label) {
+            if (!row.alternative || /^n\/a$/i.test(row.alternative)) return '';
+            return row.alternative;
+          }
+        }
+      }
+      return '';
+    },
 
     render() {
       const root = document.getElementById('endgameGearRoot');
@@ -3667,6 +3718,7 @@
             slotLabel: slot.slot,
             svgName: slot.svgName,
             section: sec,
+            socketBackup: this.socketBackupFor(k),
           });
           html += '</div>';
         }

@@ -3876,3 +3876,26 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
   .hc-recipes { grid-template-columns: repeat(2, 1fr); }
   .hc-prisms { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ============================================================
+   CONSOLIDATED PER-SLOT CARD BLOCKS
+   Stat priority, aspect, tempering, masterwork, sockets all
+   always visible per slot.
+   ============================================================ */
+.ec-block { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.ec-block-label { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); }
+.ec-block-val { font-size: 0.88rem; color: var(--text); font-weight: 600; }
+.ec-block-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.ec-block-aspect { border-left: 3px solid #ffb800; }
+.ec-block-temper { border-left: 3px solid #2ea043; }
+.ec-block-mw { border-left: 3px solid #d29922; }
+.ec-block-socket { border-left: 3px solid var(--accent); }
+.ec-bk-best { font-size: 0.86rem; color: var(--text); }
+.ec-bk-alt { font-size: 0.82rem; color: var(--text-secondary); }
+.ec-bk-na { font-size: 0.82rem; color: var(--text-dim); font-style: italic; }
+.ec-bk-tag { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; padding: 1px 7px; border-radius: 3px; margin-right: 6px; background: #2ea043; color: #0f1117; }
+.ec-bk-tag-alt { background: var(--bg-darker); color: var(--text-dim); border: 1px solid var(--border); }
+.ec-item-body { gap: 10px; }
+@media (min-width: 600px) {
+  .ec-block-row { grid-template-columns: 1fr 1fr; }
+}
