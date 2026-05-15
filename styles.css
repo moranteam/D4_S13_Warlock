@@ -1055,6 +1055,39 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
   font-family: var(--font-mono);
 }
 
+.wt-catchup {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wt-catchup-btn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.wt-catchup-btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.wt-catchup-meta {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
 .wt-phase {
   background: var(--bg-card);
   border: 1px solid var(--border);

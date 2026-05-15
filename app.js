@@ -829,6 +829,17 @@
       }, 0);
       const globalPct = totalSteps > 0 ? Math.round((doneSteps / totalSteps) * 100) : 0;
 
+      const pastPhases = phases.filter((p) => p.levelMax < c.level);
+      const pastStepCount = pastPhases.reduce((n, p) => n + p.steps.length, 0);
+      const pastStepsAlreadyDone = pastPhases.reduce((n, p) => {
+        return n + p.steps.filter((s) => wt[p.id + ':' + s.id]).length;
+      }, 0);
+      const catchUpRemaining = pastStepCount - pastStepsAlreadyDone;
+      const pastRespecsToAck = phases.filter((p) => {
+        return p.respec && p.respec.trigger && p.respec.level <= c.level && !respec['lv' + p.respec.level];
+      });
+      const catchUpDisabled = catchUpRemaining === 0 && pastRespecsToAck.length === 0;
+
       let html = '';
       html += '<div class="wt-summary">';
       html += '  <div class="wt-summary-row">';
@@ -837,6 +848,26 @@
       html += '  </div>';
       html += '  <div class="wt-summary-bar"><div class="wt-summary-fill" style="width:' + globalPct + '%"></div></div>';
       html += '  <div class="wt-summary-meta">' + doneSteps + ' of ' + totalSteps + ' steps complete, character Level ' + c.level + '</div>';
+      html += '</div>';
+
+      html += '<div class="wt-catchup">';
+      html += '  <button class="btn btn-primary wt-catchup-btn" type="button" data-catchup="1"' + (catchUpDisabled ? ' disabled' : '') + '>';
+      html += '    <i class="fa-solid fa-forward" aria-hidden="true"></i> ';
+      if (catchUpDisabled) {
+        html += 'Past phases already caught up';
+      } else if (pastPhases.length === 0) {
+        html += 'Nothing to catch up yet';
+      } else {
+        html += 'Catch Up: mark ' + catchUpRemaining + ' past step' + (catchUpRemaining === 1 ? '' : 's') + ' complete';
+      }
+      html += '  </button>';
+      html += '  <div class="wt-catchup-meta">';
+      if (pastPhases.length === 0) {
+        html += 'You are in the first phase. No prior phases to mark complete.';
+      } else {
+        html += 'Bulk checks every step in ' + pastPhases.length + ' phase' + (pastPhases.length === 1 ? '' : 's') + ' below Lv ' + c.level + '. Auto-acknowledges any respec at or below your current level. The current phase stays manual.';
+      }
+      html += '  </div>';
       html += '</div>';
 
       for (const p of phases) {
@@ -957,7 +988,70 @@
           Walkthrough.togglePhaseComplete(phaseId);
           return;
         }
+        const catchUpBtn = e.target.closest && e.target.closest('[data-catchup]');
+        if (catchUpBtn && !catchUpBtn.disabled) {
+          Walkthrough.catchUp();
+          return;
+        }
       });
+    },
+
+    catchUp() {
+      const phases = (window.D4_DATA && window.D4_DATA.walkthrough) || [];
+      if (!phases.length) return;
+      const currentLevel = AppState.data.character.level;
+      const wt = AppState.data.walkthrough;
+      const pc = AppState.data.phaseComplete;
+      const snap = AppState.data.phaseToggleSnapshot;
+      const respec = AppState.data.skills.respec;
+
+      let stepsChecked = 0;
+      let phasesClosed = 0;
+      let respecsAcked = 0;
+
+      for (const p of phases) {
+        if (p.levelMax >= currentLevel) continue;
+        const snapshot = snap[p.id] || {};
+        for (const s of p.steps) {
+          const key = p.id + ':' + s.id;
+          if (!wt[key]) {
+            wt[key] = true;
+            stepsChecked++;
+          }
+          if (!(s.id in snapshot)) snapshot[s.id] = false;
+        }
+        if (!pc[p.id]) {
+          pc[p.id] = true;
+          phasesClosed++;
+        }
+        snap[p.id] = snapshot;
+      }
+
+      for (const p of phases) {
+        if (!p.respec || !p.respec.trigger) continue;
+        if (p.respec.level > currentLevel) continue;
+        const k = 'lv' + p.respec.level;
+        if (!respec[k]) {
+          respec[k] = true;
+          respecsAcked++;
+        }
+      }
+
+      AppState.save('walkthrough');
+      AppState.save('phaseComplete');
+      AppState.save('phaseToggleSnapshot');
+      AppState.save('skills');
+
+      const parts = [];
+      if (stepsChecked) parts.push(stepsChecked + ' step' + (stepsChecked === 1 ? '' : 's'));
+      if (phasesClosed) parts.push(phasesClosed + ' phase' + (phasesClosed === 1 ? '' : 's'));
+      if (respecsAcked) parts.push(respecsAcked + ' respec' + (respecsAcked === 1 ? '' : 's'));
+      const msg = parts.length ? 'Caught up: ' + parts.join(', ') : 'Already caught up';
+
+      Toast.show(msg, 'success');
+      Walkthrough.render();
+      Dashboard.render();
+      Nav.updateBadges();
     },
 
     togglePhaseComplete(phaseId) {
