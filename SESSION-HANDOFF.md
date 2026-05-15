@@ -1,48 +1,57 @@
 # D4 Warlock God Run, Session Handoff
 
 Last updated: 2026-05-14
-Current sprint: Sprint 3 Part C queued, Sprint 4 through 8 planned and approved
+Current sprint: Sprint 5 shipped, awaiting design review before Sprint 6
 Build target: Dread Claws Mastermind Warlock, Season 13 Lord of Hatred
 Character state: Level 54, Faith and Failings quest, Hard difficulty
 
 ## Next session start here
 
-The Endgame Overhaul plan is approved. Full plan lives at
-`docs/ENDGAME-OVERHAUL-PLAN.md`. 26 systems in scope (17 original plus 9 approved
-additions) across 5 net new sprints (4 through 8).
+Sprint 5 is the design gate. Open the live app at
+https://moranteam.github.io/D4_S13_Warlock/ and tap Endgame Build in the nav. The new
+Gear Targets section renders at the top with 10 slot comparison pair cards in the new
+Maxroll inspired style. The existing endgame content (skill bar aggregator, soul
+shards, paragon view, war plans, mercenary) still renders below for reference until
+Sprint 6 replaces it.
 
-Sprint 3 Part C ships first per the approved plan. Save this drop history feature
-bolts into the Gear Compare tool: per slot log of past evaluated drops with timestamps,
-score, and verdict. Reuses `d4_warlock_gearcompare_v1` localStorage with a new
-`history` sub key.
+Three things to check on Sprint 5 visuals:
 
-After Part C lands, Sprint 4 opens with a 6 way parallel `WebFetch` against the
-reference URLs into `data-sources/endgame/raw/`. Then 4 reconciliation sub agents run
-in parallel (Gear and Stats, Build Layer, Companions, Progression). Output is a set
-of reconciled markdown files plus `endgamedata.js`. No UI changes in Sprint 4.
+1. **Density**: is the affix list readable, are the chips not too cramped?
+2. **Mobile**: does the comparison pair accordion collapse cleanly on a phone
+   (375 px), no horizontal scroll, no overlapping cards?
+3. **Visual hierarchy**: are the section emoji headers, slot titles, and tier badges
+   doing the right work, or is anything wrong?
+
+After review, reply with one of:
+- `ship 6 7 8` to bulldoze the rest of the endgame overhaul in another marathon
+- `revise sprint 5 [feedback]` to redo the visual before Sprint 6 starts
+- `revise then proceed` for any tweaks plus then ship Sprints 6 through 8
 
 ## Active sprint
 
-**Sprint 3 Part C: Save this drop history** (queued next)
+None active. Sprint 5 closed and shipped. Waiting on design review for Sprint 6 gate.
 
-Goal: Add a per slot history log to Gear Compare. Every time the live verdict
-recomputes, optionally pin the current entry to a history list with timestamp, item
-nickname (free text), verdict tier, score, and the selected affixes. List renders
-below the verdict card, scrollable, each row tappable to reload that drop's state
-into the form. Clear history button per slot.
+## Shipped tonight
 
-Storage: extend `AppState.data.gearCompare.slots[slot]` with `history: []`. Reuse the
-existing `d4_warlock_gearcompare_v1` key, no new persistence layer.
+### Sprint 3 Part C: Save this drop history (shipped 2026-05-14)
+Commit `627560d`. Per slot history log in Gear Compare. Save current entry with
+optional nickname, tap any saved row to reload state, per entry delete, per slot
+clear. Reuses existing localStorage key.
 
-## Approved sprint queue (post Part C)
+### Sprint 4: Endgame data layer (shipped 2026-05-14)
+Commit `a0a807c`. 6 way parallel fetch, 4 succeeded, 2 failed (eGamersWorld and
+BoostMatch HTTP 403, tiebreakers only). 4 reconciled MD files plus
+`RECONCILIATION-V2.md` plus `endgamedata.js` (43 KB, well under split threshold).
+Covers all 17 original systems plus 9 approved additions.
 
-- **Sprint 4**: Endgame data layer. Parallel fetch plus reconciliation sub agents.
-  Output: `endgamedata.js`, `data-sources/endgame/raw/*.md`,
-  `data-sources/endgame/reconciled/*.md`, `RECONCILIATION-V2.md`.
-- **Sprint 5**: Visual mockup, Gear Targets section only. Builds 5 render template
-  helpers (`renderItemCard`, `renderComparisonPair`, `renderStepList`,
-  `renderTierList`, `renderLookupGrid`). Charlie reviews before Sprint 6 starts.
-- **Sprint 6**: Full UI rebuild for Layers 1 and 2 using the locked templates. Covers
+### Sprint 5: Visual mockup, Gear Targets (shipped 2026-05-14)
+Commit `d86f087`. 5 render template helpers (renderItemCard, renderComparisonPair,
+renderStepList, renderTierList, renderLookupGrid). Gear Targets section rendered with
+the new style in the Endgame Build view above existing content.
+
+## Approved sprint queue (gated on Sprint 5 review)
+
+- **Sprint 6**: Full UI rebuild for Layers 1 and 2 using locked templates. Covers
   Runes, Talismans, Glyphs, Tempering, Masterworking, Soul Shards plus Fragment,
   Paragon step by step, Mercenaries, plus stat caps card, skill bar swap step list,
   resource management mechanics card.
@@ -208,12 +217,17 @@ D4_S13_Warlock/
 │   ├── RECONCILIATION.md
 │   ├── ai_llm_output_combined.md
 │   ├── controller-bindings.md
+│   ├── endgame/
+│   │   ├── RECONCILIATION-V2.md
+│   │   ├── raw/ (6 fetches, 4 successful)
+│   │   └── reconciled/ (gear.md, build-layer.md, mercs.md, progression.md)
 │   ├── gear-weights.md
 │   ├── leveling-skill-points.md
 │   └── runes-gems.md
 ├── data.js
 ├── docs/
 │   └── ENDGAME-OVERHAUL-PLAN.md
+├── endgamedata.js
 ├── gearweights.js
 ├── index.html
 ├── itemdata.js
