@@ -1,26 +1,58 @@
 # D4 Warlock God Run, Session Handoff
 
 Last updated: 2026-05-14
-Current sprint: None active. All planned sprints shipped.
+Current sprint: Sprint 3 Part C queued, Sprint 4 through 8 planned and approved
 Build target: Dread Claws Mastermind Warlock, Season 13 Lord of Hatred
 Character state: Level 54, Faith and Failings quest, Hard difficulty
 
 ## Next session start here
 
-The guide is feature complete for the originally planned scope. Every section listed in
-the 8 section nav renders real content, no placeholder cards remain in the UI. The next
-time you open this repo, you can either:
+The Endgame Overhaul plan is approved. Full plan lives at
+`docs/ENDGAME-OVERHAUL-PLAN.md`. 26 systems in scope (17 original plus 9 approved
+additions) across 5 net new sprints (4 through 8).
 
-1. Play through the build. Use the Walkthrough Catch Up button on the Leveling Path view
-   to bulk check every step in past phases the moment your character level changes.
-   Update level and quest progress through the Quick Update modal (slash key or FAB).
-2. Pick an enhancement from the Open items queue below if you want a new sprint.
+Sprint 3 Part C ships first per the approved plan. Save this drop history feature
+bolts into the Gear Compare tool: per slot log of past evaluated drops with timestamps,
+score, and verdict. Reuses `d4_warlock_gearcompare_v1` localStorage with a new
+`history` sub key.
 
-No master prompt drafted for a Sprint 4 yet. All open items are optional polish.
+After Part C lands, Sprint 4 opens with a 6 way parallel `WebFetch` against the
+reference URLs into `data-sources/endgame/raw/`. Then 4 reconciliation sub agents run
+in parallel (Gear and Stats, Build Layer, Companions, Progression). Output is a set
+of reconciled markdown files plus `endgamedata.js`. No UI changes in Sprint 4.
 
 ## Active sprint
 
-None. Sprint 3 closed on 2026-05-14.
+**Sprint 3 Part C: Save this drop history** (queued next)
+
+Goal: Add a per slot history log to Gear Compare. Every time the live verdict
+recomputes, optionally pin the current entry to a history list with timestamp, item
+nickname (free text), verdict tier, score, and the selected affixes. List renders
+below the verdict card, scrollable, each row tappable to reload that drop's state
+into the form. Clear history button per slot.
+
+Storage: extend `AppState.data.gearCompare.slots[slot]` with `history: []`. Reuse the
+existing `d4_warlock_gearcompare_v1` key, no new persistence layer.
+
+## Approved sprint queue (post Part C)
+
+- **Sprint 4**: Endgame data layer. Parallel fetch plus reconciliation sub agents.
+  Output: `endgamedata.js`, `data-sources/endgame/raw/*.md`,
+  `data-sources/endgame/reconciled/*.md`, `RECONCILIATION-V2.md`.
+- **Sprint 5**: Visual mockup, Gear Targets section only. Builds 5 render template
+  helpers (`renderItemCard`, `renderComparisonPair`, `renderStepList`,
+  `renderTierList`, `renderLookupGrid`). Charlie reviews before Sprint 6 starts.
+- **Sprint 6**: Full UI rebuild for Layers 1 and 2 using the locked templates. Covers
+  Runes, Talismans, Glyphs, Tempering, Masterworking, Soul Shards plus Fragment,
+  Paragon step by step, Mercenaries, plus stat caps card, skill bar swap step list,
+  resource management mechanics card.
+- **Sprint 7**: Progression and activities (Layer 3). Difficulty path, Pit tiers,
+  Lair Boss farming, War Plans, Helltide and Nightmare Dungeons, boss kill rotations,
+  tempering manual catalog.
+- **Sprint 8**: Cross reference views, What I Need Next panel, Codex of Power hooks,
+  Renown reminder, full mobile QA pass at 375 px and 414 px.
+- **Sprint 9** (deferred per existing roadmap): Codex of Power integration. Sprint 8
+  lands the hooks, Sprint 9 lights them up.
 
 ## Shipped sprints
 
@@ -110,23 +142,20 @@ adding the Sprint 1 master prompt to the repo afterward.
 
 ## Open items queue
 
-All items below are optional polish, not blocking the guide from being usable.
+Most former items are now folded into the approved Sprint 4 through 8 plan. The list
+below is what stays outside the sprint flow as small enhancement queue items.
 
-- Paragon planner enhancements. The Paragon view already has board cards, mark-built
-  toggles, glyph steppers, and stat target rows. An enhancement could add a board
-  rotation visualizer with node positions or a glyph leveling cost calculator.
-- Endgame Build visualizer beyond the current aggregator card. Could overlay the skill
-  bar, soul shard, fragment, glyph priority, and uniques in a single canvas view.
-- Codex of Power integration. No data layer exists for this yet. Would need fresh
-  research and a new reconciliation pass.
-- Aspect tracking enhancements. Currently flat in the Gear Targets view, could move to
-  a per-slot tracker with imprint history.
-- Mobile responsive QA pass. No blocking layout bugs known. Worth a tour on a phone to
-  catch any cramped sections.
-- 3 generic named aspects (Aggressive, Crushing, Demonic) were dropped in commit
-  `e8fa70e` for low confidence. Revisit once verified in game.
-- "Save this drop" history in Gear Compare. Tonight's tool persists the current entry
-  per slot but does not keep a log of past evaluations. Could add a stash log.
+- Aspect stash management. Which aspects to leave imprinted in the Codex permanently
+  vs which need a saved higher roll. Pair with the existing aspect tracker
+  enhancement.
+- Aspect tracking per slot with imprint history. Currently flat in Gear Targets,
+  could become a slot keyed tracker.
+- 3 generic named aspects (Aggressive, Crushing, Demonic) dropped in commit `e8fa70e`
+  for low confidence. Revisit once verified in game.
+- Re-fetch patch refresh mini sprint, only if Blizzard ships a balance patch mid
+  overhaul. Re runs the parallel fetch plus reconciliation pipeline.
+- PvP and Hardcore considerations explicitly skipped per build target lock. Document
+  the skip in the new reconciliation log.
 
 ## Sticky decisions
 
@@ -183,6 +212,8 @@ D4_S13_Warlock/
 │   ├── leveling-skill-points.md
 │   └── runes-gems.md
 ├── data.js
+├── docs/
+│   └── ENDGAME-OVERHAUL-PLAN.md
 ├── gearweights.js
 ├── index.html
 ├── itemdata.js

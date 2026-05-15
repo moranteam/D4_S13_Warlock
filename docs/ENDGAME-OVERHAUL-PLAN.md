@@ -1,5 +1,9 @@
 # Endgame Overhaul Plan
 
+**Status**: APPROVED on 2026-05-14. 17 original systems plus 9 additional flagged
+systems are all in scope. Sprint 3 Part C ships first per recommended path, then
+Sprint 4 opens the new track.
+
 ## Summary
 
 This plan proposes 5 net new sprints (Sprints 4 through 8) to overhaul the Endgame Build
@@ -428,39 +432,40 @@ Run this before kicking off any sprint in this plan:
 10. Time budget: 1 to 3 hour blocks available. Do not start a 2 session sprint with
     only 30 minutes free.
 
-## Missing systems flagged
+## Approved additions (was: Missing systems flagged)
 
-Systems in the Season 13 Lord of Hatred endgame that are not in the 17 Charlie listed:
+The 9 systems below were flagged in the original draft and approved on 2026-05-14 for
+inclusion. Each one's home sprint is locked.
 
-1. **Stat caps and breakpoints**. Resistance caps (70 percent on Hard, 80 percent
-   target overall), armor cap (~10000 typical), attack speed breakpoints for Dread
-   Claws cast intervals. Maxroll calls these out explicitly. Recommend folding into
-   Sprint 6 as a sub card inside the gear targets section.
-2. **Endgame skill bar variants**. Final endgame bar vs leveling bar are different.
-   Current `data.js` covers the endgame bar. Worth surfacing the swap moment in the
-   new endgame UI as a step list anchored to Lv 70.
-3. **Boss kill rotations**. Specific button sequences vs Astaroth, Duriel, Andariel.
-   Maxroll has these. Recommend a small per pinnacle boss card in Sprint 7 inside the
-   Lair Boss farming view.
-4. **Resource management mechanics**. Wrath generation cadence, Offering uptime,
-   Shadowform stack maintenance. Currently mentioned in passing in `runesgems.js`
-   notes. Recommend a single Mechanics card in Sprint 6 inside the Soul Shards
-   section that explains the rotation loops in 3 to 5 bullet points.
-5. **Aspect stash management**. Which aspects to leave imprinted in the Codex
-   permanently vs which need a saved higher roll. Adjacent to the existing aspect
-   tracker. Recommend a follow up enhancement in the existing Open Items queue, not a
-   new sprint.
-6. **Seasonal mechanic flavor**. Season 13 Lord of Hatred has Soul Shards as the
-   marquee system (covered) plus a seasonal questline (covered in walkthrough). If
-   there is a additional seasonal power loop, flag during Sprint 4 reconciliation.
-7. **PvP and Hardcore considerations**. Out of scope per build target lock. Flag and
-   skip.
-8. **Tempering manual catalog**. The build uses 4 to 6 specific manuals. Where to farm
-   each manual is not in the 17. Recommend folding into Sprint 7 inside the activities
-   section, since manuals drop from Helltides and Nightmare Dungeons.
-9. **Renown and altar of Lilith reminders**. One time grind, not strictly an endgame
-   system, but skipping costs paragon and stats. Recommend a small reminder card in
-   the existing Dashboard, not a new sprint.
+1. **Stat caps and breakpoints** (resistance, armor, attack speed). HOME: Sprint 6 as
+   a sub card inside the gear targets section. Source: Maxroll endgame stat caps
+   table.
+2. **Endgame skill bar swap moment**. HOME: Sprint 6 as a step list anchored to Lv 70.
+   Surfaces the difference between the leveling bar and the final endgame bar.
+3. **Boss kill rotations** (Astaroth, Duriel, Andariel button sequences). HOME: Sprint
+   7 as a per pinnacle boss card inside the Lair Boss farming view.
+4. **Resource management mechanics** (Wrath, Offering uptime, Shadowform stack
+   maintenance). HOME: Sprint 6 as a Mechanics card inside the Soul Shards section.
+   3 to 5 bullet point rotation loops.
+5. **Aspect stash management**. HOME: Open Items queue, not a new sprint. Pair with
+   the existing aspect tracker enhancement candidate.
+6. **Seasonal mechanic flavor beyond Soul Shards**. HOME: Sprint 4 reconciliation
+   flag. If the parallel fetch surfaces a Season 13 power loop not already covered by
+   Soul Shards or the walkthrough, the data lands in `endgamedata.js` and a UI home
+   is assigned in Sprint 6 or 7.
+7. **PvP and Hardcore considerations**. HOME: skipped, out of scope per build target
+   lock. Document the skip in `RECONCILIATION-V2.md` so future you knows why.
+8. **Tempering manual catalog with farm locations**. HOME: Sprint 7 inside the
+   activities section. Tempering manuals drop from Helltides and Nightmare Dungeons,
+   so this lives alongside those activity cards.
+9. **Renown and altar of Lilith reminders**. HOME: small reminder card on the existing
+   Dashboard, not a new sprint. Folded into the Sprint 8 mobile QA pass as a tiny
+   addition.
+
+Total systems now in scope: 17 original plus 9 approved additions equals **26
+systems** across Sprints 4 through 8. Two of the 9 (items 5 and 9) stay outside the
+sprint flow as enhancement queue items. One (item 7) is explicitly skipped. The
+remaining 6 are folded into existing sprint scopes without adding new sprints.
 
 ## Recommended first action
 
