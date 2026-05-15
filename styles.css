@@ -4105,3 +4105,153 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 #view-endgame-build .ec-block {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
 }
+
+/* ============================================================
+   GOTHIC EMBER, SITE WIDE ROLL
+   Global polish on the shared component vocabulary so every
+   view matches the endgame views. Low specificity, so the
+   scoped endgame block above still wins where it applies.
+   ============================================================ */
+
+/* Entrance motion on the major containers everywhere */
+.view-header,
+.card,
+.card-hero,
+.placeholder-card,
+.wt-summary,
+.wt-catchup,
+.wt-phase,
+.st-list,
+.ctl-callout,
+.ctl-bindings,
+.aspect-group,
+.patch-banner,
+.patch-section {
+  animation: ecRise 0.38s ease both;
+}
+
+/* Universal card and panel surfaces: ember gradient, grain, depth */
+.card,
+.card-hero,
+.placeholder-card,
+.wt-summary,
+.wt-catchup,
+.wt-phase,
+.st-list,
+.ctl-callout,
+.ctl-bindings,
+.aspect-group,
+.patch-section,
+.modal-panel {
+  background-image: var(--stone-grain), var(--ember-card);
+  box-shadow: var(--shadow-ember);
+  border-color: var(--border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-image 0.2s ease;
+}
+
+/* Hover lift on the interactive surfaces */
+.card:hover,
+.wt-phase:hover,
+.aspect-group:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--gold-line);
+  background-image: var(--stone-grain), var(--ember-card-hover);
+}
+
+/* Dashboard hero: deep ember wash plus gold top hairline */
+.card-hero {
+  background-image: var(--stone-grain), var(--ember-hero);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+.card-hero::after {
+  content: '';
+  position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: var(--hairline-gold);
+}
+
+/* View titles: gilded Cinzel with a gold hairline under the header */
+.view-title {
+  font-family: var(--font-mythic);
+  color: var(--gold-bright);
+  letter-spacing: 0.03em;
+}
+.view-header {
+  border-bottom: 0;
+  padding-bottom: 14px;
+  position: relative;
+}
+.view-header::after {
+  content: '';
+  position: absolute; left: 0; bottom: 0; height: 2px; width: 100%;
+  max-width: 320px;
+  background: var(--hairline-gold);
+}
+
+/* Section titles across the per view families */
+.st-title,
+.ctl-title,
+.aspect-group > h2,
+.aspect-group > h3,
+.patch-section > h2,
+.patch-section > h3,
+.wt-phase-name,
+.wt-summary-title {
+  font-family: var(--font-mythic);
+  color: var(--gold-bright);
+  letter-spacing: 0.03em;
+}
+
+/* Topbar: frosted plus gold hairline, gilded brand */
+.topbar {
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 var(--gold-line), var(--shadow-md);
+}
+.topbar-brand-title {
+  font-family: var(--font-mythic);
+  color: var(--gold-bright);
+  letter-spacing: 0.04em;
+}
+
+/* Active nav and bottom tab: ember light plus gilded accent */
+.nav-item.is-active {
+  background-image: var(--ember-card-hover);
+  border-color: var(--gold-line);
+}
+.nav-item.is-active .nav-icon,
+.bottom-tab.is-active i,
+.bottom-tab.is-active {
+  color: var(--gold-bright);
+}
+.nav-item:hover { border-color: var(--gold-line); }
+
+/* Primary button and FAB: gilded ember */
+.btn-primary {
+  background-image: linear-gradient(160deg, var(--accent-hot), var(--accent-strong));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 2px 8px rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+.btn-primary:hover { filter: brightness(1.12); box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 16px rgba(255,69,0,0.3); }
+.fab {
+  background-image: linear-gradient(160deg, var(--accent-hot), var(--accent-strong));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 24px var(--accent-glow);
+}
+
+/* Leveling progress bars: glowing ember gradient */
+.wt-summary-fill,
+.wt-phase-fill {
+  background: linear-gradient(90deg, var(--accent-strong), var(--accent) 45%, var(--accent-hot));
+  box-shadow: 0 0 12px rgba(255, 69, 0, 0.5);
+}
+
+/* Modal: ember surface plus gold hairline */
+.modal-panel::before {
+  content: '';
+  position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: var(--hairline-gold);
+}
+.modal-panel { position: relative; overflow: hidden; }
