@@ -3740,3 +3740,78 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 .gc-cmp-loss { border-left: 3px solid #f85149; }
 .gc-cmp-loss .gc-cmp-diff-label { color: #f85149; }
 .gc-clear-equipped { align-self: flex-start; font-size: 0.78rem; }
+
+/* ============================================================
+   ACQUISITION ROADMAP (Sprint 8 pulled forward)
+   Clean ordered checklist, QV Progress aesthetic, data driven.
+   ============================================================ */
+.acquisition-root { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+
+.acq-hero {
+  background:
+    radial-gradient(ellipse at top left, rgba(196,30,58,0.10) 0%, transparent 60%),
+    var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.acq-hero-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.acq-hero-title { margin: 0; font-family: var(--font-title); font-size: 1.15rem; color: var(--text); display: flex; align-items: center; gap: 10px; }
+.acq-hero-title i { color: var(--accent); }
+.acq-hero-count { font-family: var(--font-mono); font-size: 1rem; font-weight: 700; color: var(--text); }
+.acq-bar { height: 8px; background: var(--bg-darker); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+.acq-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #ffb800); border-radius: 999px; transition: width 0.4s ease; }
+.acq-hero-sub { font-size: 0.8rem; color: var(--text-dim); }
+.acq-next { background: var(--bg-darker); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.acq-next-label { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); font-weight: 700; }
+.acq-next-item { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; color: var(--text); }
+.acq-next-n { font-family: var(--font-mono); font-weight: 700; color: #fff; background: var(--accent); border-radius: 5px; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.74rem; }
+.acq-next-task { font-weight: 600; }
+
+.acq-group { display: flex; flex-direction: column; gap: 6px; }
+.acq-group-label { font-family: var(--font-mono); font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); margin: 14px 0 4px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+
+.acq-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  display: flex; align-items: flex-start; gap: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
+}
+.acq-item:hover { border-color: var(--accent); }
+.acq-item.is-done { opacity: 0.45; }
+.acq-check {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  border: 2px solid var(--border2, var(--border));
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+  color: transparent;
+  transition: all 0.15s ease;
+}
+.acq-item.is-done .acq-check { background: #2ea043; border-color: #2ea043; color: #0f1117; }
+.acq-content { flex: 1; min-width: 0; }
+.acq-pri { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--accent); margin-bottom: 3px; }
+.acq-task { font-size: 0.98rem; font-weight: 700; color: var(--text); line-height: 1.35; }
+.acq-item.is-done .acq-task { text-decoration: line-through; color: var(--text-secondary); }
+.acq-how { font-size: 0.84rem; color: var(--text-secondary); margin-top: 4px; line-height: 1.5; }
+.acq-goto {
+  margin-top: 8px;
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 36px;
+}
+.acq-goto:hover { background: var(--accent-light); border-color: var(--accent); }

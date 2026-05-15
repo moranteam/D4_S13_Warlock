@@ -26,6 +26,7 @@
     settings: 'd4_warlock_settings_v1',
     notes: 'd4_warlock_notes_v1',
     gearCompare: 'd4_warlock_gearcompare_v1',
+    acquisition: 'd4_warlock_acquisition_v1',
   };
 
   // ========================================
@@ -77,6 +78,7 @@
       activeSlot: 'daggers',
       slots: {},
     },
+    acquisition: {},
   };
 
   // ========================================
@@ -282,6 +284,7 @@
         Bosses.render();
       }
       if (this.current === 'gear-comparison') {
+        Acquisition.render();
         GearCompare.render();
       }
       if (this.current === 'slot-reference') {
@@ -960,6 +963,7 @@
       Endbuild.render();
       Talismans.render();
       RunesGems.render();
+      Acquisition.render();
       GearCompare.render();
       WarPlans.render();
       Mercenary.render();
@@ -2808,6 +2812,212 @@
       html += '</details>';
 
       paint(root, html);
+    },
+  };
+
+  // ========================================
+  // ACQUISITION ROADMAP (Sprint 8 pulled forward)
+  // Data driven "Do These In Order" checklist generated from
+  // endgamedata.js. Replaces the hand maintained QV Progress tab.
+  // ========================================
+  const Acquisition = {
+    bound: false,
+    // endgamedata gear key -> gearweights.js slot key for the Go to slot jump
+    slotKeyMap: {
+      mainHand: 'daggers', offhand: 'focus', helm: 'helm', chest: 'chest',
+      gloves: 'gloves', pants: 'pants', boots: 'boots', amulet: 'amulet',
+      ring1: 'ring-1', ring2: 'ring-2',
+    },
+
+    slug(s) {
+      return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    },
+
+    buildRoadmap() {
+      const eg = window.D4_ENDGAME;
+      if (!eg || !eg.gear) return [];
+      const steps = [];
+      const gearKeys = ['mainHand', 'offhand', 'helm', 'chest', 'gloves', 'pants', 'boots', 'amulet', 'ring1', 'ring2'];
+      const lookups = (eg.lookups && eg.lookups.byItem) || {};
+      const sourceText = (p) => {
+        if (!p) return 'Source not specified';
+        const extra = lookups[p.name];
+        if (extra && extra.length) return 'Drops from ' + extra.join(' or ');
+        if (p.source && p.source.name) return (p.source.type ? p.source.type + ': ' : '') + p.source.name;
+        return 'Source not specified';
+      };
+      const isBuildDefining = (p) => {
+        if (!p) return false;
+        if (/MANDATORY|CORE BUILD/i.test(p.tier || '')) return true;
+        return (p.affixes || []).some((a) => a.buildDefining);
+      };
+      const isUniqueish = (p) => /unique|mythic/i.test((p && p.type) || '');
+
+      // 1. Build defining items
+      for (const k of gearKeys) {
+        const slot = eg.gear[k];
+        if (!slot || !slot.primary) continue;
+        if (isBuildDefining(slot.primary)) {
+          steps.push({
+            group: 'Build Defining', groupRank: 1,
+            pri: 'Critical', task: 'Get ' + slot.primary.name + ' (' + slot.slot + ')',
+            how: sourceText(slot.primary) + '. ' + (slot.primary.notes || ''),
+            key: 'bd-' + this.slug(slot.primary.name), slotKey: this.slotKeyMap[k] || null,
+          });
+        }
+      }
+
+      // 2. Core uniques and mythics (not already listed as build defining)
+      const listed = new Set(steps.map((s) => s.key.replace(/^bd-/, '')));
+      for (const k of gearKeys) {
+        const slot = eg.gear[k];
+        if (!slot || !slot.primary) continue;
+        if (isBuildDefining(slot.primary)) continue;
+        if (isUniqueish(slot.primary) && !listed.has(this.slug(slot.primary.name))) {
+          steps.push({
+            group: 'Core Uniques and Mythics', groupRank: 2,
+            pri: /mythic/i.test(slot.primary.type) ? 'Mythic' : 'Unique',
+            task: 'Get ' + slot.primary.name + ' (' + slot.slot + ')',
+            how: sourceText(slot.primary),
+            key: 'uniq-' + this.slug(slot.primary.name), slotKey: this.slotKeyMap[k] || null,
+          });
+        }
+      }
+
+      // 3. Soul Shard plus Fragment
+      if (eg.soulShards) {
+        if (eg.soulShards.shard) steps.push({ group: 'Soul Shard and Fragment', groupRank: 3, pri: 'Shard', task: 'Equip the ' + eg.soulShards.shard.name + ' Soul Shard', how: eg.soulShards.shard.effect, key: 'shard-' + this.slug(eg.soulShards.shard.name) });
+        if (eg.soulShards.fragment) steps.push({ group: 'Soul Shard and Fragment', groupRank: 3, pri: 'Fragment', task: 'Slot the ' + eg.soulShards.fragment.name + ' Fragment', how: eg.soulShards.fragment.effect, key: 'frag-' + this.slug(eg.soulShards.fragment.name) });
+      }
+
+      // 4. Runewords
+      if (eg.runes && eg.runes.canonicalPairs) {
+        for (const p of eg.runes.canonicalPairs) {
+          steps.push({ group: 'Runewords', groupRank: 4, pri: p.tier || 'Runeword', task: 'Build the ' + p.pair + ' runeword (' + p.slot + ')', how: p.effect + ' ' + (eg.runes.farmNote || ''), key: 'rune-' + this.slug(p.slot) });
+        }
+      }
+
+      // 5. Aspects to imprint on legendary slots
+      for (const k of gearKeys) {
+        const slot = eg.gear[k];
+        if (!slot || !slot.primary || !slot.primary.aspect) continue;
+        steps.push({
+          group: 'Aspects to Imprint', groupRank: 5, pri: 'Aspect',
+          task: 'Get ' + slot.primary.aspect + ' for ' + slot.slot,
+          how: (slot.primary.source && slot.primary.source.type === 'Codex of Power') ? 'Check your Codex of Power first, you may already have it unlocked' : sourceText(slot.primary),
+          key: 'asp-' + this.slug(slot.primary.aspect), slotKey: this.slotKeyMap[k] || null,
+        });
+      }
+
+      // 6. Talismans
+      if (eg.talismans) {
+        if (eg.talismans.charmSet) steps.push({ group: 'Talismans', groupRank: 6, pri: 'Set', task: 'Assemble the ' + eg.talismans.charmSet.primary, how: 'Charm set drops from Lord of Hatred activities. Prioritize ' + ((eg.talismans.charmAffixPriority && eg.talismans.charmAffixPriority[0] && eg.talismans.charmAffixPriority[0].stat) || 'the top charm affixes') + '.', key: 'tal-charmset' });
+        if (eg.talismans.seal) steps.push({ group: 'Talismans', groupRank: 6, pri: 'Seal', task: 'Get the ' + eg.talismans.seal.canonical, how: 'Seal slot. ' + (eg.talismans.seal.mythicVariant || ''), key: 'tal-seal' });
+      }
+
+      // 7. Glyphs
+      if (eg.glyphs && eg.glyphs.priority && eg.glyphs.priority.length) {
+        const order = eg.glyphs.priority.map((g) => g.name).join(', ');
+        steps.push({ group: 'Glyphs', groupRank: 7, pri: 'Glyphs', task: 'Level glyphs in priority order: ' + order, how: (eg.glyphs.farmNote || 'Glyph XP comes from Pit clears.'), key: 'glyph-priority' });
+      }
+
+      // 8. Endgame polish
+      steps.push({ group: 'Endgame Polish', groupRank: 8, pri: 'Temper', task: 'Temper every slot to its build defining recipe', how: 'Visit the Blacksmith. Each slot detail card lists the exact tempering manual.', key: 'polish-temper' });
+      steps.push({ group: 'Endgame Polish', groupRank: 8, pri: 'Masterwork', task: 'Masterwork priority pieces, Weapon first', how: 'Requires Pit materials. Weapon, then Gloves, then Rings. Crit the masterwork primary stat on each slot.', key: 'polish-mw' });
+
+      let n = 1;
+      for (const s of steps) s.n = n++;
+      return steps;
+    },
+
+    render() {
+      const root = document.getElementById('acquisitionRoot');
+      if (!root) return;
+      const steps = this.buildRoadmap();
+      if (!steps.length) {
+        paint(root, '<div class="placeholder-card"><i class="fa-solid fa-list-check placeholder-icon"></i><div class="placeholder-title">No roadmap data</div><div class="placeholder-text">endgamedata.js may have failed to load.</div></div>');
+        return;
+      }
+      const done = AppState.data.acquisition || {};
+      const total = steps.length;
+      const doneCount = steps.filter((s) => done[s.key]).length;
+      const pct = Math.round((doneCount / total) * 100);
+      const next3 = steps.filter((s) => !done[s.key]).slice(0, 3);
+
+      let html = '';
+      html += '<section class="acq-hero">';
+      html += '  <div class="acq-hero-top">';
+      html += '    <h2 class="acq-hero-title"><i class="fa-solid fa-list-check" aria-hidden="true"></i> Acquisition Roadmap</h2>';
+      html += '    <span class="acq-hero-count">' + doneCount + ' / ' + total + '</span>';
+      html += '  </div>';
+      html += '  <div class="acq-bar"><div class="acq-bar-fill" style="width:' + pct + '%"></div></div>';
+      html += '  <div class="acq-hero-sub">Do these in order. Generated from the reconciled build data, sourced per item.</div>';
+      if (next3.length) {
+        html += '  <div class="acq-next">';
+        html += '    <div class="acq-next-label">Your next ' + next3.length + '</div>';
+        for (const s of next3) {
+          html += '<div class="acq-next-item"><span class="acq-next-n">' + s.n + '</span><span class="acq-next-task">' + escapeHtml(s.task) + '</span></div>';
+        }
+        html += '  </div>';
+      }
+      html += '</section>';
+
+      let curGroup = null;
+      for (const s of steps) {
+        if (s.group !== curGroup) {
+          if (curGroup !== null) html += '</div>';
+          curGroup = s.group;
+          html += '<div class="acq-group">';
+          html += '  <div class="acq-group-label">' + escapeHtml(curGroup) + '</div>';
+        }
+        const isDone = !!done[s.key];
+        html += '<div class="acq-item' + (isDone ? ' is-done' : '') + '" data-acq-key="' + escapeHtml(s.key) + '">';
+        html += '  <div class="acq-check">' + (isDone ? '<i class="fa-solid fa-check" aria-hidden="true"></i>' : '') + '</div>';
+        html += '  <div class="acq-content">';
+        html += '    <div class="acq-pri">' + escapeHtml(s.pri) + ' &middot; Step ' + s.n + '</div>';
+        html += '    <div class="acq-task">' + escapeHtml(s.task) + '</div>';
+        html += '    <div class="acq-how">' + escapeHtml(s.how) + '</div>';
+        if (s.slotKey) {
+          html += '    <button type="button" class="acq-goto" data-acq-goto="' + escapeHtml(s.slotKey) + '"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i> Compare drops for this slot</button>';
+        }
+        html += '  </div>';
+        html += '</div>';
+      }
+      if (curGroup !== null) html += '</div>';
+
+      paint(root, html);
+      this.bind();
+    },
+
+    bind() {
+      if (this.bound) return;
+      this.bound = true;
+      const main = document.getElementById('main');
+      if (!main) return;
+      main.addEventListener('click', (e) => {
+        const goto = e.target.closest && e.target.closest('[data-acq-goto]');
+        if (goto) {
+          e.stopPropagation();
+          const sk = goto.getAttribute('data-acq-goto');
+          if (window.D4_GEAR_WEIGHTS && window.D4_GEAR_WEIGHTS.slots && window.D4_GEAR_WEIGHTS.slots[sk]) {
+            AppState.data.gearCompare.activeSlot = sk;
+            AppState.save('gearCompare');
+            GearCompare.render();
+            const gcRoot = document.getElementById('gearCompareRoot');
+            if (gcRoot) gcRoot.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          return;
+        }
+        const item = e.target.closest && e.target.closest('[data-acq-key]');
+        if (item) {
+          const key = item.getAttribute('data-acq-key');
+          if (!AppState.data.acquisition) AppState.data.acquisition = {};
+          AppState.data.acquisition[key] = !AppState.data.acquisition[key];
+          AppState.save('acquisition');
+          Acquisition.render();
+          return;
+        }
+      });
     },
   };
 
