@@ -2899,9 +2899,11 @@
 
       html += '  <div class="gc-actions">';
       html += '    <button type="button" class="btn btn-ghost gc-clear" data-gc-clear="1">Clear slot</button>';
+      html += '    <button type="button" class="btn btn-ghost gc-set-equipped" data-gc-set-equipped="1"><i class="fa-solid fa-user-shield" aria-hidden="true"></i> Set as equipped</button>';
       html += '    <input type="text" class="gc-save-nickname" data-gc-nickname placeholder="Optional nickname (e.g. Tuesday drop)" maxlength="40" />';
       html += '    <button type="button" class="btn btn-primary gc-save" data-gc-save="1"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save this drop</button>';
       html += '  </div>';
+      html += '  <div class="gc-actions-hint">Enter your currently equipped item and tap <strong>Set as equipped</strong> to lock it as the baseline. Then enter any looted item to see a live upgrade comparison.</div>';
       html += '</section>';
 
       // ---------- Verdict ----------
@@ -2936,6 +2938,69 @@
       html += '    </ul>';
       html += '  </details>';
       html += '</section>';
+
+      // ---------- Equipped vs This Drop comparison ----------
+      if (saved.equipped) {
+        const eqV = this.computeVerdict(slot, saved.equipped);
+        const dropV = verdict;
+        const delta = dropV.scorePct - eqV.scorePct;
+        let cmpTier, cmpLabel, cmpReason;
+        if (delta >= 8) {
+          cmpTier = 'keep';
+          cmpLabel = 'UPGRADE';
+          cmpReason = 'This drop scores ' + delta + ' points higher than your equipped item. Equip it.';
+        } else if (delta <= -8) {
+          cmpTier = 'salvage';
+          cmpLabel = 'WORSE';
+          cmpReason = 'This drop scores ' + Math.abs(delta) + ' points lower than your equipped item. Keep what you have, salvage the drop.';
+        } else {
+          cmpTier = 'imprint';
+          cmpLabel = 'SIDEGRADE';
+          cmpReason = 'Within ' + Math.abs(delta) + ' points of your equipped item. Roughly even. Decide on tempering or masterwork headroom.';
+        }
+        const eqAff = saved.equipped.selectedAffixes || {};
+        const drAff = saved.selectedAffixes || {};
+        const gained = [];
+        const lost = [];
+        for (let i = 0; i < slot.affixes.length; i++) {
+          const a = slot.affixes[i];
+          const id = 'a' + i;
+          if (drAff[id] && !eqAff[id]) gained.push(a.name);
+          if (!drAff[id] && eqAff[id]) lost.push(a.name);
+        }
+
+        html += '<section class="gc-cmp gc-verdict-' + cmpTier + '">';
+        html += '  <div class="gc-cmp-verdict">';
+        html += '    <span class="gc-cmp-tag">' + cmpLabel + '</span>';
+        html += '    <span class="gc-cmp-delta">' + (delta > 0 ? '+' : '') + delta + '%</span>';
+        html += '  </div>';
+        html += '  <p class="gc-cmp-reason">' + escapeHtml(cmpReason) + '</p>';
+        html += '  <div class="gc-cmp-cols">';
+        html += '    <div class="gc-cmp-col gc-cmp-equipped">';
+        html += '      <div class="gc-cmp-col-label"><i class="fa-solid fa-user-shield" aria-hidden="true"></i> Equipped</div>';
+        html += '      <div class="gc-cmp-score gc-verdict-' + eqV.tier + '">' + eqV.scorePct + '%</div>';
+        html += '      <div class="gc-cmp-vtag">' + eqV.label + '</div>';
+        html += '    </div>';
+        html += '    <div class="gc-cmp-vs">vs</div>';
+        html += '    <div class="gc-cmp-col gc-cmp-drop">';
+        html += '      <div class="gc-cmp-col-label"><i class="fa-solid fa-gift" aria-hidden="true"></i> This Drop</div>';
+        html += '      <div class="gc-cmp-score gc-verdict-' + dropV.tier + '">' + dropV.scorePct + '%</div>';
+        html += '      <div class="gc-cmp-vtag">' + dropV.label + '</div>';
+        html += '    </div>';
+        html += '  </div>';
+        if (gained.length || lost.length) {
+          html += '  <div class="gc-cmp-diff">';
+          if (gained.length) {
+            html += '<div class="gc-cmp-diff-row gc-cmp-gain"><span class="gc-cmp-diff-label"><i class="fa-solid fa-plus" aria-hidden="true"></i> Drop adds</span> ' + gained.map((g) => escapeHtml(g)).join(', ') + '</div>';
+          }
+          if (lost.length) {
+            html += '<div class="gc-cmp-diff-row gc-cmp-loss"><span class="gc-cmp-diff-label"><i class="fa-solid fa-minus" aria-hidden="true"></i> Drop loses</span> ' + lost.map((l) => escapeHtml(l)).join(', ') + '</div>';
+          }
+          html += '  </div>';
+        }
+        html += '  <button type="button" class="btn btn-ghost gc-clear-equipped" data-gc-clear-equipped="1">Clear equipped baseline</button>';
+        html += '</section>';
+      }
 
       html += '<section class="gc-ref">';
       html += '  <h3 class="gc-ref-title">Tempering reference</h3>';
@@ -2981,6 +3046,33 @@
 
       root.innerHTML = html;
       this.bind(root);
+    },
+
+    setEquipped() {
+      const activeKey = AppState.data.gearCompare.activeSlot;
+      if (!AppState.data.gearCompare.slots[activeKey]) {
+        AppState.data.gearCompare.slots[activeKey] = { selectedAffixes: {}, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false, history: [], equipped: null };
+      }
+      const s = AppState.data.gearCompare.slots[activeKey];
+      s.equipped = {
+        selectedAffixes: Object.assign({}, s.selectedAffixes || {}),
+        hasGA: Object.assign({}, s.hasGA || {}),
+        hasTemper: !!s.hasTemper,
+        hasMasterworkPrimary: !!s.hasMasterworkPrimary,
+      };
+      AppState.save('gearCompare');
+      Toast.show('Equipped baseline set for this slot', 'success');
+      GearCompare.render();
+    },
+
+    clearEquipped() {
+      const activeKey = AppState.data.gearCompare.activeSlot;
+      const s = AppState.data.gearCompare.slots[activeKey];
+      if (!s) return;
+      s.equipped = null;
+      AppState.save('gearCompare');
+      Toast.show('Equipped baseline cleared', 'info');
+      GearCompare.render();
     },
 
     saveCurrent() {
@@ -3126,10 +3218,20 @@
         if (clearBtn) {
           const activeKey = AppState.data.gearCompare.activeSlot;
           const existing = AppState.data.gearCompare.slots[activeKey] || {};
-          AppState.data.gearCompare.slots[activeKey] = { selectedAffixes: {}, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false, history: existing.history || [] };
+          AppState.data.gearCompare.slots[activeKey] = { selectedAffixes: {}, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false, history: existing.history || [], equipped: existing.equipped || null };
           AppState.save('gearCompare');
           GearCompare.render();
           Toast.show('Slot cleared', 'info');
+          return;
+        }
+        const setEqBtn = e.target.closest && e.target.closest('[data-gc-set-equipped]');
+        if (setEqBtn) {
+          GearCompare.setEquipped();
+          return;
+        }
+        const clearEqBtn = e.target.closest && e.target.closest('[data-gc-clear-equipped]');
+        if (clearEqBtn) {
+          GearCompare.clearEquipped();
           return;
         }
         const saveBtn = e.target.closest && e.target.closest('[data-gc-save]');
@@ -3159,7 +3261,7 @@
         if (!t || !t.classList) return;
         const activeKey = AppState.data.gearCompare.activeSlot;
         if (!AppState.data.gearCompare.slots[activeKey]) {
-          AppState.data.gearCompare.slots[activeKey] = { selectedAffixes: {}, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false, history: [] };
+          AppState.data.gearCompare.slots[activeKey] = { selectedAffixes: {}, hasGA: {}, hasTemper: false, hasMasterworkPrimary: false, history: [], equipped: null };
         }
         const slotState = AppState.data.gearCompare.slots[activeKey];
         let changed = false;

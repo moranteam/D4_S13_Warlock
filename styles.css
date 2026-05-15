@@ -3704,3 +3704,39 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 @media (min-width: 1024px) {
   .rg-gem-grid { grid-template-columns: repeat(5, 1fr); }
 }
+
+/* ============================================================
+   GEAR COMPARE: EQUIPPED VS LOOTED SIDE BY SIDE
+   ============================================================ */
+.gc-actions-hint { font-size: 0.78rem; color: var(--text-dim); line-height: 1.45; padding-top: 6px; }
+.gc-actions-hint strong { color: var(--text-secondary); }
+.gc-set-equipped { font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; }
+
+.gc-cmp { border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 12px; border: 2px solid; }
+.gc-cmp.gc-verdict-keep { border-color: #2ea043; background: rgba(46,160,67,0.08); }
+.gc-cmp.gc-verdict-imprint { border-color: #d29922; background: rgba(210,153,34,0.08); }
+.gc-cmp.gc-verdict-salvage { border-color: #f85149; background: rgba(196,30,58,0.08); }
+.gc-cmp-verdict { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.gc-cmp-tag { font-family: var(--font-title); font-size: 1.5rem; font-weight: 700; letter-spacing: 0.05em; }
+.gc-cmp.gc-verdict-keep .gc-cmp-tag { color: #2ea043; }
+.gc-cmp.gc-verdict-imprint .gc-cmp-tag { color: #d29922; }
+.gc-cmp.gc-verdict-salvage .gc-cmp-tag { color: #f85149; }
+.gc-cmp-delta { font-family: var(--font-mono); font-size: 1.3rem; font-weight: 700; color: var(--text); }
+.gc-cmp-reason { margin: 0; font-size: 0.88rem; color: var(--text); line-height: 1.45; }
+.gc-cmp-cols { display: flex; align-items: stretch; gap: 10px; }
+.gc-cmp-col { flex: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.gc-cmp-col-label { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-dim); display: flex; align-items: center; gap: 6px; }
+.gc-cmp-score { font-family: var(--font-title); font-size: 2rem; font-weight: 700; line-height: 1; }
+.gc-cmp-score.gc-verdict-keep { color: #2ea043; }
+.gc-cmp-score.gc-verdict-imprint { color: #d29922; }
+.gc-cmp-score.gc-verdict-salvage { color: #f85149; }
+.gc-cmp-vtag { font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-secondary); font-weight: 600; }
+.gc-cmp-vs { display: flex; align-items: center; font-family: var(--font-title); font-size: 0.9rem; color: var(--text-dim); }
+.gc-cmp-diff { display: flex; flex-direction: column; gap: 6px; }
+.gc-cmp-diff-row { font-size: 0.82rem; color: var(--text); background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; }
+.gc-cmp-diff-label { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; font-weight: 700; margin-right: 6px; }
+.gc-cmp-gain { border-left: 3px solid #2ea043; }
+.gc-cmp-gain .gc-cmp-diff-label { color: #2ea043; }
+.gc-cmp-loss { border-left: 3px solid #f85149; }
+.gc-cmp-loss .gc-cmp-diff-label { color: #f85149; }
+.gc-clear-equipped { align-self: flex-start; font-size: 0.78rem; }
