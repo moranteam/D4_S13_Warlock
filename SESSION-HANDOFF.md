@@ -1,31 +1,49 @@
 # D4 Warlock God Run, Session Handoff
 
 Last updated: 2026-05-14
-Current sprint: Sprint 3 queued (Gear Comparison)
+Current sprint: Sprint 3 queued (Gear Comparison plus Walkthrough Catch Up)
 Build target: Dread Claws Mastermind Warlock, Season 13 Lord of Hatred
-Character state: Level 46, Scattered to the Winds quest, Hard difficulty
+Character state: Level 54, Faith and Failings quest, Hard difficulty
 
 ## Next session start here
 
-Open `D4-WARLOCK-SPRINT3-MASTER-PROMPT.md` if present, otherwise draft it from the Sprint 3
-goal block below. The work mounts to the `#gearCompareRoot` placeholder inside
-`index.html` (currently shows the Sprint 3 placeholder card around line 305). The new
-module reads slot priorities from `window.D4_GEAR_WEIGHTS` in `gearweights.js`, which is
-already loaded by `index.html` after `itemdata.js`. Wire the new `GearCompare` module into
-`Router.render()` in `app.js` under the `gear-comparison` case where the inline comment
-already marks the Sprint 3 slot. Keep the single file vanilla JS pattern, no React, no
-build step. Persist any per-slot stat entries under `d4_warlock_gearcompare_v1` to match
-the existing localStorage prefix convention.
+Sprint 3 now carries two deliverables, ship them in order.
+
+First deliverable, Walkthrough Catch Up button. Add a single bulk action to the
+Walkthrough view in `app.js` under the existing Walkthrough module. Render a button at
+the top of the view labeled "Mark all complete through Level X" where X is the live
+`AppState.character.level`. On click, iterate every phase in the existing 9 phase
+walkthrough (`window.D4_DATA.walkthrough`), mark every step whose level gate is at or
+below the current character level as checked, persist to the existing walkthrough
+checkbox localStorage key from Sprint 2 Part C, then re-render the view. Confirm with a
+Toast showing how many steps were just checked. No new localStorage key needed. Ship
+this first so the user can fast forward past Level 54 of historical progress in one tap.
+
+Second deliverable, Gear Comparison tool. Open `D4-WARLOCK-SPRINT3-MASTER-PROMPT.md` if
+present, otherwise draft it from the goal block below. The work mounts to the
+`#gearCompareRoot` placeholder inside `index.html` (currently shows the Sprint 3
+placeholder card around line 305). The new module reads slot priorities from
+`window.D4_GEAR_WEIGHTS` in `gearweights.js`, which is already loaded by `index.html`
+after `itemdata.js`. Wire the new `GearCompare` module into `Router.render()` in
+`app.js` under the `gear-comparison` case where the inline comment already marks the
+Sprint 3 slot. Keep the single file vanilla JS pattern, no React, no build step.
+Persist any per-slot stat entries under `d4_warlock_gearcompare_v1` to match the
+existing localStorage prefix convention.
 
 ## Active sprint
 
-**Sprint 3: Gear Comparison Tool** (queued, not started)
+**Sprint 3: Gear Comparison Tool plus Walkthrough Catch Up** (queued, not started)
 
-Goal: Manual stat entry per slot plus drop verdict tool that reads from `gearweights.js`.
-Mounts to the `gearCompareRoot` placeholder in the Gear Comparison section. Per-slot form
-inputs accept the affixes the player rolled, the tool weighs them against the canonical
-priorities in `window.D4_GEAR_WEIGHTS`, and returns a Keep, Salvage, or Imprint verdict
-plus a list of which target stats are missing.
+Part A goal: Walkthrough Catch Up button. Reads `AppState.character.level`, bulk checks
+every walkthrough step whose level gate is at or below current level, persists to the
+existing Sprint 2 walkthrough checkbox key, toasts the count. Mounts at the top of the
+existing Walkthrough view, no new section needed.
+
+Part B goal: Manual stat entry per slot plus drop verdict tool that reads from
+`gearweights.js`. Mounts to the `gearCompareRoot` placeholder in the Gear Comparison
+section. Per-slot form inputs accept the affixes the player rolled, the tool weighs
+them against the canonical priorities in `window.D4_GEAR_WEIGHTS`, and returns a Keep,
+Salvage, or Imprint verdict plus a list of which target stats are missing.
 
 ## Shipped sprints
 
