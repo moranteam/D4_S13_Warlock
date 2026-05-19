@@ -616,7 +616,7 @@ window.D4_DATA = {
   mercPairs: [
     { id: 'leveling', name: 'Leveling Pair', hired: 'subo', reinforcement: 'aldkin', notes: 'Subo applies Vulnerable for free DPS, Aldkin caps the DR floor. Run from Level 1 to 70.' },
     { id: 'boss-farm', name: 'Boss Farming Pair', hired: 'raheir', reinforcement: 'varyana', notes: 'Raheir tanks and taunts, Varyana keeps you healed and fast. Use for Lair Boss runs once gear is locked.' },
-    { id: 'endgame', name: 'Endgame Pair', hired: 'subo', reinforcement: 'varyana', notes: 'Once you outgear leveling, swap Aldkin for Varyana. Vulnerable plus heal plus attack speed.' },
+    { id: 'endgame', name: 'Endgame Pair', hired: 'raheir', reinforcement: 'aldkin', notes: 'Maxroll canonical endgame. Raheir front lines plus Inspiration damage amp, Aldkin Field of Languish applies DR on every skill cast. Varyana is a viable alt hire for more sustain.' },
   ],
 
   /* ==========================================
