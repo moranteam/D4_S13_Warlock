@@ -1,9 +1,9 @@
 # D4 Warlock God Run, Session Handoff
 
-Last updated: 2026-05-14
-Current sprint: Sprint 5 shipped, awaiting design review before Sprint 6
+Last updated: 2026-05-18
+Current sprint: Gothic Ember design shipped site-wide. Sprints 6, 7, 8 queued.
 Build target: Dread Claws Mastermind Warlock, Season 13 Lord of Hatred
-Character state: Level 54, Faith and Failings quest, Hard difficulty
+Character state: Level 70, ENDGAME, Paragon 25 (sub-200, board rush path applies)
 
 ## Next session start here
 
