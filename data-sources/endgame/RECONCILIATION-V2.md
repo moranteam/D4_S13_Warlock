@@ -155,3 +155,22 @@ canonical for leveling. Available if a leveling aspect view is built later.
 Mobalytics leveling skill point order names "Terror Swarm" which does not match the
 canonical skill names in data.js. Treated as a source naming discrepancy. Canonical
 leveling skill data NOT changed.
+
+## V2.2 Verification, 2026-05-18
+
+Charlie re-supplied the canonical Maxroll endgame URL anchored to the mercenary
+section (https://maxroll.gg/d4/build-guides/dread-claws-warlock-guide#mercenary-header).
+Re-fetched and verified the mercenary section directly.
+
+Result: CONFIRMED, no changes needed.
+- Hired: Raheir (survivability plus Inspiration damage amplification)
+- Reinforcement: Aldkin (damage reduction from Field of Languish)
+- Alternative hired: Varyana (more healing from Taste of Flesh)
+- Aldkin is the consistent reinforcement across variants
+
+This matches Resolution 2 and the 2026-05-18 fix (commit c098eb5) that set the
+data.js endgame mercPair to Raheir hired plus Aldkin reinforcement. endgamedata.js
+mercs.canonical already Raheir/Aldkin. No discrepancy. Confidence on the endgame
+hired pick raised from MEDIUM to HIGH for the Maxroll canonical specifically, since
+it is now directly verified against the cited source (the 3-way source disagreement
+note still stands for cross-source context).

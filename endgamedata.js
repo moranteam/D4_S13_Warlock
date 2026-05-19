@@ -710,8 +710,9 @@
        ============================================================ */
     mercs: {
       canonical: {
-        hired: { name: 'Raheir', confidence: 'MEDIUM' },
-        reinforcement: { name: 'Aldkin', confidence: 'MEDIUM' },
+        hired: { name: 'Raheir', confidence: 'HIGH' },
+        reinforcement: { name: 'Aldkin', confidence: 'HIGH' },
+        verifiedAgainst: 'Maxroll endgame mercenary section, directly re-verified 2026-05-18',
       },
       variants: [
         { label: 'Maxroll Canonical (endgame)', hired: 'Raheir', reinforcement: 'Aldkin', source: 'Maxroll endgame', confidence: 'MEDIUM' },
