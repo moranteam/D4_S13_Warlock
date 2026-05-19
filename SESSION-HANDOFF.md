@@ -1,9 +1,23 @@
 # D4 Warlock God Run, Session Handoff
 
 Last updated: 2026-05-18
-Current sprint: Gothic Ember design shipped site-wide. Sprints 6, 7, 8 queued.
+Current sprint: Sprints 6, 7, 8 shipped. Only Sprint 9 (Codex) deferred.
 Build target: Dread Claws Mastermind Warlock, Season 13 Lord of Hatred
 Character state: Level 70, ENDGAME, Paragon 25 (sub-200, board rush path applies)
+
+## Status: endgame overhaul effectively complete
+
+Shipped 2026-05-18: endgame merc pair fixed to Maxroll canonical (Raheir + Aldkin),
+Sprint 7 EndgameProgression (difficulty ladder, Pit milestones, Lair Boss farming
+map, War Plans tiers, Helltide/NMD, all mark current Torment/Pit from AppState),
+Sprint 6 leftovers EndgameSystems (skill bar, soul shard/fragment, glyphs, paragon
+path with YOU ARE HERE marker, resource mechanics, boss rotation), Sprint 8
+acquisition lookup search plus mobile QA hardening. All Gothic Ember styled.
+
+Remaining: Sprint 9 Codex of Power (deferred, needs fresh data research). Small
+flagged items: real D4 item icons vs SVG silhouettes, 3 LOW-confidence aspects to
+re-verify in-game, Renown/Altar reminder card, War Plans per-activity skill tree
+deep dive.
 
 ## Next session start here
 
