@@ -272,6 +272,7 @@
       }
       if (this.current === 'endgame-build') {
         EndgameGear.render();
+        EndgameProgression.render();
         Endbuild.render();
         Shards.render();
         Paragon.render();
@@ -991,6 +992,7 @@
       Uniques.render();
       Bosses.render();
       EndgameGear.render();
+      EndgameProgression.render();
       Endbuild.render();
       Talismans.render();
       RunesGems.render();
@@ -3769,6 +3771,132 @@
         anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
         setTimeout(() => anchor.classList.remove('is-flash'), 1600);
       });
+    },
+  };
+
+  // ========================================
+  // ENDGAME PROGRESSION (Sprint 7)
+  // Difficulty ladder, Pit tiers, Lair Boss farming map,
+  // War Plans tier list, Helltide and Nightmare Dungeons.
+  // Reads endgamedata.js, marks current Torment and Pit from
+  // AppState so a Paragon 25 player sees where they are.
+  // ========================================
+  const EndgameProgression = {
+    render() {
+      const root = document.getElementById('endgameProgressionRoot');
+      if (!root) return;
+      const eg = window.D4_ENDGAME;
+      if (!eg || !eg.difficulty) {
+        paint(root, '<div class="placeholder-card"><i class="fa-solid fa-mountain placeholder-icon"></i><div class="placeholder-title">No progression data</div></div>');
+        return;
+      }
+      const c = (AppState.data && AppState.data.character) || {};
+      const curTorment = Number(c.torment) || 0;
+      const curPit = Number(c.pitHighest) || 0;
+      const conf = (x) => 'rg-conf-' + String(x || 'MEDIUM').toLowerCase();
+
+      let html = '';
+
+      html += '<section class="ec-hero">';
+      html += '  <h2 class="ec-hero-title">Endgame Progression</h2>';
+      html += '  <p class="ec-hero-sub">Your difficulty path, Pit milestones, and where to farm every target. Current markers come from your tracked Torment and Pit.</p>';
+      html += '  <div class="ec-hero-meta">Torment ' + curTorment + ' &middot; Pit ' + curPit + ' tracked</div>';
+      html += '</section>';
+
+      // Difficulty ladder
+      html += '<section class="ec-section ec-section-stats">';
+      html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F4C8}</span><h2 class="ec-section-title">Difficulty Ladder</h2></header>';
+      html += '  <ol class="ec-step-list">';
+      for (const d of eg.difficulty.path) {
+        const tMatch = d.level.match(/Torment (\d)/);
+        const tNum = tMatch ? Number(tMatch[1]) : null;
+        const reached = tNum != null && curTorment >= tNum;
+        const isCurrent = tNum != null && curTorment === tNum;
+        html += '<li class="ec-step' + (reached ? ' acq-done-soft' : '') + (isCurrent ? ' ec-step-current' : '') + '">';
+        html += '  <span class="ec-step-n">' + (isCurrent ? '▶' : (reached ? '✓' : '•')) + '</span>';
+        html += '  <div class="ec-step-body"><div class="ec-step-label">' + escapeHtml(d.level) + '</div><div class="ec-step-text">' + escapeHtml(d.target) + '</div>';
+        html += '<span class="aspect-priority ' + conf(d.confidence) + ' ec-step-conf">' + (d.confidence || 'MEDIUM') + '</span></div>';
+        html += '</li>';
+      }
+      html += '  </ol>';
+      if (eg.difficulty.note) html += '  <p class="ec-notes">' + escapeHtml(eg.difficulty.note) + '</p>';
+      html += '</section>';
+
+      // Pit milestones
+      if (eg.pit && eg.pit.milestones) {
+        html += '<section class="ec-section">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F3AF}</span><h2 class="ec-section-title">Pit Milestones</h2></header>';
+        html += '  <div class="ec-grid">';
+        for (const m of eg.pit.milestones) {
+          const tierNum = parseInt(String(m.tier), 10);
+          const reached = !isNaN(tierNum) && curPit >= tierNum;
+          html += '<div class="ec-pair' + (reached ? ' acq-done-soft' : '') + '">';
+          html += '  <div class="ec-pair-head"><span class="ec-tier-badge">Pit ' + escapeHtml(String(m.tier)) + '</span>' + (reached ? '<span class="ec-affix-flag ec-flag-defining">REACHED</span>' : '') + '</div>';
+          html += '  <div class="ec-block-val">' + escapeHtml(m.note) + '</div>';
+          html += '  <span class="aspect-priority ' + conf(m.confidence) + '">' + (m.confidence || 'MEDIUM') + '</span>';
+          html += '</div>';
+        }
+        html += '  </div>';
+        html += '</section>';
+      }
+
+      // Lair Boss farming map
+      if (eg.bosses && eg.bosses.length) {
+        html += '<section class="ec-section ec-section-weapons">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F409}</span><h2 class="ec-section-title">Lair Boss Farming Map</h2></header>';
+        html += '  <div class="ec-grid">';
+        for (const b of eg.bosses) {
+          html += '<div class="ec-pair">';
+          html += '  <div class="ec-pair-head">' + slotSvg('rune', 'ec-pair-svg') + ' ' + escapeHtml(b.name) + ' <span class="ec-tag ec-tag-tier">' + escapeHtml(b.tier) + '</span></div>';
+          html += '  <div class="ec-block"><div class="ec-block-label">Drops</div><ul class="ec-affix-list">';
+          for (const drop of b.drops) {
+            html += '<li class="ec-affix"><span class="ec-affix-stat">' + escapeHtml(drop) + '</span></li>';
+          }
+          html += '  </ul></div>';
+          html += '  <div class="ec-block ec-block-socket"><div class="ec-block-label">Summon materials</div><div class="ec-block-val">' + escapeHtml(b.materials) + '</div></div>';
+          html += '  <span class="aspect-priority ' + conf(b.confidence) + '">' + (b.confidence || 'MEDIUM') + '</span>';
+          html += '</div>';
+        }
+        html += '  </div>';
+        html += '</section>';
+      }
+
+      // War Plans tier list
+      if (eg.warplans && eg.warplans.length) {
+        html += '<section class="ec-section ec-section-jewelry">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{2694}</span><h2 class="ec-section-title">War Plans Priority</h2></header>';
+        html += Templates.renderTierList(eg.warplans, 'tier', { labelField: 'activity', subField: 'role' });
+        html += '</section>';
+      }
+
+      // Helltide and Nightmare Dungeons
+      if (eg.activities) {
+        html += '<section class="ec-section">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F525}</span><h2 class="ec-section-title">Helltide and Nightmare Dungeons</h2></header>';
+        html += '  <div class="ec-grid">';
+        const ht = eg.activities.helltide;
+        if (ht) {
+          html += '<div class="ec-pair">';
+          html += '  <div class="ec-pair-head">Helltide</div>';
+          html += '  <div class="ec-block"><div class="ec-block-label">Currency</div><div class="ec-block-val">' + escapeHtml(ht.currency) + '</div></div>';
+          html += '  <div class="ec-block"><div class="ec-block-label">Chest priority</div><div class="ec-block-val">' + escapeHtml(ht.chestPriority) + '</div></div>';
+          html += '  <div class="ec-block"><div class="ec-block-label">Cadence</div><div class="ec-block-val">' + escapeHtml(ht.cadence) + '</div></div>';
+          if (ht.targetUniques) html += '  <div class="ec-block ec-block-aspect"><div class="ec-block-label">Target uniques</div><div class="ec-bk-best">' + ht.targetUniques.map((u) => escapeHtml(u)).join(', ') + '</div></div>';
+          html += '</div>';
+        }
+        const nd = eg.activities.nightmareDungeons;
+        if (nd) {
+          html += '<div class="ec-pair">';
+          html += '  <div class="ec-pair-head">Nightmare Dungeons</div>';
+          html += '  <div class="ec-block"><div class="ec-block-label">Primary use</div><div class="ec-block-val">' + escapeHtml(nd.primaryUse) + '</div></div>';
+          html += '  <div class="ec-block"><div class="ec-block-label">Targets</div><div class="ec-block-val">' + escapeHtml(nd.targetUniques) + '</div></div>';
+          html += '</div>';
+        }
+        html += '  </div>';
+        html += '</section>';
+      }
+
+      paint(root, html);
     },
   };
 
