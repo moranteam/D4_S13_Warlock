@@ -258,6 +258,9 @@
       const titleEl = document.getElementById('topbarCurrent');
       if (titleEl) titleEl.textContent = this.titles[this.current] || this.current;
 
+      // Phase banner renders on every view transition
+      PhaseBanner.render();
+
       // Consolidated sections call multiple module renders in sequence.
       // Existing module objects are preserved; the new sections just
       // stack their content vertically.
@@ -491,10 +494,16 @@
       const isAlt = !!opts.isAlt;
       const r = rarityOf(item);
 
+      const iconUrl = opts.iconUrl || item.iconUrl || '';
+      const fallback = slotSvg(svgName, 'ec-slot-svg');
+      const iconMarkup = iconUrl
+        ? '<img src="' + escapeHtml(iconUrl) + '" alt="" class="ec-slot-img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'" />' + '<span class="ec-slot-svg-fallback" style="display:none">' + fallback + '</span>'
+        : fallback;
+
       let html = '';
       html += '<article class="ec-item ec-rar-' + r.key + (isAlt ? ' ec-item-alt' : '') + '" style="--rar:' + r.color + '">';
       html += '  <div class="ec-item-frame">';
-      html += '    <div class="ec-item-icon">' + slotSvg(svgName, 'ec-slot-svg') + '</div>';
+      html += '    <div class="ec-item-icon">' + iconMarkup + '</div>';
       html += '    <span class="ec-item-rarity">' + r.label + '</span>';
       html += '  </div>';
       html += '  <div class="ec-item-body">';
@@ -547,13 +556,19 @@
       }
       html += '    </div>';
 
-      // Tempering plus Masterwork side by side
+      // Tempering plus Masterwork side by side, Best plus 2nd Best
       html += '    <div class="ec-block-row">';
       if (item.tempering) {
-        html += '<div class="ec-block ec-block-temper"><div class="ec-block-label">Tempering</div><div class="ec-block-val">' + escapeHtml(item.tempering) + '</div></div>';
+        html += '<div class="ec-block ec-block-temper"><div class="ec-block-label">Tempering</div>';
+        html += '<div class="ec-bk-best"><span class="ec-bk-tag">Best</span> ' + escapeHtml(item.tempering) + '</div>';
+        if (opts.tempering2) html += '<div class="ec-bk-alt"><span class="ec-bk-tag ec-bk-tag-alt">Backup</span> ' + escapeHtml(opts.tempering2) + '</div>';
+        html += '</div>';
       }
       if (item.masterworkPrimary) {
-        html += '<div class="ec-block ec-block-mw"><div class="ec-block-label">Masterwork crit</div><div class="ec-block-val">' + escapeHtml(item.masterworkPrimary) + '</div></div>';
+        html += '<div class="ec-block ec-block-mw"><div class="ec-block-label">Masterwork crit</div>';
+        html += '<div class="ec-bk-best"><span class="ec-bk-tag">Best</span> ' + escapeHtml(item.masterworkPrimary) + '</div>';
+        if (opts.masterwork2) html += '<div class="ec-bk-alt"><span class="ec-bk-tag ec-bk-tag-alt">2nd</span> ' + escapeHtml(opts.masterwork2) + '</div>';
+        html += '</div>';
       }
       html += '    </div>';
 
@@ -563,8 +578,11 @@
       if (typeof item.sockets === 'number' && item.sockets > 0) {
         const best = item.socketContents || (opts.socketBest || 'See runes and gems reference');
         html += '      <div class="ec-bk-best"><span class="ec-bk-tag">Best</span> ' + escapeHtml(best) + '</div>';
+        if (opts.runeBackup) {
+          html += '      <div class="ec-bk-alt"><span class="ec-bk-tag ec-bk-tag-alt">2nd Runeword</span> ' + escapeHtml(opts.runeBackup) + '</div>';
+        }
         if (opts.socketBackup) {
-          html += '      <div class="ec-bk-alt"><span class="ec-bk-tag ec-bk-tag-alt">Backup</span> ' + escapeHtml(opts.socketBackup) + '</div>';
+          html += '      <div class="ec-bk-alt"><span class="ec-bk-tag ec-bk-tag-alt">Backup Gem</span> ' + escapeHtml(opts.socketBackup) + '</div>';
         }
       } else {
         html += '      <div class="ec-bk-na">No sockets on this slot in D4</div>';
@@ -590,7 +608,10 @@
         const r = rarityOf(slot.primary);
         let h = '';
         h += '<button type="button" class="ec-ld-tile ec-rar-' + r.key + '" data-ld-slot="' + escapeHtml(key) + '" style="--rar:' + r.color + '">';
-        h += '  <span class="ec-ld-icon">' + slotSvg(slot.svgName || 'gem', 'ec-slot-svg') + '</span>';
+        const ldIcon = slot.primary && slot.primary.iconUrl
+          ? '<img src="' + escapeHtml(slot.primary.iconUrl) + '" alt="" class="ec-slot-img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'" /><span class="ec-slot-svg-fallback" style="display:none">' + slotSvg(slot.svgName || 'gem', 'ec-slot-svg') + '</span>'
+          : slotSvg(slot.svgName || 'gem', 'ec-slot-svg');
+        h += '  <span class="ec-ld-icon">' + ldIcon + '</span>';
         h += '  <span class="ec-ld-text">';
         h += '    <span class="ec-ld-slotname">' + escapeHtml(slot.slot) + '</span>';
         h += '    <span class="ec-ld-itemname">' + escapeHtml(slot.primary.name) + '</span>';
@@ -666,18 +687,25 @@
       opts = opts || {};
       const slotLabel = opts.slotLabel || '';
       const svgName = opts.svgName || 'gem';
-      const socketBackup = opts.socketBackup || '';
+      const passthrough = {
+        svgName,
+        socketBackup: opts.socketBackup || '',
+        runeBackup: opts.runeBackup || '',
+        tempering2: opts.tempering2 || '',
+        masterwork2: opts.masterwork2 || '',
+        iconUrl: opts.iconUrl || '',
+      };
       let html = '';
       html += '<section class="ec-pair" data-section="' + escapeHtml(opts.section || '') + '">';
       if (slotLabel) html += '  <header class="ec-pair-head">' + slotSvg(svgName, 'ec-pair-svg') + ' ' + escapeHtml(slotLabel) + '</header>';
       html += '  <div class="ec-pair-body">';
       html += '    <div class="ec-pair-col ec-pair-primary">';
       html += '      <div class="ec-pair-flag ec-pair-flag-primary"><i class="fa-solid fa-star" aria-hidden="true"></i> Primary</div>';
-      html += Templates.renderItemCard(primary, { svgName, slotLabel: '', socketBackup });
+      html += Templates.renderItemCard(primary, Object.assign({ slotLabel: '' }, passthrough));
       html += '    </div>';
       html += '    <details class="ec-pair-col ec-pair-backup">';
       html += '      <summary class="ec-pair-flag ec-pair-flag-backup"><i class="fa-solid fa-shuffle" aria-hidden="true"></i> Backup option</summary>';
-      html += Templates.renderItemCard(backup, { svgName, slotLabel: '', isAlt: true, socketBackup });
+      html += Templates.renderItemCard(backup, Object.assign({ slotLabel: '', isAlt: true }, passthrough, { iconUrl: opts.iconUrlBackup || '' }));
       html += '    </details>';
       html += '  </div>';
       html += '</section>';
@@ -981,6 +1009,7 @@
     },
 
     renderAll() {
+      PhaseBanner.render();
       Dashboard.render();
       LevelingPathHeader.render();
       Walkthrough.render();
@@ -1060,6 +1089,72 @@
   function clamp(n, min, max) {
     return Math.max(min, Math.min(max, n));
   }
+
+  // ========================================
+  // ========================================
+  // PHASE INDICATOR BANNER (site-wide)
+  // Live phase from AppState. Tells the player exactly where they are
+  // in Starter / Midgame / Endgame and what unlocks the next phase.
+  // ========================================
+  const PhaseBanner = {
+    render() {
+      const root = document.getElementById('phaseBannerRoot');
+      if (!root) return;
+      const c = (AppState.data && AppState.data.character) || {};
+      const level = Number(c.level) || 1;
+      const paragon = Number(c.paragon) || 0;
+      const torment = Number(c.torment) || 0;
+      const pit = Number(c.pitHighest) || 0;
+      const phase = this.computePhase(level, paragon, torment, pit);
+      let html = '';
+      html += '<div class="phase-banner phase-' + phase.key + '">';
+      html += '  <div class="phase-banner-left">';
+      html += '    <span class="phase-banner-label">Current Phase</span>';
+      html += '    <span class="phase-banner-name">' + escapeHtml(phase.name) + '</span>';
+      html += '  </div>';
+      html += '  <div class="phase-banner-meta">';
+      html += '    <span class="phase-chip">Lv ' + level + '</span>';
+      if (level >= 70) html += '<span class="phase-chip">P ' + paragon + '</span>';
+      if (torment > 0) html += '<span class="phase-chip">T' + torment + '</span>';
+      if (pit > 0) html += '<span class="phase-chip">Pit ' + pit + '</span>';
+      html += '  </div>';
+      html += '  <div class="phase-banner-next"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i> ' + escapeHtml(phase.nextUp) + '</div>';
+      html += '</div>';
+      paint(root, html);
+    },
+
+    computePhase(level, paragon, torment, pit) {
+      if (level < 70) {
+        return {
+          key: 'leveling', name: 'Leveling',
+          nextUp: 'Hit Lv 70 and complete Pit 10 to unlock Torment 1.',
+        };
+      }
+      // At Lv 70
+      if (paragon < 50 || torment < 3) {
+        return {
+          key: 'starter', name: 'Starter (Lv 70, T1-T2)',
+          nextUp: 'Boss farm Litany of Sable (Astaroth) and Footfalls of the Waning World. Push to Paragon 50 and Torment 3.',
+        };
+      }
+      if (paragon < 150 || torment < 6) {
+        return {
+          key: 'midgame', name: 'Midgame (Paragon 50-150, T3-T5)',
+          nextUp: 'Level glyphs in Pit (Abyssal first). Farm Mythics from Duriel and Andariel. Imprint Aspect of Deeper Shadows and Aspect of Calamity. Aim Paragon 200 and Torment 7.',
+        };
+      }
+      if (paragon < 200 || pit < 80) {
+        return {
+          key: 'endgame-early', name: 'Endgame Push (Paragon 150+, T6-T7)',
+          nextUp: 'Lock Mythics. Push Pit 80 for reliable Mythic farming. Temper every slot and Masterwork the priority pieces.',
+        };
+      }
+      return {
+        key: 'endgame-full', name: 'Optimized Endgame (Paragon 200+, T8, Pit 80+)',
+        nextUp: 'Stat caps: Crit Chance 90, Crit Damage 300, Vulnerable 150, Attack Speed 86. Transfigure final pieces with the Horadric Cube last. Push Pit ceiling (~100).',
+      };
+    },
+  };
 
   // ========================================
   // DASHBOARD RENDERER
@@ -3697,6 +3792,40 @@
       return '';
     },
 
+    // Maps endgame gear key to gearweights.js slot key for 2nd-best
+    // tempering and masterwork sourcing.
+    gwSlotMap: {
+      mainHand: 'daggers', offhand: 'focus', helm: 'helm', chest: 'chest',
+      gloves: 'gloves', pants: 'pants', boots: 'boots', amulet: 'amulet',
+      ring1: 'ring-1', ring2: 'ring-2',
+    },
+
+    enrichmentsFor(gearKey) {
+      const gw = window.D4_GEAR_WEIGHTS;
+      const eg = window.D4_ENDGAME;
+      const slotKey = this.gwSlotMap[gearKey];
+      const out = { tempering2: '', masterwork2: '', runeBackup: '' };
+      if (gw && gw.slots && gw.slots[slotKey]) {
+        const s = gw.slots[slotKey];
+        if (s.tempering && s.tempering[1]) out.tempering2 = s.tempering[1].manual;
+        if (s.masterwork) {
+          const mw2 = s.masterwork.find((m) => m.priority === 2);
+          if (mw2) out.masterwork2 = mw2.stat;
+        }
+      }
+      // Runeword 2nd best (chest, pants only)
+      if (eg && eg.runes && eg.runes.alternatives) {
+        if (gearKey === 'chest') {
+          const alt = eg.runes.alternatives.find((a) => /prid/i.test(a.pair) && !/nagu/i.test(a.pair));
+          if (alt) out.runeBackup = alt.pair + ' (' + alt.tier + ' tier alt)';
+        } else if (gearKey === 'pants') {
+          // Pants alt not enumerated in alternatives, leave empty
+          out.runeBackup = '';
+        }
+      }
+      return out;
+    },
+
     render() {
       const root = document.getElementById('endgameGearRoot');
       if (!root) return;
@@ -3748,12 +3877,18 @@
         for (const k of sectionMap[sec]) {
           const slot = gear[k];
           if (!slot) continue;
+          const enrich = this.enrichmentsFor(k);
           html += '<div class="ec-detail-anchor" id="ecSlot-' + k + '">';
           html += Templates.renderComparisonPair(slot.primary, slot.backup, {
             slotLabel: slot.slot,
             svgName: slot.svgName,
             section: sec,
             socketBackup: this.socketBackupFor(k),
+            tempering2: enrich.tempering2,
+            masterwork2: enrich.masterwork2,
+            runeBackup: enrich.runeBackup,
+            iconUrl: slot.primary && slot.primary.iconUrl,
+            iconUrlBackup: slot.backup && slot.backup.iconUrl,
           });
           html += '</div>';
         }
