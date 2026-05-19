@@ -272,6 +272,7 @@
       }
       if (this.current === 'endgame-build') {
         EndgameGear.render();
+        EndgameSystems.render();
         EndgameProgression.render();
         Endbuild.render();
         Shards.render();
@@ -992,6 +993,7 @@
       Uniques.render();
       Bosses.render();
       EndgameGear.render();
+      EndgameSystems.render();
       EndgameProgression.render();
       Endbuild.render();
       Talismans.render();
@@ -3771,6 +3773,147 @@
         anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
         setTimeout(() => anchor.classList.remove('is-flash'), 1600);
       });
+    },
+  };
+
+  // ========================================
+  // ENDGAME SYSTEMS (Sprint 6 leftovers)
+  // How to play it: skill bar, soul shard plus fragment, glyphs,
+  // paragon path, resource mechanics, boss rotation. Read only
+  // visual surface from endgamedata.js. The old interactive
+  // Endbuild, Shards, Paragon renderers stay below, untouched.
+  // ========================================
+  const EndgameSystems = {
+    render() {
+      const root = document.getElementById('endgameSystemsRoot');
+      if (!root) return;
+      const eg = window.D4_ENDGAME;
+      if (!eg || !eg.skillBar) {
+        paint(root, '<div class="placeholder-card"><i class="fa-solid fa-wand-sparkles placeholder-icon"></i><div class="placeholder-title">No systems data</div></div>');
+        return;
+      }
+      const c = (AppState.data && AppState.data.character) || {};
+      const paragon = Number(c.paragon) || 0;
+      const conf = (x) => 'rg-conf-' + String(x || 'MEDIUM').toLowerCase();
+      let html = '';
+
+      html += '<section class="ec-hero">';
+      html += '  <h2 class="ec-hero-title">How To Play It</h2>';
+      html += '  <p class="ec-hero-sub">Skill bar, soul shard, glyphs, paragon path, and the resource loops. The interactive trackers (paragon mark-built, glyph steppers) are still below.</p>';
+      html += '</section>';
+
+      // Skill Bar
+      const fb = eg.skillBar.finalEndgame;
+      html += '<section class="ec-section ec-section-weapons">';
+      html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{2694}</span><h2 class="ec-section-title">Skill Bar</h2></header>';
+      html += '  <div class="ec-pair"><div class="ec-pair-head">' + escapeHtml(fb.label) + ' <span class="aspect-priority ' + conf(fb.confidence) + '">' + fb.confidence + '</span></div>';
+      html += '  <ol class="ec-affix-list">';
+      for (const s of fb.slots) {
+        html += '<li class="ec-affix"><span class="ec-affix-n">' + s.n + '</span><span class="ec-affix-stat"><strong>' + escapeHtml(s.skill) + '</strong> &middot; ' + escapeHtml(s.role) + '<br><span class="ec-step-sub">' + escapeHtml(s.notes) + '</span></span></li>';
+      }
+      html += '  </ol></div>';
+      if (eg.skillBar.lv70SwapMoment) {
+        html += '  <div class="hc-warn"><div class="hc-warn-head"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> ' + escapeHtml(eg.skillBar.lv70SwapMoment.label) + '</div><p class="hc-warn-body">' + escapeHtml(eg.skillBar.lv70SwapMoment.description) + '</p></div>';
+      }
+      if (eg.skillBar.optimizedPush) {
+        html += '  <div class="ec-block ec-block-mw"><div class="ec-block-label">' + escapeHtml(eg.skillBar.optimizedPush.label) + '</div><div class="ec-block-val">' + escapeHtml(eg.skillBar.optimizedPush.rotation) + '</div></div>';
+      }
+      const variant = (v) => {
+        if (!v || !v.slots) return '';
+        let h = '<details class="ec-deep"><summary>' + escapeHtml(v.label) + '</summary><ol class="ec-affix-list">';
+        for (const s of v.slots) h += '<li class="ec-affix"><span class="ec-affix-n">' + s.n + '</span><span class="ec-affix-stat"><strong>' + escapeHtml(s.skill) + '</strong> &middot; ' + escapeHtml(s.notes) + '</span></li>';
+        return h + '</ol></details>';
+      };
+      html += variant(eg.skillBar.speedfarm) + variant(eg.skillBar.push);
+      html += '</section>';
+
+      // Soul Shard plus Fragment
+      const ss = eg.soulShards;
+      if (ss) {
+        html += '<section class="ec-section ec-section-stats">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F480}</span><h2 class="ec-section-title">Soul Shard and Fragment</h2></header>';
+        html += '  <div class="ec-grid">';
+        html += '<div class="ec-pair"><div class="ec-pair-head">Shard: ' + escapeHtml(ss.shard.name) + ' <span class="aspect-priority ' + conf(ss.shard.confidence) + '">' + ss.shard.confidence + '</span></div><div class="ec-block-val">' + escapeHtml(ss.shard.effect) + '</div></div>';
+        html += '<div class="ec-pair"><div class="ec-pair-head">Fragment: ' + escapeHtml(ss.fragment.name) + ' <span class="aspect-priority ' + conf(ss.fragment.confidence) + '">' + ss.fragment.confidence + '</span></div><div class="ec-block-val">' + escapeHtml(ss.fragment.effect) + '</div></div>';
+        html += '  </div>';
+        html += '  <div class="ec-block ec-block-aspect"><div class="ec-block-label">Synergy</div><div class="ec-block-val">' + escapeHtml(ss.synergy) + '</div></div>';
+        html += '</section>';
+      }
+
+      // Glyphs
+      if (eg.glyphs) {
+        html += '<section class="ec-section ec-section-jewelry">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F4DC}</span><h2 class="ec-section-title">Glyph Priority</h2></header>';
+        html += '  <ol class="ec-affix-list">';
+        for (const g of eg.glyphs.priority) {
+          html += '<li class="ec-affix"><span class="ec-affix-n">' + g.rank + '</span><span class="ec-affix-stat"><strong>' + escapeHtml(g.name) + '</strong> &middot; ' + escapeHtml(g.board) + '</span></li>';
+        }
+        html += '  </ol>';
+        html += '  <div class="ec-block"><div class="ec-block-label">Leveling thresholds</div><ul class="ec-affix-list">';
+        for (const t of eg.glyphs.levelingThresholds) {
+          html += '<li class="ec-affix"><span class="ec-affix-stat">Glyph ' + t.glyphLevel + ' needs Pit ' + t.pitRequired + ' &middot; ' + escapeHtml(t.note) + '</span></li>';
+        }
+        html += '  </ul></div>';
+        if (eg.glyphs.farmNote) html += '  <p class="ec-notes">' + escapeHtml(eg.glyphs.farmNote) + '</p>';
+        html += '</section>';
+      }
+
+      // Paragon path, highlight the one that applies to current paragon
+      if (eg.paragon) {
+        const sub = paragon < 200;
+        html += '<section class="ec-section ec-section-armor">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F333}</span><h2 class="ec-section-title">Paragon Path</h2></header>';
+        html += '  <div class="ec-grid">';
+        html += '<div class="ec-pair' + (sub ? '' : ' acq-done-soft') + '"><div class="ec-pair-head">' + escapeHtml(eg.paragon.sub200Path.label) + (sub ? ' <span class="ec-affix-flag ec-flag-defining">YOU ARE HERE</span>' : '') + '</div><div class="ec-block-val">' + escapeHtml(eg.paragon.sub200Path.description) + '</div></div>';
+        html += '<div class="ec-pair' + (sub ? ' acq-done-soft' : '') + '"><div class="ec-pair-head">' + escapeHtml(eg.paragon.over200Path.label) + (!sub ? ' <span class="ec-affix-flag ec-flag-defining">YOU ARE HERE</span>' : '') + '</div><div class="ec-block-val">' + escapeHtml(eg.paragon.over200Path.description) + '</div></div>';
+        html += '  </div>';
+        html += '  <div class="ec-block"><div class="ec-block-label">Board order</div><ol class="ec-affix-list">';
+        for (const b of eg.paragon.boardOrder) {
+          html += '<li class="ec-affix"><span class="ec-affix-n">' + b.rank + '</span><span class="ec-affix-stat">' + escapeHtml(b.name) + (b.glyph && b.glyph !== 'none' ? ' &middot; glyph: ' + escapeHtml(b.glyph) : '') + '</span></li>';
+        }
+        html += '  </ol></div>';
+        html += '  <div class="ec-block ec-block-socket"><div class="ec-block-label">Node strategy</div><ol class="ec-affix-list">';
+        for (const ns of eg.paragon.nodeStrategy) {
+          html += '<li class="ec-affix"><span class="ec-affix-n">' + ns.rank + '</span><span class="ec-affix-stat">' + escapeHtml(ns.action) + '</span></li>';
+        }
+        html += '  </ol></div>';
+        html += '</section>';
+      }
+
+      // Mechanics
+      const m = eg.mechanics;
+      if (m) {
+        html += '<section class="ec-section">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F501}</span><h2 class="ec-section-title">Resource Mechanics</h2></header>';
+        html += '  <div class="ec-grid">';
+        if (m.shadowform) {
+          html += '<div class="ec-pair"><div class="ec-pair-head">Shadowform</div>';
+          html += '<div class="ec-block"><div class="ec-block-label">Generators</div><ul class="ec-affix-list">' + m.shadowform.sources.map((x) => '<li class="ec-affix"><span class="ec-affix-stat">' + escapeHtml(x) + '</span></li>').join('') + '</ul></div>';
+          html += '<div class="ec-block"><div class="ec-block-label">Consumers</div><ul class="ec-affix-list">' + m.shadowform.consumers.map((x) => '<li class="ec-affix"><span class="ec-affix-stat">' + escapeHtml(x) + '</span></li>').join('') + '</ul></div>';
+          html += '<div class="ec-block ec-block-aspect"><div class="ec-block-label">While active</div><div class="ec-block-val">' + escapeHtml(m.shadowform.whileActive) + '. ' + escapeHtml(m.shadowform.maxNote || '') + '</div></div>';
+          html += '</div>';
+        }
+        if (m.wrath) {
+          html += '<div class="ec-pair"><div class="ec-pair-head">Wrath</div>';
+          html += '<div class="ec-block"><div class="ec-block-label">Sources</div><ul class="ec-affix-list">' + m.wrath.sources.map((x) => '<li class="ec-affix"><span class="ec-affix-stat">' + escapeHtml(x) + '</span></li>').join('') + '</ul></div>';
+          html += '<div class="ec-block ec-block-socket"><div class="ec-block-label">Optimal kit</div><div class="ec-block-val">' + escapeHtml(m.wrath.optimalKit) + '</div></div>';
+          html += '</div>';
+        }
+        html += '  </div>';
+        if (m.offering) {
+          html += '  <div class="ec-block"><div class="ec-block-label">Offering</div><div class="ec-block-val">Generators: ' + escapeHtml(m.offering.generators) + '<br>Consumers: ' + escapeHtml(m.offering.consumers) + '</div></div>';
+        }
+        if (m.bossRotation && m.bossRotation.length) {
+          html += '  <div class="ec-block ec-block-temper"><div class="ec-block-label">Boss rotation</div><ol class="ec-affix-list">';
+          for (const step of m.bossRotation) {
+            html += '<li class="ec-affix"><span class="ec-affix-n">' + (step.step || '') + '</span><span class="ec-affix-stat">' + escapeHtml(step.action) + '</span></li>';
+          }
+          html += '  </ol></div>';
+        }
+        html += '</section>';
+      }
+
+      paint(root, html);
     },
   };
 
