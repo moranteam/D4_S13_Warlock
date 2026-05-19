@@ -3115,6 +3115,25 @@
       }
       if (curGroup !== null) html += '</div>';
 
+      // Sprint 8: acquisition lookup, where does any target drop
+      const eg = window.D4_ENDGAME;
+      if (eg && eg.lookups && eg.lookups.byItem) {
+        const items = Object.keys(eg.lookups.byItem).map((name) => ({
+          name,
+          sources: eg.lookups.byItem[name],
+        })).sort((a, b) => a.name.localeCompare(b.name));
+        html += '<section class="acq-group">';
+        html += '  <div class="acq-group-label">Acquisition Lookup</div>';
+        html += '  <div class="acq-lookup-sub">Search any target item to see where it drops.</div>';
+        html += Templates.renderLookupGrid(items, [], {
+          id: 'acqLookup',
+          labelKey: 'name',
+          subKey: 'sources',
+          searchPlaceholder: 'an item (Litany, Heir, runes...)',
+        });
+        html += '</section>';
+      }
+
       paint(root, html);
       this.bind();
     },
@@ -3147,6 +3166,18 @@
           Acquisition.render();
           return;
         }
+      });
+      main.addEventListener('input', (e) => {
+        const search = e.target.closest && e.target.closest('[data-acqLookup-search]');
+        if (!search) return;
+        const q = (search.value || '').trim().toLowerCase();
+        const cells = document.querySelectorAll('#acqLookup .ec-lookup-cell');
+        cells.forEach((cell) => {
+          const label = cell.getAttribute('data-label') || '';
+          const txt = (cell.textContent || '').toLowerCase();
+          const hit = !q || label.indexOf(q) !== -1 || txt.indexOf(q) !== -1;
+          cell.classList.toggle('is-hidden', !hit);
+        });
       });
     },
   };

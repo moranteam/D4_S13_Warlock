@@ -4264,3 +4264,21 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 .endgame-progression-root { display: flex; flex-direction: column; gap: 18px; margin: 18px 0; }
 
 .endgame-systems-root { display: flex; flex-direction: column; gap: 18px; margin: 18px 0; }
+
+/* Sprint 8: acquisition lookup + mobile QA hardening */
+.acq-lookup-sub { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 10px; }
+#acqLookup .ec-lookup-search { width: 100%; }
+
+@media (max-width: 480px) {
+  .ec-item { grid-template-columns: 56px 1fr; gap: 10px; padding: 12px; }
+  .ec-item-icon { width: 56px; height: 56px; padding: 8px; }
+  .ec-hero-title, .acq-hero-title, .hc-hero-title, .rg-hero-title, .tal-hero-title { font-size: 1.1rem; }
+  .view-title { font-size: 1.5rem; }
+  .ec-section-title { font-size: 1rem; }
+  .ec-affix { font-size: 0.86rem; }
+  .gc-cmp-cols { flex-direction: column; }
+  .gc-cmp-vs { padding: 4px 0; }
+  .ec-loadout, .ec-grid, .ec-block-row { gap: 8px; }
+  body, .view, .main { overflow-x: hidden; }
+  .ec-item-name, .acq-task, .ec-affix-stat { overflow-wrap: anywhere; }
+}
