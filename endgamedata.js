@@ -884,6 +884,43 @@
     },
 
     /* ============================================================
+       MURMURING OBOLS and KURAST UNDERCITY (Spirit Brazier)
+       Source: master prompt 2026-05-19.
+       ============================================================ */
+    spiritBrazier: {
+      overview: 'The Spirit Brazier in the Undercity of Kurast lets you customize the run rewards. Two slots: a Tribute slot (the dungeon key, sets the challenge) and a Bargain slot (sets what loot drops).',
+      flow: [
+        { rank: 1, action: 'Place a Tribute. Tributes act as dungeon keys and add challenge for improved rewards. The Bargain slot stays locked until a Tribute is placed.' },
+        { rank: 2, action: 'Place a Bargain. Bargains customize the loot and cost materials.' },
+      ],
+      bargains: [
+        { material: 'Iron', effect: 'More weapons drop' },
+        { material: 'Murmuring Obols', effect: 'Items for OTHER classes appear' },
+        { material: 'Baleful Fragments', effect: 'Weapons drop with Offensive Aspects' },
+        { material: 'Gold (millions)', effect: 'Dropped armor or amulet gets Skill or Passive Ranks' },
+      ],
+      warlockWarning: {
+        headline: 'The Murmuring Obols Bargain is NOT for Warlock gearing.',
+        detail: 'It produces loot for OTHER classes. For Warlock gearing in the Undercity, use Iron, Baleful Fragments, or Gold instead.',
+      },
+      confidence: 'HIGH',
+    },
+
+    /* ============================================================
+       MURMURING OBOLS FARMING (Purveyor gambling currency)
+       ============================================================ */
+    murmuringObols: {
+      sources: [
+        { src: 'World events (red circle events)', yield: '~20 Obols per event. ~35 if the mastery objective is completed.', priority: 'HIGH' },
+        { src: 'Helltides', yield: 'Most efficient loop. Packs many events and chests into a small area.', priority: 'HIGH' },
+        { src: 'Tree of Whispers caches', yield: 'Obols included in cache rewards.', priority: 'MEDIUM' },
+      ],
+      carryCap: '2,640 Obols. Account shared. Anything above the cap is lost, so spend regularly.',
+      bestUse: 'Gamble at the Purveyor of Curiosities. Rarity and item power scale to character level. Good for chasing missing Legendary Aspects and slot Uniques.',
+      confidence: 'HIGH',
+    },
+
+    /* ============================================================
        GREATER AFFIX PRIORITY (where to spend Tuning Prisms)
        Source: master prompt 2026-05-19.
        ============================================================ */

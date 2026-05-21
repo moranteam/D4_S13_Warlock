@@ -4185,6 +4185,50 @@
         html += '</section>';
       }
 
+      // Spirit Brazier (Kurast Undercity)
+      const sb = eg.spiritBrazier;
+      if (sb) {
+        html += '<section class="ec-section ec-section-jewelry">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F525}</span><h2 class="ec-section-title">Spirit Brazier (Kurast Undercity)</h2></header>';
+        html += '  <p class="ec-notes">' + escapeHtml(sb.overview) + '</p>';
+        html += '  <div class="ec-block-label">Flow</div>';
+        html += '  <ol class="ec-step-list">';
+        for (const s of sb.flow) {
+          html += '<li class="ec-step"><span class="ec-step-n">' + s.rank + '</span><div class="ec-step-body"><div class="ec-step-text">' + escapeHtml(s.action) + '</div></div></li>';
+        }
+        html += '  </ol>';
+        html += '  <div class="ec-block-label" style="margin-top:8px">Bargain effects</div>';
+        html += '  <div class="ec-grid">';
+        for (const b of sb.bargains) {
+          html += '<div class="ec-pair">';
+          html += '  <div class="ec-pair-head">' + escapeHtml(b.material) + '</div>';
+          html += '  <div class="ec-block-val">' + escapeHtml(b.effect) + '</div>';
+          html += '</div>';
+        }
+        html += '  </div>';
+        if (sb.warlockWarning) {
+          html += '  <div class="hc-warn"><div class="hc-warn-head"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> ' + escapeHtml(sb.warlockWarning.headline) + '</div><p class="hc-warn-body">' + escapeHtml(sb.warlockWarning.detail) + '</p></div>';
+        }
+        html += '</section>';
+      }
+
+      // Murmuring Obols farming
+      const obols = eg.murmuringObols;
+      if (obols) {
+        html += '<section class="ec-section">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1FA99}</span><h2 class="ec-section-title">Murmuring Obols Farming</h2></header>';
+        html += '  <div class="ec-block-label">Sources</div>';
+        html += '  <ul class="ec-affix-list">';
+        for (const s of obols.sources) {
+          const conf = String(s.priority || 'MEDIUM').toLowerCase();
+          html += '<li class="ec-affix"><span class="ec-affix-stat"><strong>' + escapeHtml(s.src) + '</strong> &middot; ' + escapeHtml(s.yield) + '</span><span class="aspect-priority rg-conf-' + conf + '">' + s.priority + '</span></li>';
+        }
+        html += '  </ul>';
+        html += '  <div class="ec-block ec-block-socket"><div class="ec-block-label">Carry cap</div><div class="ec-block-val">' + escapeHtml(obols.carryCap) + '</div></div>';
+        html += '  <div class="ec-block ec-block-aspect"><div class="ec-block-label">Best use</div><div class="ec-block-val">' + escapeHtml(obols.bestUse) + '</div></div>';
+        html += '</section>';
+      }
+
       paint(root, html);
     },
   };
