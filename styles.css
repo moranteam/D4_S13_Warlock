@@ -4351,3 +4351,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 @media (min-width: 768px) {
   .ap-row { grid-template-columns: 160px 1fr 1fr; align-items: start; }
 }
+
+/* Patch freshness sub-line */
+.patch-banner-fresh { font-family: var(--font-mono); font-size: 0.78rem; color: var(--gold-bright); margin-top: 6px; }

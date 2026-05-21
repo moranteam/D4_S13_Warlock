@@ -824,6 +824,7 @@ window.D4_DATA = {
     version: '3.0',
     season: 13,
     seasonName: 'Season of Reckoning',
+    freshnessNote: 'Season 13 Lord of Hatred. Sources: Icy Veins, Maxroll, Wowhead. Compiled May 2026.',
     releaseDate: '2026-04-28',
     sources: [
       { name: 'Maxroll', url: 'https://maxroll.gg/d4', role: 'Build guides, paragon, tier lists' },

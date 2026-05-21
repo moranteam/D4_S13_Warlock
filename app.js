@@ -4574,6 +4574,7 @@
       html += '  <div class="patch-banner-title"><i class="fa-solid fa-fire"></i> Patch ' + meta.version + ' ' + meta.name + '</div>';
       html += '  <div class="patch-banner-meta">Season ' + meta.season + ' &middot; ' + meta.seasonName + ' &middot; Launched ' + meta.releaseDate + '</div>';
       html += '  <div class="patch-banner-compiled">Data compiled ' + ((window.D4_DATA && window.D4_DATA.compiledAt) || 'unknown') + '</div>';
+      if (meta.freshnessNote) html += '  <div class="patch-banner-fresh">' + escapeHtml(meta.freshnessNote) + '</div>';
       html += '</section>';
 
       html += '<section class="patch-section">';
