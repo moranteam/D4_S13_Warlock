@@ -108,7 +108,7 @@
           tempering: 'Natural Resistance (Lightning Resistance)',
           masterworkPrimary: 'Maximum Resource',
           sockets: 2,
-          socketContents: 'Runeword: Neo plus Prid (Dark Prison automation)',
+          socketContents: 'Runeword: Igni plus Prid (defensive variant uses same runes) (Dark Prison automation, S tier endgame canonical)',
           notes: 'Deeper Shadows increases max Shadowform stacks. Chest sockets reserved for the build defining runeword.',
         },
         backup: {
@@ -490,9 +490,9 @@
       canonicalPairs: [
         {
           slot: 'Chest',
-          pair: 'Neo plus Prid',
-          tier: 'A',
-          effect: 'Avoid taking damage 2 sec generates Offering. Prid invokes Dark Prison Chain Aura. Drops Dark Prison from the skill bar after Lv 40.',
+          pair: 'Igni plus Prid',
+          tier: 'S',
+          effect: 'Igni stores Offering every 0.3 sec passively (up to 500 cap). Prid invokes Dark Prison Chain Aura. Drops Dark Prison from the skill bar after Lv 40. Maxroll endgame canonical (V2.4 verified 2026-05-21).',
           confidence: 'HIGH',
         },
         {
@@ -502,6 +502,12 @@
           effect: 'Maintain 1 active Summon for 5 sec generates Offering per summon (max 5). Que invokes Earthen Bulwark Barrier.',
           confidence: 'HIGH',
         },
+      ],
+      // Progression-aware runeword setups per Maxroll Equipment widget variants
+      bySetup: [
+        { phase: 'Leveling / T1 Starter', pairs: ['Cem plus Ceh', 'Cir plus Prid'], note: 'Used in the 1-70 Leveling and T1 Starter loadout. Cem on movement plus Ceh Vulnerable, and Cir on crit plus Prid Dark Prison.' },
+        { phase: 'Mid Endgame', pairs: ['Cir plus Prid', 'Nagu plus Que'], note: 'Mid endgame Maxroll variant. Cir Crit-based Offering with Dark Prison, Nagu summons with Earthen Bulwark Barrier.' },
+        { phase: 'Final Endgame', pairs: ['Igni plus Prid', 'Nagu plus Que'], note: 'Final endgame Maxroll canonical. Igni passive 0.3 sec Offering store with Dark Prison, plus Nagu plus Que summons Barrier.' },
       ],
       alternatives: [
         { pair: 'Cir plus Ceh', tier: 'S', effect: 'Crit generates Offering, Ceh applies Vulnerable plus damage ramp. Top damage combo.' },
@@ -692,7 +698,7 @@
         optimalKit: 'Ring of Starless Skies plus Dominion plus Unbound plus 1x Wrath Regeneration affix keeps Wrath topped up regardless of Attack Speed.',
       },
       offering: {
-        generators: 'Neo plus Prid (avoid damage 2 sec) plus Nagu plus Que (active summons, 1 per summon up to 5, max 500)',
+        generators: 'Igni plus Prid (passive Offering store every 0.3 sec, max 500) plus Nagu plus Que (active summons, 1 per summon up to 5, max 500)',
         consumers: 'Prid (Dark Prison cast) plus Que (Earthen Bulwark Barrier)',
       },
       bossRotation: [

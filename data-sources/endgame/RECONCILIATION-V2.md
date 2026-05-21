@@ -195,3 +195,35 @@ holds.
 
 This makes the Maxroll-canonical rule the project-wide tie-breaker for any future
 divergence between user-supplied research and our reconciled data.
+
+## V2.4 Maxroll Runeword Direct Verification, 2026-05-21
+
+Charlie pointed out that the Maxroll endgame guide shows different runeword pairs
+than our reconciled data. Re-fetched the Maxroll Dread Claws equipment widget
+directly via Playwright on 2026-05-21 and confirmed:
+
+The Maxroll page renders THREE runeword variants depending on progression phase
+(visible as concatenated rune name text in the equipment widget):
+
+- Leveling / T1 Starter: `Cem + Ceh` and `Cir + Prid`
+- Mid Endgame: `Cir + Prid` and `Nagu + Que`
+- Final Endgame: `Igni + Prid` and `Nagu + Que`
+
+This overrides Resolution 10 which had Neo plus Prid as the canonical chest pair.
+Resolution 10 was sourced from Icy Veins. Maxroll wins per Charlie's directive that
+Maxroll is the project tie breaker.
+
+Updates applied to endgamedata.js:
+- runes.canonicalPairs chest changed from Neo plus Prid to Igni plus Prid (S tier)
+- runes.canonicalPairs pants unchanged (Nagu plus Que, A tier)
+- New runes.bySetup array documenting all 3 progression phase setups
+- mechanics.offering.generators updated to reflect Igni passive store
+- gear.chest.primary and gear.chest.backup socketContents updated
+
+Slot assignment confirmed: runewords go in Chest and Pants. Maxroll places the
+runewords in a separate widget container (equipment_Equipment__runewords) that is
+visually separate from the gear paper-doll, which can read as if they live in
+a different slot. They do not. Helm is gem-only (Royal Sapphire).
+
+Confidence: HIGH on Igni plus Prid chest endgame canonical and Nagu plus Que pants
+endgame canonical (direct Maxroll widget verification).

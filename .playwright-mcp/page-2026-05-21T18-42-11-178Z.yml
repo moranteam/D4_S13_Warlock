@@ -1,0 +1,1119 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - region "Notifications Alt+T"
+    - generic [ref=e4]:
+      - link "Maxroll" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic "Maxroll" [ref=e6]
+      - list [ref=e11]:
+        - listitem [ref=e12]:
+          - link "Home" [ref=e14] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=e17]:
+          - generic [ref=e18]:
+            - generic "Games" [ref=e19] [cursor=pointer]
+            - list [ref=e22]:
+              - listitem [ref=e23]:
+                - link "Path of Exile 2" [ref=e24] [cursor=pointer]:
+                  - /url: /poe2
+                  - img "Path of Exile 2" [ref=e28]
+              - listitem [ref=e31]:
+                - link "Diablo IV" [ref=e32] [cursor=pointer]:
+                  - /url: /d4
+                  - img "Diablo IV" [ref=e35]
+              - listitem [ref=e36]:
+                - link "Path of Exile" [ref=e37] [cursor=pointer]:
+                  - /url: /poe
+                  - img "Path of Exile" [ref=e40]
+              - listitem [ref=e41]:
+                - link "Last Epoch" [ref=e42] [cursor=pointer]:
+                  - /url: /last-epoch
+                  - img "Last Epoch" [ref=e45]
+              - listitem [ref=e46]:
+                - 'link "Diablo II: Resurrected" [ref=e47] [cursor=pointer]':
+                  - /url: /d2
+                  - 'img "Diablo II: Resurrected" [ref=e50]'
+              - listitem [ref=e51]:
+                - link "Borderlands 4" [ref=e52] [cursor=pointer]:
+                  - /url: /borderlands-4
+                  - img "Borderlands 4" [ref=e55]
+              - listitem [ref=e56]:
+                - link "World of Warcraft" [ref=e57] [cursor=pointer]:
+                  - /url: /wow
+                  - img "World of Warcraft" [ref=e60]
+              - listitem [ref=e61]:
+                - link "Throne And Liberty" [ref=e62] [cursor=pointer]:
+                  - /url: /throne-and-liberty
+                  - img "Throne And Liberty" [ref=e65]
+              - listitem [ref=e66]:
+                - 'link "Clair Obscur: Expedition 33" [ref=e67] [cursor=pointer]':
+                  - /url: /clair-obscur-expedition-33
+                  - 'img "Clair Obscur: Expedition 33" [ref=e70]'
+              - listitem [ref=e71]:
+                - link "Diablo III" [ref=e72] [cursor=pointer]:
+                  - /url: /d3
+                  - img "Diablo III" [ref=e75]
+              - listitem [ref=e76]:
+                - link "Lost Ark" [ref=e77] [cursor=pointer]:
+                  - /url: /lost-ark
+                  - img "Lost Ark" [ref=e80]
+              - listitem [ref=e81]:
+                - link "Monster Hunter Wilds" [ref=e82] [cursor=pointer]:
+                  - /url: /monster-hunter-wilds
+                  - img "Monster Hunter Wilds" [ref=e85]
+              - listitem [ref=e86]:
+                - link "Elden Ring Nightreign" [ref=e87] [cursor=pointer]:
+                  - /url: /elden-ring-nightreign
+                  - img "Elden Ring Nightreign" [ref=e90]
+              - listitem [ref=e91]:
+                - 'link "Blue Protocol: Star Resonance" [ref=e92] [cursor=pointer]':
+                  - /url: /blue-protocol
+                  - 'img "Blue Protocol: Star Resonance" [ref=e95]'
+              - listitem [ref=e96]:
+                - generic "More Games" [ref=e97] [cursor=pointer]
+        - listitem [ref=e102]:
+          - link "Store" [ref=e104] [cursor=pointer]:
+            - /url: /shop
+        - listitem [ref=e107]:
+          - generic "Coming Soon" [ref=e109]
+        - listitem [ref=e112]:
+          - link "About Us" [ref=e114] [cursor=pointer]:
+            - /url: "#"
+        - listitem [ref=e117]:
+          - link "Contact Us" [ref=e119] [cursor=pointer]:
+            - /url: /contact-us
+    - banner [ref=e122]:
+      - generic [ref=e123]:
+        - generic [ref=e127]: Browse Games
+        - generic "Global search" [ref=e132]:
+          - textbox "Search Diablo IV" [ref=e133]
+      - link "pandaglassjaw pandaglassjaw Diablo IV Live Now" [ref=e136] [cursor=pointer]:
+        - /url: https://www.twitch.tv/pandaglassjaw
+        - img "pandaglassjaw" [ref=e138]
+        - generic [ref=e139]:
+          - generic [ref=e140]: pandaglassjaw
+          - generic [ref=e141]: Diablo IV
+        - generic [ref=e144]: Live Now
+      - generic [ref=e146]:
+        - link [ref=e148] [cursor=pointer]:
+          - /url: /shop
+        - link [ref=e152] [cursor=pointer]:
+          - /url: /auth/settings
+        - button "Sign In" [ref=e157] [cursor=pointer]:
+          - generic [ref=e159]: Sign In
+    - generic [ref=e161]:
+      - generic [ref=e165]:
+        - link "Diablo IV" [ref=e166] [cursor=pointer]:
+          - /url: /d4
+          - img "Diablo IV" [ref=e167]
+        - generic [ref=e168]:
+          - link "All News" [ref=e169] [cursor=pointer]:
+            - /url: /
+            - text: All News
+          - link "Diablo IV" [ref=e171] [cursor=pointer]:
+            - /url: /d4
+      - generic [ref=e174]:
+        - generic [ref=e175]: Powered By
+        - link "Starforge Systems" [ref=e177] [cursor=pointer]:
+          - /url: http://starforgesystems.com/?utm_source=web&utm_medium=banner&utm_campaign=Maxroll
+          - generic "Starforge Systems" [ref=e178]
+    - generic [ref=e181]:
+      - link "Home" [ref=e184] [cursor=pointer]:
+        - /url: /d4
+        - generic [ref=e185]: Home
+      - link "Getting Started" [ref=e188] [cursor=pointer]:
+        - /url: /d4/getting-started
+        - generic [ref=e189]: Getting Started
+      - link "Build Guides" [ref=e192] [cursor=pointer]:
+        - /url: /d4/build-guides
+        - generic [ref=e193]: Build Guides
+      - link "Tier Lists" [ref=e197] [cursor=pointer]:
+        - /url: /d4/tierlists
+        - generic [ref=e198]: Tier Lists
+      - link "Meta" [ref=e201] [cursor=pointer]:
+        - /url: /d4/meta
+        - generic [ref=e202]: Meta
+      - link "Bosses" [ref=e205] [cursor=pointer]:
+        - /url: /d4/bosses
+        - generic [ref=e206]: Bosses
+      - generic [ref=e210]: Resources
+      - link "World Map" [ref=e214] [cursor=pointer]:
+        - /url: /d4/map-tool
+        - generic [ref=e215]: World Map
+      - link "D4Planner" [ref=e218] [cursor=pointer]:
+        - /url: /d4/planner
+        - generic [ref=e219]: D4Planner
+      - link "Community Builds" [ref=e222] [cursor=pointer]:
+        - /url: /d4/planner/builds
+        - generic [ref=e223]: Community Builds
+    - progressbar [ref=e224]
+    - generic [ref=e228]:
+      - generic [ref=e231]:
+        - link "Diablo 4" [ref=e233] [cursor=pointer]:
+          - /url: /d4/
+        - generic [ref=e234]:
+          - img [ref=e235]
+          - link "Build Guides" [ref=e237] [cursor=pointer]:
+            - /url: /d4/build-guides
+        - generic [ref=e238]:
+          - img [ref=e239]
+          - generic [ref=e241]: Dread Claws Warlock Endgame Build Guide
+      - generic [ref=e242]:
+        - generic [ref=e243]:
+          - complementary [ref=e244]:
+            - generic [ref=e246]:
+              - generic [ref=e247]:
+                - heading "Author" [level=3] [ref=e251]
+                - img [ref=e254]
+                - generic [ref=e260]:
+                  - generic [ref=e261]: Director
+                  - link "wudijo" [ref=e262] [cursor=pointer]:
+                    - /url: /@wudijo
+              - generic [ref=e263]:
+                - generic [ref=e265]:
+                  - link "Navigate to YouTube page" [ref=e268] [cursor=pointer]:
+                    - /url: https://www.youtube.com/c/wudijo
+                    - img [ref=e269]
+                  - link "Navigate to Twitch page" [ref=e273] [cursor=pointer]:
+                    - /url: https://www.twitch.tv/wudijo
+                    - img [ref=e274]
+                  - link "Navigate to Twitter page" [ref=e279] [cursor=pointer]:
+                    - /url: https://twitter.com/wudijo
+                    - img [ref=e280]
+                - link "Live Watch Now" [ref=e282] [cursor=pointer]:
+                  - /url: https://www.twitch.tv/wudijo
+                  - generic [ref=e285]: Live
+                  - generic [ref=e287]:
+                    - generic [ref=e288]: Watch Now
+                    - img [ref=e289]
+            - generic [ref=e299]:
+              - heading "Table of Contents" [level=3] [ref=e301]
+              - generic [ref=e304]:
+                - link "1. Introduction" [ref=e305] [cursor=pointer]:
+                  - /url: "#introduction-header"
+                  - generic [ref=e307]: "1."
+                  - generic [ref=e308]: Introduction
+                - link "2. Equipment" [ref=e309] [cursor=pointer]:
+                  - /url: "#equipment-header"
+                  - generic [ref=e311]: "2."
+                  - generic [ref=e312]: Equipment
+                - link "3. Skills" [ref=e313] [cursor=pointer]:
+                  - /url: "#skills-header"
+                  - generic [ref=e315]: "3."
+                  - generic [ref=e316]: Skills
+                - link "4. Paragon" [ref=e317] [cursor=pointer]:
+                  - /url: "#paragon-header"
+                  - generic [ref=e319]: "4."
+                  - generic [ref=e320]: Paragon
+                - link "5. Mercenary" [ref=e321] [cursor=pointer]:
+                  - /url: "#mercenary-header"
+                  - generic [ref=e323]: "5."
+                  - generic [ref=e324]: Mercenary
+                - link "6. Loot Filter" [ref=e325] [cursor=pointer]:
+                  - /url: "#loot-filter-header"
+                  - generic [ref=e327]: "6."
+                  - generic [ref=e328]: Loot Filter
+                - link "7. Summary" [ref=e329] [cursor=pointer]:
+                  - /url: "#summary-header"
+                  - generic [ref=e331]: "7."
+                  - generic [ref=e332]: Summary
+                - link "8. Changelog" [ref=e333] [cursor=pointer]:
+                  - /url: "#changelog-header"
+                  - generic [ref=e335]: "8."
+                  - generic [ref=e336]: Changelog
+          - main [ref=e337]:
+            - article [ref=e338]:
+              - generic [ref=e340]:
+                - heading "Dread Claws Warlock Endgame Build Guide for Diablo IV Season 13 - Reckoning" [level=1] [ref=e342]
+                - generic [ref=e344]:
+                  - generic [ref=e345]:
+                    - generic [ref=e346]:
+                      - text: by
+                      - link "wudijo" [ref=e347] [cursor=pointer]:
+                        - /url: /@wudijo
+                        - text: wudijo
+                        - img [ref=e348]
+                    - generic [ref=e351]: Season 13 - Reckoning
+                    - generic [ref=e352]: "Last Updated: May 19, 2026"
+                    - generic [ref=e355]: Endgame
+                  - generic [ref=e356]:
+                    - button "Get notified" [ref=e360] [cursor=pointer]:
+                      - img [ref=e361]
+                      - generic [ref=e363]: Get notified
+                    - generic [ref=e364]:
+                      - button "Changelog" [ref=e365] [cursor=pointer]:
+                        - img [ref=e366]
+                        - text: Changelog
+                      - button "Get Link" [ref=e369] [cursor=pointer]:
+                        - img [ref=e370]
+                        - text: Get Link
+              - generic [ref=e374]:
+                - generic [ref=e375]:
+                  - heading "Introduction" [level=2] [ref=e376]:
+                    - generic [ref=e378]: Introduction
+                  - generic [ref=e382]:
+                    - paragraph [ref=e383]:
+                      - text: Welcome to the
+                      - generic [ref=e385]: ‍Dread Claws
+                      - text: Warlock Endgame Build Guide! This Abyss-themed build revolves around positioning and brings massive AoE damage to the table. If you want to stealth around before striking the entire screen at once from the shadows, you've come to the right place!
+                    - paragraph [ref=e388]
+                    - paragraph [ref=e389]:
+                      - text: Your main skill ‍
+                      - generic [ref=e391]: ‍Dread Claws
+                      - text: "-"
+                      - generic [ref=e395]: ‍Enveloping Terror
+                      - text: summons a circular AoE around both yourself and your Greater Demon summons, allowing you to double up on your damage and cover more area. In the lategame, you will be flying around with non-stop
+                      - generic [ref=e399]: ‍Nether Step
+                      - text: ", automatically moving your summoned demons with you & blowing up entire screens at once while melting bosses with overlapping hits!"
+                    - paragraph [ref=e402]
+                    - paragraph [ref=e403]:
+                      - text: All in all, the ‍
+                      - generic [ref=e405]: ‍Dread Claws
+                      - text: Warlock is a great allrounder that brings magnificent AoE coverage to the table and breezes through the entire game with ease. Let's dive in to see how it works!
+                    - paragraph [ref=e408]
+                    - paragraph [ref=e409]:
+                      - strong [ref=e411]: Key Uniques
+                      - text: (not required to get started)
+                    - list [ref=e412]:
+                      - listitem [ref=e413]:
+                        - generic [ref=e415]: ‍Litany of Sable
+                        - text: (Astaroth)
+                      - listitem [ref=e418]:
+                        - generic [ref=e420]: ‍Footfalls of the Waning World
+                        - text: (Astaroth)
+                      - listitem [ref=e423]:
+                        - generic [ref=e425]: ‍Seed of Horazon
+                        - text: (Grigoire)
+                - generic [ref=e430]:
+                  - button "Starter" [ref=e432] [cursor=pointer]:
+                    - generic [ref=e434]: Starter
+                  - button "Midgame" [ref=e436] [cursor=pointer]:
+                    - generic [ref=e438]: Midgame
+                  - button "Endgame" [ref=e440] [cursor=pointer]:
+                    - generic [ref=e442]: Endgame
+                - generic [ref=e443]:
+                  - heading "Equipment Collapse" [level=2] [ref=e444]:
+                    - generic [ref=e446]: Equipment
+                    - button "Collapse" [ref=e448] [cursor=pointer]:
+                      - img [ref=e449]
+                      - generic [ref=e451]: Collapse
+                  - generic [ref=e453]:
+                    - paragraph [ref=e454]: Here you learn how to optimize your Dread Claws Endgame Warlock with the correct Legendary and Unique items, Talisman and Charm options, Item Stat Priorities, Runes, and Class Mechanic choices.
+                    - generic [ref=e456]:
+                      - generic [ref=e457]:
+                        - generic [ref=e460]:
+                          - generic [ref=e461]:
+                            - generic [ref=e462]:
+                              - generic [ref=e464]:
+                                - button "Equipment" [ref=e466] [cursor=pointer]:
+                                  - generic [ref=e468]: Equipment
+                                - button "Stat Priority" [ref=e470] [cursor=pointer]:
+                                  - generic [ref=e472]: Stat Priority
+                              - link [ref=e474] [cursor=pointer]:
+                                - /url: https://maxroll.gg/d4/planner/sf1n6g0v#5
+                                - img [ref=e475]
+                            - generic [ref=e477]:
+                              - generic [ref=e481]:
+                                - generic [ref=e482]:
+                                  - generic [ref=e491]:
+                                    - generic [ref=e492]: Heir of Perdition
+                                    - generic [ref=e493]: Mythic Unique Helm
+                                  - generic [ref=e502]:
+                                    - generic [ref=e503]: Tyrael's Might
+                                    - generic [ref=e504]: Mythic Unique Chest Armor
+                                  - generic [ref=e509]:
+                                    - generic [ref=e510]: Fathomless Dark
+                                    - generic [ref=e511]: Legendary Gloves
+                                  - generic [ref=e520]:
+                                    - generic [ref=e521]: Juggernaut's
+                                    - generic [ref=e522]: Legendary Pants
+                                  - generic [ref=e527]:
+                                    - generic [ref=e528]: Footfalls of the Waning World
+                                    - generic [ref=e529]: Unique Boots
+                                - generic [ref=e530]:
+                                  - generic [ref=e537]:
+                                    - generic [ref=e538]: Seed of Horazon
+                                    - generic [ref=e539]: Unique Amulet
+                                  - generic [ref=e546]:
+                                    - generic [ref=e547]: Crushing
+                                    - generic [ref=e548]: Legendary Ring
+                                  - generic [ref=e555]:
+                                    - generic [ref=e556]: Ring of Starless Skies
+                                    - generic [ref=e557]: Mythic Unique Ring
+                              - generic [ref=e558]:
+                                - generic [ref=e566]:
+                                  - generic [ref=e567]: Litany of Sable
+                                  - generic [ref=e568]: Unique Dagger
+                                - generic [ref=e576]:
+                                  - generic [ref=e577]: Aggressive
+                                  - generic [ref=e578]: Legendary Focus
+                              - generic [ref=e579]:
+                                - generic [ref=e580]:
+                                  - generic [ref=e583]: Nagu
+                                  - generic [ref=e586]: Que
+                                - generic [ref=e587]:
+                                  - generic [ref=e590]: Igni
+                                  - generic [ref=e593]: Prid
+                          - generic [ref=e608]:
+                            - generic [ref=e609]:
+                              - generic [ref=e610]: Talisman
+                              - list [ref=e638]:
+                                - listitem [ref=e639]:
+                                  - generic [ref=e644]: Seal of the Diamond Mind
+                                - listitem [ref=e645]:
+                                  - generic [ref=e650]: Linta of Horazon's Chains
+                                - listitem [ref=e651]:
+                                  - generic [ref=e656]: Phoba of Horazon's Chains
+                                - listitem [ref=e657]:
+                                  - generic [ref=e662]: Fer of the Nameless
+                                - listitem [ref=e663]:
+                                  - generic [ref=e668]: Fer of Horazon's Chains
+                                - listitem [ref=e669]:
+                                  - generic [ref=e674]: Mlor of Horazon's Chains
+                                - listitem [ref=e675]:
+                                  - generic [ref=e680]: Berú of the Nameless
+                            - generic [ref=e682]: Soul Shards
+                        - generic [ref=e693]: Dread Claws Endgame Warlock Equipment
+                      - generic [ref=e695]:
+                        - paragraph [ref=e696]:
+                          - strong [ref=e698]: Equipment
+                        - list [ref=e699]:
+                          - listitem [ref=e700]:
+                            - generic [ref=e702]: ‍Litany of Sable
+                            - text: is a core item for
+                            - generic [ref=e706]: ‍Dread Claws
+                            - text: "- try to get it as soon as possible (tip: upgrade common daggers in cube)."
+                          - listitem [ref=e709]:
+                            - generic [ref=e711]: ‍Footfalls of the Waning World
+                            - text: allows you to teleport much more frequently and constantly extend the duration of your Abyssal summons (
+                            - generic [ref=e715]: ‍Abyssal Titan
+                            - text: ","
+                            - generic [ref=e719]: ‍Profane Sentinel
+                            - text: without having to recast them, smoothing out the playstyle. In the endgame, you rely exclusively on the
+                            - generic [ref=e723]: ‍Evade
+                            - generic [ref=e727]: ‍Nether Step
+                            - text: version granted by this item to gain this effect.
+                          - listitem [ref=e730]:
+                            - text: Focus on farming
+                            - generic [ref=e732]: ‍Footfalls of the Waning World
+                            - text: with Attacks Reduce Evade Cooldown and masterwork that stat for more frequent teleports.
+                          - listitem [ref=e735]:
+                            - generic [ref=e737]: ‍Seed of Horazon
+                            - text: is optional but slightly better than a normal amulet once you get a great roll and the full Chains of Horazon set.
+                          - listitem [ref=e740]:
+                            - generic [ref=e742]: ‍Aspect of Calamity
+                            - text: provides a ton of Critical Strike Chance from the start, allowing to scale Critical Strike Damage Multiplier on gear. In the endgame, this is dropped as you can get 100% Crit Chance from gear alone.
+                          - listitem [ref=e745]:
+                            - generic [ref=e747]: ‍Juggernaut's Aspect
+                            - text: provides a powerful defensive upgrade (~30-35% DR with endgame setup) and
+                            - generic [ref=e751]: ‍Footfalls of the Waning World
+                            - text: does not suffer from its downside, making this a great choice for the build.
+                          - listitem [ref=e754]:
+                            - generic [ref=e756]: ‍Igni
+                            - text: +
+                            - generic [ref=e760]: ‍Prid
+                            - text: automates
+                            - generic [ref=e764]: ‍Dark Prison
+                            - text: for a range of defensive benefits.
+                          - listitem [ref=e767]: Offensive stat priorities are Critical Strike Damage, Vulnerable Damage, Shadow Damage, All Damage Multipliers and some Attack Speed and Abyss/Core/Demonology/Dread Claws ranks.
+                          - listitem [ref=e768]: Defensive stat priorities are x1 Life on Hit (Weapon/Offhand), All Resist, Max Life, Armor.
+                        - paragraph [ref=e769]
+                        - paragraph [ref=e770]:
+                          - strong [ref=e772]: Talisman
+                        - list [ref=e773]:
+                          - listitem [ref=e774]:
+                            - text: Chains of Horazon grants massive buffs but requires you to press
+                            - generic [ref=e776]: ‍Command Laalish
+                            - text: every 10sec. The 2 and 3-piece bonuses aren't great, so this build experiences a massive power spike once you get the full combo.
+                          - listitem [ref=e779]:
+                            - text: Your damage can ramp up even further thanks to the 2-piece bonus once you start summoning
+                            - generic [ref=e781]: ‍Profane Sentinel
+                            - text: (up to 5) so keeping them alive is useful.
+                          - listitem [ref=e784]:
+                            - text: If you acquire
+                            - generic [ref=e786]: ‍Seal of the Diamond Mind
+                            - text: ", you can combine the set with 2 pieces of Rite of the Nameless, easily activated by casting your sigil once in a while."
+                          - listitem [ref=e789]: On charms, aim for Ranks to Abyss/Demonology skills or alternatives like All Stats, Movement Speed, Maximum Resources.
+                        - paragraph [ref=e790]
+                        - paragraph [ref=e791]:
+                          - strong [ref=e793]: Good Unique Charm Options
+                        - list [ref=e794]:
+                          - listitem [ref=e795]:
+                            - generic [ref=e797]: ‍Seed of Horazon
+                            - text: (if not equipped)
+                          - listitem [ref=e800]:
+                            - generic [ref=e802]: ‍Godslayer Crown
+                          - listitem [ref=e805]:
+                            - generic [ref=e807]: ‍Temerity
+                          - listitem [ref=e810]:
+                            - generic [ref=e812]: ‍Night Terror
+                          - listitem [ref=e815]:
+                            - generic [ref=e817]: ‍Flickerstep
+                          - listitem [ref=e820]:
+                            - generic [ref=e822]: ‍Endurant Faith
+                        - paragraph [ref=e825]
+                        - paragraph [ref=e826]:
+                          - strong [ref=e828]: Transfiguration
+                        - list [ref=e829]:
+                          - listitem [ref=e830]:
+                            - text: Aim for
+                            - generic [ref=e832]: ‍Aspect of Rallying Reversal
+                            - text: ","
+                            - generic [ref=e836]: ‍Nefarious Aspect
+                            - text: ","
+                            - generic [ref=e840]: ‍Undying Aspect
+                            - text: or
+                            - generic [ref=e844]: ‍Aspect of Elusive Menace
+                            - text: on your amulet.
+                          - listitem [ref=e847]: On other slots, aim for Gem Strength or other generically useful stats like Crit Chance, Attack Speed, Shadow/All Damage Multiplier, Willpower.
+                        - paragraph [ref=e848]
+                    - blockquote [ref=e850]:
+                      - paragraph [ref=e851]:
+                        - emphasis [ref=e852]:
+                          - text: Learn more details and how to unlock these systems in our
+                          - link "Equipment" [ref=e853] [cursor=pointer]:
+                            - /url: /d4/resources/equipment
+                          - text: ","
+                          - link "Talisman" [ref=e854] [cursor=pointer]:
+                            - /url: /d4/resources/talisman
+                          - text: and
+                          - link "Warlock" [ref=e855] [cursor=pointer]:
+                            - /url: /d4/resources/warlock-class-overview
+                          - text: articles.
+                    - generic [ref=e856]:
+                      - generic [ref=e857]:
+                        - generic [ref=e858]:
+                          - img [ref=e859]
+                          - generic [ref=e861]: Pros
+                        - list [ref=e862]:
+                          - listitem [ref=e863]:
+                            - img [ref=e864]
+                            - generic [ref=e866]: Melts Bosses
+                          - listitem [ref=e867]:
+                            - img [ref=e868]
+                            - generic [ref=e870]: Easy Playstyle
+                          - listitem [ref=e871]:
+                            - img [ref=e872]
+                            - generic [ref=e874]: Great AoE Damage
+                      - generic [ref=e875]:
+                        - generic [ref=e876]:
+                          - img [ref=e877]
+                          - generic [ref=e879]: Cons
+                        - list [ref=e880]:
+                          - listitem [ref=e881]:
+                            - img [ref=e882]
+                            - generic [ref=e884]: High Gear Ceiling
+                          - listitem [ref=e885]:
+                            - img [ref=e886]
+                            - generic [ref=e888]: Mostly Close Range
+                          - listitem [ref=e889]:
+                            - img [ref=e890]
+                            - generic [ref=e892]: Timing & Positioning
+                    - blockquote [ref=e894]:
+                      - paragraph [ref=e895]:
+                        - emphasis [ref=e896]:
+                          - generic [ref=e897]:
+                            - text: This build guide assumes you have a Level 70 Character and unlocked Torment 1. To get there, level up with one of our
+                            - link "Warlock Leveling Guides" [ref=e898] [cursor=pointer]:
+                              - /url: /d4/build-guides?filter[build_guide_type][filters][0][taxonomy]=taxonomies.build_guide_type&filter[build_guide_type][filters][0][value]=archive&filter[build_guide_type][filters][0][operation]=!%3D&filter[build_guide_type][filters][1][taxonomy]=taxonomies.build_guide_type&filter[build_guide_type][filters][1][value]=%20&filter[build_guide_type][filters][1][operation]=NOT%20EXISTS&filter[classes][taxonomy]=taxonomies.classes&filter[classes][value]=d4-warlock&filter[metas][taxonomy]=taxonomies.metas&filter[metas][value]=d4-leveling
+                            - text: . See how this Build compares against others with our various
+                            - link "Build Tier Lists" [ref=e899] [cursor=pointer]:
+                              - /url: /d4/tierlists
+                            - text: .
+                - generic [ref=e902]:
+                  - heading "Skills Collapse" [level=2] [ref=e903]:
+                    - generic [ref=e905]: Skills
+                    - button "Collapse" [ref=e907] [cursor=pointer]:
+                      - img [ref=e908]
+                      - generic [ref=e910]: Collapse
+                  - generic [ref=e912]:
+                    - paragraph [ref=e913]: Learn more about the Skill Tree and Gameplay Rotation for the Dread Claws Endgame Warlock here.
+                    - generic [ref=e915]:
+                      - generic [ref=e916]:
+                        - generic [ref=e918]:
+                          - generic [ref=e919]:
+                            - button "Prev" [disabled] [ref=e920]:
+                              - img [ref=e921]
+                              - text: Prev
+                            - generic [ref=e924]:
+                              - text: Endgame
+                              - img [ref=e925]
+                            - button "Next" [disabled] [ref=e927]:
+                              - text: Next
+                              - img [ref=e928]
+                            - generic [ref=e930]:
+                              - button [ref=e931] [cursor=pointer]:
+                                - img [ref=e932]
+                              - generic [ref=e938]:
+                                - button "Tree" [ref=e940] [cursor=pointer]:
+                                  - generic [ref=e941]:
+                                    - img [ref=e942]
+                                    - generic [ref=e944]: Tree
+                                - button "List" [ref=e946] [cursor=pointer]:
+                                  - generic [ref=e947]:
+                                    - img [ref=e948]
+                                    - generic [ref=e950]: List
+                          - generic [ref=e951]:
+                            - generic [ref=e953]:
+                              - generic [ref=e1165]: 15/15
+                              - generic [ref=e1207]:
+                                - text: 0/15
+                                - generic [ref=e1208]: "+6"
+                              - generic [ref=e1221]: 1/15
+                              - generic [ref=e1232]:
+                                - text: 0/15
+                                - generic [ref=e1233]: "+6"
+                              - generic [ref=e1244]: 8/15
+                              - generic [ref=e1249]: 8/15
+                              - generic [ref=e1252]: 1/15
+                              - generic [ref=e1255]:
+                                - text: 0/15
+                                - generic [ref=e1256]: "+6"
+                              - generic [ref=e1273]:
+                                - text: 15/15
+                                - generic [ref=e1274]: "+6"
+                              - generic [ref=e1283]:
+                                - text: 0/15
+                                - generic [ref=e1284]: "+6"
+                              - generic [ref=e1345]: 15/15
+                            - generic [ref=e1720]:
+                              - generic [ref=e1721]: 83 points spent
+                              - generic [ref=e1722]: Available Points
+                              - generic [ref=e1723]: "0"
+                            - generic [ref=e1726]:
+                              - generic [ref=e1727]:
+                                - textbox "Search" [ref=e1728]
+                                - img [ref=e1729] [cursor=pointer]
+                              - img [ref=e1732] [cursor=pointer]
+                            - generic [ref=e1734]:
+                              - img [ref=e1736] [cursor=pointer]
+                              - img [ref=e1740] [cursor=pointer]
+                              - img [ref=e1743] [cursor=pointer]
+                        - generic [ref=e1749]: Dread Claws Endgame Warlock Skills
+                      - generic [ref=e1751]:
+                        - paragraph [ref=e1752]:
+                          - strong [ref=e1754]: Skill Rotation
+                        - list [ref=e1755]:
+                          - listitem [ref=e1756]:
+                            - text: Spam
+                            - generic [ref=e1758]: ‍Dread Claws
+                            - text: to deal damage.
+                          - listitem [ref=e1761]:
+                            - text: Activate
+                            - generic [ref=e1763]: ‍Rampage
+                            - text: "-"
+                            - generic [ref=e1767]: ‍Abyssal Titan
+                            - text: to have a secondary source of
+                            - generic [ref=e1771]: ‍Dread Claws
+                            - text: "-"
+                            - generic [ref=e1775]: ‍Enveloping Terror
+                            - text: . Either keep him close to you for double bursts or cast him into a pack at range to clear two spots at once.
+                          - listitem [ref=e1778]:
+                            - generic [ref=e1780]: ‍Profane Sentinel
+                            - text: applies
+                            - generic [ref=e1783]: Vulnerable
+                            - text: and triggers
+                            - generic [ref=e1785]: Dominion
+                            - text: . Make sure to summon one of these (or
+                            - generic [ref=e1787]: ‍Abyssal Titan
+                            - text: if it timed out) every 12sec for the Paragon node.
+                          - listitem [ref=e1790]:
+                            - generic [ref=e1792]: ‍Command Laalish
+                            - text: also applies
+                            - generic [ref=e1795]: Vulnerable
+                            - text: ", grants"
+                            - generic [ref=e1796]: Shadowform
+                            - text: and triggers the Chains of Horazon bonuses. Cast this every 10sec for the set buffs.
+                          - listitem [ref=e1797]:
+                            - generic [ref=e1799]: ‍Nether Step
+                            - text: pulls your summons to you and extends their durations with
+                            - generic [ref=e1803]: ‍Shadow Recall
+                            - text: ", so you rarely have to recast them throughout a run. Use this skill frequently to keep them up and gain extra speed + damage reduction. In the endgame, you only use the"
+                            - generic [ref=e1807]: ‍Evade
+                            - text: version of this granted by
+                            - generic [ref=e1811]: ‍Footfalls of the Waning World
+                            - text: ", making room for"
+                            - generic [ref=e1815]: ‍Sigil of Summons
+                            - text: on your skill bar.
+                          - listitem [ref=e1818]:
+                            - generic [ref=e1820]: ‍Sigil of Summons
+                            - text: is an alternative option to extend your summons, great for boss fights or other prolonged encounters. Instead of spamming
+                            - generic [ref=e1824]: ‍Nether Step
+                            - text: ", you park your summons inside to make them last forever. Swap"
+                            - generic [ref=e1828]: ‍Nether Step
+                            - text: to this skill once you acquired
+                            - generic [ref=e1832]: ‍Footfalls of the Waning World
+                            - text: with an Attacks Reduce Evade Cooldown affix.
+                          - listitem [ref=e1835]:
+                            - text: Activate
+                            - generic [ref=e1837]: ‍Metamorphosis
+                            - text: as often as possible to burst down packs and bosses.
+                          - listitem [ref=e1840]:
+                            - generic [ref=e1842]: ‍Dark Prison
+                            - text: is automated by
+                            - generic [ref=e1846]: ‍Prid
+                            - text: for a range of useful defensive buffs.
+                          - listitem [ref=e1849]:
+                            - text: (Starter only) Keep up
+                            - generic [ref=e1851]: ‍Command Fallen
+                            - text: to passively generate a lot of resources by casting them 3 times every 20sec. Once you acquire the
+                            - generic [ref=e1855]: Dominion
+                            - text: "Paragon node and two rings with Lucky Hit: Chance to Restore Resources, you can remove this skill for"
+                            - generic [ref=e1857]: ‍Profane Sentinel
+                            - text: .
+                        - paragraph [ref=e1860]
+                        - paragraph [ref=e1861]:
+                          - generic [ref=e1862]: Shadowform
+                        - list [ref=e1863]:
+                          - listitem [ref=e1864]: This is a buff gained and consumed by various Abyss abilities.
+                          - listitem [ref=e1865]:
+                            - text: Main sources include
+                            - generic [ref=e1867]: ‍Metamorphosis
+                            - text: "-"
+                            - generic [ref=e1871]: ‍Terror Demon
+                            - text: ","
+                            - generic [ref=e1875]: ‍Nether Step
+                            - text: ","
+                            - generic [ref=e1879]: ‍Command Laalish
+                            - text: "&"
+                            - generic [ref=e1883]: ‍Sigil of Subversion
+                            - text: .
+                          - listitem [ref=e1886]:
+                            - text: This build consumes them via movement & casting
+                            - generic [ref=e1888]: ‍Dread Claws
+                            - text: "-"
+                            - generic [ref=e1892]: ‍Enveloping Terror
+                            - text: .
+                    - blockquote [ref=e1896]:
+                      - paragraph [ref=e1897]:
+                        - emphasis [ref=e1898]:
+                          - text: Learn more about this system in our
+                          - link "Skill Tree Overview" [ref=e1899] [cursor=pointer]:
+                            - /url: /d4/getting-started/skill-trees
+                          - text: .
+                - generic [ref=e1902]:
+                  - heading "Paragon Collapse" [level=2] [ref=e1903]:
+                    - generic [ref=e1905]: Paragon
+                    - button "Collapse" [ref=e1907] [cursor=pointer]:
+                      - img [ref=e1908]
+                      - generic [ref=e1910]: Collapse
+                  - generic [ref=e1912]:
+                    - paragraph [ref=e1913]:
+                      - text: Progress your Dread Claws Endgame Warlock through the
+                      - link "Pit" [ref=e1914] [cursor=pointer]:
+                        - /url: /d4/resources/pit-guide
+                      - text: to rank up your
+                      - link "Glyphs" [ref=e1915] [cursor=pointer]:
+                        - /url: /d4/resources/paragon-boards
+                      - text: . Carefully check your Paragon Boards to ensure correct order and rotation.
+                    - generic [ref=e1917]:
+                      - generic [ref=e1918]:
+                        - generic [ref=e1920]:
+                          - generic [ref=e1921]:
+                            - button "Prev" [ref=e1922] [cursor=pointer]:
+                              - img [ref=e1923]
+                              - text: Prev
+                            - generic [ref=e1926] [cursor=pointer]:
+                              - text: "2"
+                              - img [ref=e1927]
+                            - button "Next" [ref=e1929] [cursor=pointer]:
+                              - text: Next
+                              - img [ref=e1930]
+                            - button [ref=e1933] [cursor=pointer]:
+                              - img [ref=e1934]
+                          - generic [ref=e1939]:
+                            - generic [ref=e1940]:
+                              - generic [ref=e1941]: 292 points spent
+                              - generic [ref=e1942]: Available Points
+                              - generic [ref=e1943]: "50"
+                            - generic [ref=e1947]:
+                              - textbox "Search" [ref=e1948]
+                              - img [ref=e1949] [cursor=pointer]
+                            - generic [ref=e1951]:
+                              - img [ref=e1953] [cursor=pointer]
+                              - img [ref=e1957] [cursor=pointer]
+                              - img [ref=e1960] [cursor=pointer]
+                            - generic [ref=e1966]:
+                              - generic [ref=e1967] [cursor=pointer]:
+                                - text: Boards Used
+                                - img [ref=e1968]
+                              - generic [ref=e1971]:
+                                - generic [ref=e1972] [cursor=pointer]:
+                                  - generic [ref=e1975]: Start
+                                  - generic [ref=e1976]: /
+                                  - generic [ref=e1979]: Abyssal Lv. 150
+                                - generic [ref=e1980] [cursor=pointer]:
+                                  - generic [ref=e1983]: Greater Hex
+                                  - generic [ref=e1984]: /
+                                  - generic [ref=e1987]: Unbound Lv. 150
+                                - generic [ref=e1988] [cursor=pointer]:
+                                  - generic [ref=e1991]: Overmind
+                                  - generic [ref=e1992]: /
+                                  - generic [ref=e1995]: Demonologist Lv. 150
+                                - generic [ref=e1996] [cursor=pointer]:
+                                  - generic [ref=e1999]: Demonic Spicules
+                                  - generic [ref=e2000]: /
+                                  - generic [ref=e2003]: Destruction Lv. 150
+                                - generic [ref=e2004] [cursor=pointer]:
+                                  - generic [ref=e2007]: Dominion
+                                  - generic [ref=e2008]: /
+                                  - generic [ref=e2011]: Mastermind Lv. 150
+                            - generic [ref=e2012]:
+                              - generic:
+                                - generic [ref=e2013]:
+                                  - generic [ref=e2014]:
+                                    - generic [ref=e2015]: "1"
+                                    - generic [ref=e2016]: Start
+                                    - generic [ref=e2017]: /
+                                    - generic [ref=e2018]: Abyssal
+                                  - generic [ref=e2020]:
+                                    - generic [ref=e2021]: "Str: 64"
+                                    - generic [ref=e2022]: "Int: 59"
+                                    - generic [ref=e2023]: "Will: 105"
+                                    - generic [ref=e2024]: "Dex: 25"
+                                - generic [ref=e2251]:
+                                  - generic [ref=e2252]:
+                                    - generic [ref=e2253]: "2"
+                                    - generic [ref=e2254]: Greater Hex
+                                    - generic [ref=e2255]: /
+                                    - generic [ref=e2256]: Unbound
+                                  - generic [ref=e2258]:
+                                    - generic [ref=e2259]: "Str: 69"
+                                    - generic [ref=e2260]: "Int: 64"
+                                    - generic [ref=e2261]: "Will: 90"
+                                    - generic [ref=e2262]: "Dex: 25"
+                                - generic [ref=e2777]:
+                                  - generic [ref=e2778]:
+                                    - generic [ref=e2779]: "3"
+                                    - generic [ref=e2780]: Overmind
+                                    - generic [ref=e2781]: /
+                                    - generic [ref=e2782]: Demonologist
+                                  - generic [ref=e2784]:
+                                    - generic [ref=e2785]: "Str: 59"
+                                    - generic [ref=e2786]: "Int: 74"
+                                    - generic [ref=e2787]: "Will: 105"
+                                    - generic [ref=e2788]: "Dex: 10"
+                                - generic [ref=e3345]:
+                                  - generic [ref=e3346]:
+                                    - generic [ref=e3347]: "4"
+                                    - generic [ref=e3348]: Demonic Spicules
+                                    - generic [ref=e3349]: /
+                                    - generic [ref=e3350]: Destruction
+                                  - generic [ref=e3352]:
+                                    - generic [ref=e3353]: "Str: 59"
+                                    - generic [ref=e3354]: "Int: 49"
+                                    - generic [ref=e3355]: "Will: 115"
+                                    - generic [ref=e3356]: "Dex: 25"
+                                - generic [ref=e3850]:
+                                  - generic [ref=e3851]:
+                                    - generic [ref=e3852]: "5"
+                                    - generic [ref=e3853]: Dominion
+                                    - generic [ref=e3854]: /
+                                    - generic [ref=e3855]: Mastermind
+                                  - generic [ref=e3857]:
+                                    - generic [ref=e3858]: "Str: 86"
+                                    - generic [ref=e3859]: "Int: 54"
+                                    - generic [ref=e3860]: "Will: 90"
+                                    - generic [ref=e3861]: "Dex: 20"
+                        - generic [ref=e4376]: Dread Claws Endgame Warlock Paragon
+                      - generic [ref=e4378]:
+                        - paragraph [ref=e4379]:
+                          - strong [ref=e4381]: Board Rush
+                        - list [ref=e4382]:
+                          - listitem [ref=e4383]: If you are <200 Paragon, use the first setup (board rush) to get maximum power from the legendary nodes, then respec later.
+                        - paragraph [ref=e4384]
+                        - paragraph [ref=e4385]:
+                          - strong [ref=e4387]: Glyph leveling priorities
+                        - list [ref=e4388]:
+                          - listitem [ref=e4389]:
+                            - generic [ref=e4391]: ‍Abyssal
+                          - listitem [ref=e4394]:
+                            - generic [ref=e4396]: ‍Demonologist
+                          - listitem [ref=e4399]:
+                            - generic [ref=e4401]: ‍Unbound
+                          - listitem [ref=e4404]:
+                            - generic [ref=e4406]: ‍Destruction
+                          - listitem [ref=e4409]:
+                            - generic [ref=e4411]: ‍Mastermind
+                    - blockquote [ref=e4415]:
+                      - paragraph [ref=e4416]:
+                        - emphasis [ref=e4417]:
+                          - text: Learn more details about this system and how to unlock all points in our in-depth
+                          - link "Paragon Guide" [ref=e4418] [cursor=pointer]:
+                            - /url: /d4/resources/paragon-boards
+                          - text: and
+                          - link "Season Rank Guide" [ref=e4419] [cursor=pointer]:
+                            - /url: /d4/resources/season-journey#unlocking-paragon-points-header
+                          - text: .
+                - generic [ref=e4422]:
+                  - heading "Mercenary Collapse" [level=2] [ref=e4423]:
+                    - generic [ref=e4425]: Mercenary
+                    - button "Collapse" [ref=e4427] [cursor=pointer]:
+                      - img [ref=e4428]
+                      - generic [ref=e4430]: Collapse
+                  - generic [ref=e4432]:
+                    - paragraph [ref=e4433]: Mercenaries are unlocked during the Vessel of Hatred campaign and assist you in battle. You can have one hired (permanent) mercenary during solo play and a reinforcement who assists you from time to time in certain situations. Here are our recommendations for the Dread Claws Endgame Warlock.
+                    - generic [ref=e4435]:
+                      - generic [ref=e4436]:
+                        - generic [ref=e4439]:
+                          - generic [ref=e4440]:
+                            - generic [ref=e4441]: Hired
+                            - generic [ref=e4445] [cursor=pointer]: Raheir
+                          - generic [ref=e4446]:
+                            - generic [ref=e4447]: Reinforcement
+                            - generic [ref=e4451] [cursor=pointer]: Aldkin
+                        - generic [ref=e4521]: Dread Claws Endgame Warlock Mercenary
+                      - generic [ref=e4523]:
+                        - paragraph [ref=e4524]:
+                          - text: "Hired: Raheir for more survivability and the damage amplification from"
+                          - generic [ref=e4526]: ‍Inspiration
+                          - text: .
+                        - paragraph [ref=e4529]:
+                          - text: "Reinforcement: Aldkin for damage reduction from"
+                          - generic [ref=e4531]: ‍Field of Languish
+                          - text: .
+                    - blockquote [ref=e4535]:
+                      - paragraph [ref=e4536]:
+                        - emphasis [ref=e4537]:
+                          - text: Learn more about the types of Mercenaries and how they work with our dedicated
+                          - link "Mercenaries Overview" [ref=e4538] [cursor=pointer]:
+                            - /url: /d4/resources/mercenaries-overview
+                          - text: .
+                - generic [ref=e4541]:
+                  - heading "Loot Filter Collapse" [level=2] [ref=e4542]:
+                    - generic [ref=e4544]: Loot Filter
+                    - button "Collapse" [ref=e4546] [cursor=pointer]:
+                      - img [ref=e4547]
+                      - generic [ref=e4549]: Collapse
+                  - generic [ref=e4551]:
+                    - paragraph [ref=e4552]: Here is our recommended Loot Filter for the Dread Claws Endgame Warlock. Beware that everyone’s experience while playing through Diablo 4’s Endgame differs and this represents a baseline you can adjust to your own liking.
+                    - button "Copy Loot Filter Code" [ref=e4554] [cursor=pointer]
+                    - blockquote [ref=e4556]:
+                      - paragraph [ref=e4557]:
+                        - emphasis [ref=e4558]:
+                          - text: Learn more details about this system and how Maxroll assembles recommended filters in our
+                          - link "Loot Filter Overview" [ref=e4559] [cursor=pointer]:
+                            - /url: /d4/resources/loot-filter
+                          - text: .
+                - generic [ref=e4560]:
+                  - heading "Summary Collapse" [level=2] [ref=e4561]:
+                    - generic [ref=e4563]: Summary
+                    - button "Collapse" [ref=e4565] [cursor=pointer]:
+                      - img [ref=e4566]
+                      - generic [ref=e4568]: Collapse
+                  - generic [ref=e4572]:
+                    - paragraph [ref=e4573]:
+                      - text: The
+                      - generic [ref=e4575]: ‍Dread Claws
+                      - text: Warlock is an AoE powerhouse that works from start to finish with a smooth progression curve.
+                    - list [ref=e4578]:
+                      - listitem [ref=e4579]:
+                        - text: "Summon your demons:"
+                        - generic [ref=e4581]: ‍Command Laalish
+                        - text: ","
+                        - generic [ref=e4585]: ‍Rampage
+                        - text: "&"
+                        - generic [ref=e4589]: ‍Profane Sentinel
+                        - text: for various buffs and debuffs.
+                      - listitem [ref=e4592]:
+                        - text: Keep up
+                        - generic [ref=e4594]: ‍Metamorphosis
+                        - text: and
+                        - generic [ref=e4597]: Shadowform
+                        - text: as much as possible.
+                      - listitem [ref=e4598]:
+                        - text: Cast
+                        - generic [ref=e4600]: ‍Dread Claws
+                        - text: to deal damage.
+                      - listitem [ref=e4603]:
+                        - text: Move around with
+                        - generic [ref=e4605]: ‍Nether Step
+                        - text: as much as possible.
+                      - listitem [ref=e4608]:
+                        - emphasis [ref=e4610]: Become one with the shadows!
+                - generic [ref=e4611]:
+                  - heading "Changelog Collapse" [level=2] [ref=e4612]:
+                    - generic [ref=e4614]: Changelog
+                    - button "Collapse" [ref=e4616] [cursor=pointer]:
+                      - img [ref=e4617]
+                      - generic [ref=e4619]: Collapse
+                  - generic [ref=e4622]:
+                    - list [ref=e4623]:
+                      - listitem [ref=e4624]:
+                        - heading "08 May" [level=3] [ref=e4625]:
+                          - button "08 May" [expanded] [ref=e4626] [cursor=pointer]:
+                            - generic [ref=e4629]: 08 May
+                            - img [ref=e4631]
+                        - region "08 May" [ref=e4633]:
+                          - list [ref=e4636]:
+                            - listitem [ref=e4637]: Massive guide update after playtesting & mechanics testing
+                            - listitem [ref=e4638]: Removed various Shadowform synergies
+                            - listitem [ref=e4639]: Added Laalish, Profane Sentinel, Sigil of Summons
+                            - listitem [ref=e4640]: Massively expanded equipment and skills notes
+                            - listitem [ref=e4641]: Massively improved survivability with rune & aspect changes
+                            - listitem [ref=e4642]: Optimized stat priorities across all variants
+                            - listitem [ref=e4643]: Changed primary set from Shadow of Harash to Chains of Horazon
+                            - listitem [ref=e4644]: Various other improvements and min/maxing
+                      - listitem [ref=e4645]:
+                        - heading "05 May" [level=3] [ref=e4646]:
+                          - button "05 May" [ref=e4647] [cursor=pointer]:
+                            - generic [ref=e4650]: 05 May
+                            - img [ref=e4652]
+                      - listitem [ref=e4654]:
+                        - heading "03 May" [level=3] [ref=e4655]:
+                          - button "03 May" [ref=e4656] [cursor=pointer]:
+                            - generic [ref=e4659]: 03 May
+                            - img [ref=e4661]
+                    - button "Show more" [ref=e4663] [cursor=pointer]:
+                      - generic [ref=e4667]:
+                        - text: Show more
+                        - img [ref=e4668]
+            - generic [ref=e4674]:
+              - heading "Related Posts" [level=2] [ref=e4675]:
+                - img [ref=e4676]
+                - text: Related Posts
+              - list [ref=e4678]:
+                - listitem [ref=e4679]:
+                  - article [ref=e4680]:
+                    - link "Build Guides Lunatic Warlock Endgame Build Guide Welcome to the Lunatic Warlock Endgame Build Guide! This setup specializes in summoning Fallen Lunatic demons and sending them to their doom to blow up your enemies. But that's not all! To go even further beyond, you can become a Lunatic yourself to rush through packs and wreak havoc with powerful... by Wudijo May 19, 2026" [ref=e4681] [cursor=pointer]:
+                      - /url: /d4/build-guides/lunatic-warlock-guide
+                      - generic [ref=e4686]: Build Guides
+                      - generic [ref=e4689]:
+                        - generic [ref=e4690]:
+                          - heading "Lunatic Warlock Endgame Build Guide" [level=3] [ref=e4691]
+                          - paragraph [ref=e4692]: Welcome to the Lunatic Warlock Endgame Build Guide! This setup specializes in summoning Fallen Lunatic demons and sending them to their doom to blow up your enemies. But that's not all! To go even further beyond, you can become a Lunatic yourself to rush through packs and wreak havoc with powerful...
+                        - generic [ref=e4694]:
+                          - generic [ref=e4695]:
+                            - text: by
+                            - generic [ref=e4696]: Wudijo
+                          - generic [ref=e4698]: May 19, 2026
+                - listitem [ref=e4699]:
+                  - article [ref=e4700]:
+                    - link "Build Guides Eviscerate Warlock Endgame Build Guide Welcome to the Eviscerate Warlock Endgame Build Guide! This build revolves around applying massive Bleed DoTs (Damage over Time) from various sources to melt enemies. The setup has multiple ramping mechanisms and excels especially in extended fights such as high tier pushing and bossing. Eviscerate... by Wudijo May 6, 2026" [ref=e4701] [cursor=pointer]:
+                      - /url: /d4/build-guides/eviscerate-warlock-guide
+                      - generic [ref=e4706]: Build Guides
+                      - generic [ref=e4709]:
+                        - generic [ref=e4710]:
+                          - heading "Eviscerate Warlock Endgame Build Guide" [level=3] [ref=e4711]
+                          - paragraph [ref=e4712]: Welcome to the Eviscerate Warlock Endgame Build Guide! This build revolves around applying massive Bleed DoTs (Damage over Time) from various sources to melt enemies. The setup has multiple ramping mechanisms and excels especially in extended fights such as high tier pushing and bossing. Eviscerate...
+                        - generic [ref=e4714]:
+                          - generic [ref=e4715]:
+                            - text: by
+                            - generic [ref=e4716]: Wudijo
+                          - generic [ref=e4718]: May 6, 2026
+                - listitem [ref=e4719]:
+                  - article [ref=e4720]:
+                    - link "Build Guides Apocalypse Warlock Endgame Build Guide Welcome to the Apocalypse Warlock Endgame Build Guide! This build uses Umbral Chains - Chain Whips to quickly build Apocalypse stacks to unleash a massive Annihilation explosion every few seconds, evaporating entire screens at once. Scaling Fire Damage, Overpower synergies and in the late game... by Wudijo May 6, 2026" [ref=e4721] [cursor=pointer]:
+                      - /url: /d4/build-guides/apocalypse-warlock-guide
+                      - generic [ref=e4726]: Build Guides
+                      - generic [ref=e4729]:
+                        - generic [ref=e4730]:
+                          - heading "Apocalypse Warlock Endgame Build Guide" [level=3] [ref=e4731]
+                          - paragraph [ref=e4732]: Welcome to the Apocalypse Warlock Endgame Build Guide! This build uses Umbral Chains - Chain Whips to quickly build Apocalypse stacks to unleash a massive Annihilation explosion every few seconds, evaporating entire screens at once. Scaling Fire Damage, Overpower synergies and in the late game...
+                        - generic [ref=e4734]:
+                          - generic [ref=e4735]:
+                            - text: by
+                            - generic [ref=e4736]: Wudijo
+                          - generic [ref=e4738]: May 6, 2026
+                - listitem [ref=e4739]:
+                  - article [ref=e4740]:
+                    - 'link "Build Guides Minion Warlock Endgame Build Guide Welcome to the Minion Warlock Endgame Guide: Smash demons into the faces of other demons with Bombardment as your primary damage dealer. This has amazing synergy with Sigil of Summons-Summon Hellwyrm which copies your Bombardment casts and doubles the rate of sacrificing your Lesser Demons. For... by MacroBioBoi May 6, 2026" [ref=e4741] [cursor=pointer]':
+                      - /url: /d4/build-guides/minion-warlock-guide
+                      - generic [ref=e4746]: Build Guides
+                      - generic [ref=e4749]:
+                        - generic [ref=e4750]:
+                          - heading "Minion Warlock Endgame Build Guide" [level=3] [ref=e4751]
+                          - paragraph [ref=e4752]: "Welcome to the Minion Warlock Endgame Guide: Smash demons into the faces of other demons with Bombardment as your primary damage dealer. This has amazing synergy with Sigil of Summons-Summon Hellwyrm which copies your Bombardment casts and doubles the rate of sacrificing your Lesser Demons. For..."
+                        - generic [ref=e4754]:
+                          - generic [ref=e4755]:
+                            - text: by
+                            - generic [ref=e4756]: MacroBioBoi
+                          - generic [ref=e4758]: May 6, 2026
+                - listitem [ref=e4759]:
+                  - article [ref=e4760]:
+                    - link "Build Guides Tyrant's Grasp Warlock Endgame Build Guide Welcome to the Tyrant's Grasp Warlock Endgame Build Guide! This build transforms into a menacing Demon, spamming the Archfiend skill Tyrant's Grasp - Demonic Grasp to pull enemies and melt packs. Together with Hecaton Chasm you clear entire screens lightning fast, excelling especially at AoE... by Wudijo May 19, 2026" [ref=e4761] [cursor=pointer]:
+                      - /url: /d4/build-guides/tyrants-grasp-warlock-guide
+                      - generic [ref=e4766]: Build Guides
+                      - generic [ref=e4769]:
+                        - generic [ref=e4770]:
+                          - heading "Tyrant's Grasp Warlock Endgame Build Guide" [level=3] [ref=e4771]
+                          - paragraph [ref=e4772]: Welcome to the Tyrant's Grasp Warlock Endgame Build Guide! This build transforms into a menacing Demon, spamming the Archfiend skill Tyrant's Grasp - Demonic Grasp to pull enemies and melt packs. Together with Hecaton Chasm you clear entire screens lightning fast, excelling especially at AoE...
+                        - generic [ref=e4774]:
+                          - generic [ref=e4775]:
+                            - text: by
+                            - generic [ref=e4776]: Wudijo
+                          - generic [ref=e4778]: May 19, 2026
+                - listitem [ref=e4779]:
+                  - article [ref=e4780]:
+                    - link "Build Guides Dread Claws Warlock Leveling Guide Welcome to the Warlock Leveling Guide! This Abyss-themed build revolves around positioning and brings massive AoE damage to the table. If you want to stealth around before striking the entire screen at once from the shadows, you've come to the right place! Your main skill - summons a circular AoE... by Wudijo May 19, 2026" [ref=e4781] [cursor=pointer]:
+                      - /url: /d4/build-guides/dread-claws-warlock-leveling-guide
+                      - generic [ref=e4786]: Build Guides
+                      - generic [ref=e4789]:
+                        - generic [ref=e4790]:
+                          - heading "Dread Claws Warlock Leveling Guide" [level=3] [ref=e4791]
+                          - paragraph [ref=e4792]: Welcome to the Warlock Leveling Guide! This Abyss-themed build revolves around positioning and brings massive AoE damage to the table. If you want to stealth around before striking the entire screen at once from the shadows, you've come to the right place! Your main skill - summons a circular AoE...
+                        - generic [ref=e4794]:
+                          - generic [ref=e4795]:
+                            - text: by
+                            - generic [ref=e4796]: Wudijo
+                          - generic [ref=e4798]: May 19, 2026
+        - button [ref=e4800] [cursor=pointer]
+    - generic [ref=e4805]:
+      - list [ref=e4807]:
+        - listitem [ref=e4808]:
+          - link "Terms of Service" [ref=e4809] [cursor=pointer]:
+            - /url: https://www.ziffdavis.com/terms-of-use
+        - listitem [ref=e4810]:
+          - link "Privacy Policy" [ref=e4811] [cursor=pointer]:
+            - /url: https://www.ign.com/privacy-policy
+        - listitem [ref=e4812]:
+          - link "Accessibility" [ref=e4813] [cursor=pointer]:
+            - /url: https://www.ziffdavis.com/accessibility
+        - listitem [ref=e4814]:
+          - link "Refund Policy" [ref=e4815] [cursor=pointer]:
+            - /url: /refund-policy
+        - listitem [ref=e4816]:
+          - link "Contact Us" [ref=e4817] [cursor=pointer]:
+            - /url: /contact-us
+        - listitem [ref=e4818]:
+          - link "Cookie Policy" [ref=e4819] [cursor=pointer]:
+            - /url: https://www.ziffdavis.com/cookie-policy
+        - listitem [ref=e4820]:
+          - button "Ziff Davis icon AdChoices" [ref=e4821] [cursor=pointer]:
+            - img "Ziff Davis icon" [ref=e4822]
+            - text: AdChoices
+        - listitem [ref=e4823]:
+          - link "Do Not Sell My Personal Information" [ref=e4824] [cursor=pointer]:
+            - /url: https://dsar.ign.com/
+      - generic [ref=e4826]:
+        - button "Twitter" [ref=e4827] [cursor=pointer]:
+          - generic "Twitter" [ref=e4828]
+        - button "Twitch" [ref=e4830] [cursor=pointer]:
+          - generic "Twitch" [ref=e4831]
+        - button "Instagram" [ref=e4833] [cursor=pointer]:
+          - generic "Instagram" [ref=e4834]
+        - button "Youtube" [ref=e4836] [cursor=pointer]:
+          - generic "Youtube" [ref=e4837]
+        - button "Discord" [ref=e4839] [cursor=pointer]:
+          - generic "Discord" [ref=e4840]
+      - paragraph [ref=e4841]:
+        - text: © 2026 Maxroll a brand of IGN Entertainment, Inc. All rights reserved.
+        - text: No part of this website or its content may be reproduced without the copyright owner's permission.
+        - text: Maxroll is a registered trademark of IGN Entertainment, Inc.
+  - img [ref=e4843] [cursor=pointer]
+  - dialog "Your privacy is important to us" [ref=e4847]:
+    - generic [ref=e4848]:
+      - generic [ref=e4849]:
+        - generic:
+          - heading "Your privacy is important to us" [level=2] [ref=e4850]
+          - generic [ref=e4851]:
+            - text: We may share information about the way you interact with the website, including your IP address and information about the games you purchase and your views of game trailers and scenes with our advertising, social media, and analytics partners who may use this data for their own purposes including marketing. You understand that once you agree, we have no control over these third-parties’ use of your information. By making a selection below or closing this box and continuing to use the site, you agree to our
+            - link "Terms of Service" [ref=e4852] [cursor=pointer]:
+              - /url: https://www.ziffdavis.com/terms-of-use
+            - text: and our
+            - link "More information about your privacy, opens in a new tab" [ref=e4853] [cursor=pointer]:
+              - /url: https://www.ign.com/privacy-policy
+              - text: Privacy Policy
+      - generic [ref=e4855]:
+        - button "More Options, Opens the preference center dialog" [ref=e4856] [cursor=pointer]: More Options
+        - button "I Consent" [ref=e4858] [cursor=pointer]

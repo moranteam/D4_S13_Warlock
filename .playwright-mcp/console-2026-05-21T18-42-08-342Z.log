@@ -1,0 +1,75 @@
+[    1931ms] [WARNING] [GPT] PubAdsService.setTargeting is deprecated, use googletag.setConfig({targeting: ...}) instead.
+https://goo.gle/gpt-message#170 @ https://securepubads.g.doubleclick.net/pagead/managed/js/gpt/m202605150101/pubads_impl.js?cb=31098603:18
+[    2209ms] [WARNING] fun-hooks: referenced 'registerAdserver' but it was never created @ https://live.primis.tech/content/prebid/prebidVid.10.23.10.min.js:10
+[    4089ms] [LOG] Subscribe  to event AdStarted @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdStopped @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdSkipped @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdLoaded @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdLinearChange @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdSizeChange @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdExpandedChange @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdSkippableStateChange @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdDurationChange @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdRemainingTimeChange @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdVolumeChange @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdImpression @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdClickThru @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdInteraction @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdVideoStart @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdVideoFirstQuartile @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdVideoMidpoint @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdVideoThirdQuartile @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdVideoComplete @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdUserAcceptInvitation @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdUserMinimize @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdUserClose @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdPaused @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdPlaying @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdError @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] Subscribe  to event AdLog @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4089ms] [LOG] initAd 400x225 normal 766 @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4090ms] [LOG] desiredBitrate 766 @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4090ms] [LOG] extracted video {
+  "bitRate": 746,
+  "mimetype": "video/mp4",
+  "url": "https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/5a33ebe7-b8ba-4092-92fb-79356acae355.mp4/mp4_750Kbs_25fps_48khz_96Kbs_576p_H264_high.mp4?c=580162403820569457&d=15&br=746&w=1024&h=576"
+} @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4090ms] [LOG] setAdVolume 0 @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4090ms] [LOG] Starting ad @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4114ms] [LOG] setAdVolume 0 @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4114ms] [LOG] setAdVolume 0 @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4729ms] [LOG] resizeAd 400x225 normal @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe h to event AdStarted @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe j to event AdStopped @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe i to event AdPlaying @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe k to event AdPaused @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe m to event AdSizeChange @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe n to event AdError @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe o to event AdSkipped @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe l to event AdVolumeChanged @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe f to event AdImpression @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe d to event AdVideoStart @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe d to event AdVideoFirstQuartile @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe c to event AdVideoMidpoint @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe c to event AdVideoThirdQuartile @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4831ms] [LOG] Subscribe e to event AdVideoComplete @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    4832ms] [LOG] getAdVolume @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[    5131ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://ssum-sec.casalemedia.com/usermatch?s=197137&gdpr=0&gdpr_consent=&cb=https%3A%2F%2Fusr.undertone.com%2FuserPixel%2Fsync%3FpartnerId%3D57%26uid%3D:0
+[   19535ms] [LOG] Stopping ad @ https://m.media-amazon.com/images/I/3181ANR4pXL.js:0
+[  189437ms] [WARNING] [GPT] Slot.updateTargetingFromMap is deprecated, use Slot.setConfig({targeting: ...}) instead.
+https://goo.gle/gpt-message#171 @ https://securepubads.g.doubleclick.net/pagead/managed/js/gpt/m202605150101/pubads_impl.js?cb=31098603:18
+[  190797ms] [INFO] Powered by AMP ⚡ HTML – Version 2605071401000 https://maxroll.gg/d4/build-guides/dread-claws-warlock-guide @ https://cdn.ampproject.org/rtv/012605071401000/amp4ads-v0.mjs:1
+[  191771ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://elb.the-ozone-project.com/setuid?uid=AAY3-U7UHowAAAIkm09qqw&bidder=beeswax:0
+[  192022ms] [ERROR] Failed to load resource: net::ERR_CERT_COMMON_NAME_INVALID @ https://fran.frvr.com/api/v1/usync?bidder=inmobi&gdpr=0&gdpr_consent=&us_privacy=&f=i&uid=ID5-2-9d7d1e4c-0fed-458a-adc3-1a0242d24b6a:0
+[  191771ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://elb.the-ozone-project.com/setuid?uid=AAY3-U7UHowAAAIkm09qqw&bidder=beeswax:0
+[  192324ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://elb.the-ozone-project.com/setuid?bidder=stack&gdpr=0&gdpr_consent=&uid=EHuXK2brXqNvKsRkp1W7CBgE1ek:0
+[  192397ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ https://sync.e-volution.ai/a184e2218ea9f18e32c70fb304405e72.gif?puid=ID5-2-9d7d1e4c-0fed-458a-adc3-1a0242d24b6a&redir=https%3A%2F%2Fsync.inmobi.com%2Fsetuid%3FbidderID%3D957%26dspUserId%3D%5BUID%5D&gdpr=0&gdpr_consent=:0
+[  192022ms] [ERROR] Failed to load resource: net::ERR_CERT_COMMON_NAME_INVALID @ https://fran.frvr.com/api/v1/usync?bidder=inmobi&gdpr=0&gdpr_consent=&us_privacy=&f=i&uid=ID5-2-9d7d1e4c-0fed-458a-adc3-1a0242d24b6a:0
+[  192397ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ https://sync.e-volution.ai/a184e2218ea9f18e32c70fb304405e72.gif?puid=ID5-2-9d7d1e4c-0fed-458a-adc3-1a0242d24b6a&redir=https%3A%2F%2Fsync.inmobi.com%2Fsetuid%3FbidderID%3D957%26dspUserId%3D%5BUID%5D&gdpr=0&gdpr_consent=:0
+[  193060ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://elb.the-ozone-project.com/setuid?bidder=bidswitch&gdpr=&gdpr_consent=&us_privacy=&uid=3c4bfc18-4700-4215-890e-99b375cbc292:0
+[  193170ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://elb.the-ozone-project.com/setuid?bidder=ttd&uid=764779b6-13c8-46f1-a075-72a9fca1d70b:0
+[  194165ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://cs.iqzone.com/1092f8787f1b733028860f25be048027.gif?puid=8aae9fcb-8037-48dc-90b4-76ea1c3680cb&redir=https%3A%2F%2Fms-cookie-sync.presage.io%2Fuser-sync%3Fiqzone_id%3D%5BUID%5D%26gdpr%3D0%26gdpr_consent%3D&gdpr=0&gdpr_consent=:0
+[  194280ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ https://b1sync.zemanta.com/usersync/ogury/?gdpr=0&gdpr_consent=&cb=https%3A%2F%2Fms-cookie-sync.presage.io%2Fuser-sync%3Foutbrain_id%3D__ZUID__:0
+[  194540ms] [ERROR] Failed to load resource: the server responded with a status of 429 () @ https://sync.sparteo.com/sync?gdpr=0&gdpr_consent=&us_privacy=null&cb=0.26394980919843714&if=1&origin=https%3A%2F%2Fsync.sparteo.com%2F&src=meetscale&type=f&la[]=https://dsp-service.admatic.de&la[]=https://sync.adkernel.com&la[]=https://ap.lijit.com&la[]=https://maxroll.gg:0
+[  194540ms] [ERROR] %cSPARTEO SYNC%c11:45:22.881 display: inline-block; color: #fff; background: #5E6472; padding: 1px 4px; border-radius: 3px; display: inline-block; color: #000; background: #eee; padding: 1px 4px; border-radius: 3px; ERROR| Backend error, ERR02 @ https://sync.sparteo.com/crossfire.js:0
+[  195249ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://cs.iqzone.com/570908b7e92df631fee32098aa272f7b.gif?puid=mQOJImoPUsPk7FdKaXinEQ%3D%3D&gdpr=&gdpr_consent=&ccpa=&coppa=&redir=https%3A%2F%2Fssc-cms.33across.com%2Fps%2F%3Fxi%3D145%26ts%3D1779389123490.6%26us_privacy%3D%26xu%3D%5BUID%5D%26gpp_sid%3D%26gpp%3D:0
