@@ -4354,3 +4354,22 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 
 /* Patch freshness sub-line */
 .patch-banner-fresh { font-family: var(--font-mono); font-size: 0.78rem; color: var(--gold-bright); margin-top: 6px; }
+
+/* ============================================================
+   D4 SPRITE ICONS (Maxroll sprite sheets, downloaded local)
+   Real Diablo IV icons replacing the placeholder SVG silhouettes.
+   ============================================================ */
+.d4-sprite {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.ec-item-icon .d4-sprite,
+.ec-ld-icon .d4-sprite {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--rar) 40%, transparent));
+}
+.ec-affix-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 4px;
+}

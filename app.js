@@ -480,6 +480,34 @@
     return '<svg class="' + (cls || 'ec-slot-svg') + '" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' + body + '</svg>';
   }
 
+  // Lookup a real Maxroll sprite icon for an item, skill, or aspect by name.
+  // Returns an HTML string for a <div> with the sprite background set,
+  // sized so the tile fills the requested display size. Returns '' if not
+  // mapped (caller can then fall back to the SVG silhouette).
+  function spriteIcon(name, kind, displayPx) {
+    const s = window.D4_SPRITES;
+    if (!s || !name) return '';
+    const tableKey = kind === 'skill' ? 'skills' : kind === 'small' ? 'itemSmall' : 'itemLarge';
+    const entry = s[tableKey] && s[tableKey][name];
+    if (!entry) return '';
+    const sp = s.sprites[entry.sprite];
+    if (!sp) return '';
+    const display = displayPx || (entry.sprite === 'gems' ? 56 : 40);
+    const scale = display / sp.tile;
+    const bgW = Math.round(sp.size * scale);
+    const x = Math.round(entry.x * scale);
+    const y = Math.round(entry.y * scale);
+    const style = 'width:' + display + 'px;height:' + display + 'px;'
+      + 'background-image:url(\'' + sp.url + '\');'
+      + 'background-size:' + bgW + 'px auto;'
+      + 'background-position:-' + x + 'px -' + y + 'px;'
+      + 'background-repeat:no-repeat;'
+      + 'display:inline-block;'
+      + 'image-rendering:auto;'
+      + 'border-radius:4px;';
+    return '<span class="d4-sprite" style="' + style + '" aria-label="' + escapeHtml(name) + '" title="' + escapeHtml(name) + '"></span>';
+  }
+
   const Templates = {
     rarityOf,
     slotSvg,
@@ -497,9 +525,15 @@
 
       const iconUrl = opts.iconUrl || item.iconUrl || '';
       const fallback = slotSvg(svgName, 'ec-slot-svg');
-      const iconMarkup = iconUrl
-        ? '<img src="' + escapeHtml(iconUrl) + '" alt="" class="ec-slot-img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'" />' + '<span class="ec-slot-svg-fallback" style="display:none">' + fallback + '</span>'
-        : fallback;
+      // Prefer the real D4 sprite icon. Try the item name first, then
+      // the aspect name (so a legendary card still shows a real icon).
+      let sprite = spriteIcon(item.name, 'large', 48);
+      if (!sprite && item.aspect) sprite = spriteIcon(item.aspect, 'large', 48);
+      const iconMarkup = sprite
+        ? sprite
+        : (iconUrl
+          ? '<img src="' + escapeHtml(iconUrl) + '" alt="" class="ec-slot-img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'" />' + '<span class="ec-slot-svg-fallback" style="display:none">' + fallback + '</span>'
+          : fallback);
 
       let html = '';
       html += '<article class="ec-item ec-rar-' + r.key + (isAlt ? ' ec-item-alt' : '') + '" style="--rar:' + r.color + '">';
@@ -609,9 +643,14 @@
         const r = rarityOf(slot.primary);
         let h = '';
         h += '<button type="button" class="ec-ld-tile ec-rar-' + r.key + '" data-ld-slot="' + escapeHtml(key) + '" style="--rar:' + r.color + '">';
-        const ldIcon = slot.primary && slot.primary.iconUrl
-          ? '<img src="' + escapeHtml(slot.primary.iconUrl) + '" alt="" class="ec-slot-img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'" /><span class="ec-slot-svg-fallback" style="display:none">' + slotSvg(slot.svgName || 'gem', 'ec-slot-svg') + '</span>'
-          : slotSvg(slot.svgName || 'gem', 'ec-slot-svg');
+        // Real D4 sprite first (item name, then aspect), fallback to img URL, then SVG.
+        let ldSprite = slot.primary ? spriteIcon(slot.primary.name, 'large', 38) : '';
+        if (!ldSprite && slot.primary && slot.primary.aspect) ldSprite = spriteIcon(slot.primary.aspect, 'large', 38);
+        const ldIcon = ldSprite
+          ? ldSprite
+          : (slot.primary && slot.primary.iconUrl
+              ? '<img src="' + escapeHtml(slot.primary.iconUrl) + '" alt="" class="ec-slot-img" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'" /><span class="ec-slot-svg-fallback" style="display:none">' + slotSvg(slot.svgName || 'gem', 'ec-slot-svg') + '</span>'
+              : slotSvg(slot.svgName || 'gem', 'ec-slot-svg'));
         h += '  <span class="ec-ld-icon">' + ldIcon + '</span>';
         h += '  <span class="ec-ld-text">';
         h += '    <span class="ec-ld-slotname">' + escapeHtml(slot.slot) + '</span>';
@@ -4081,7 +4120,12 @@
       html += '  <div class="ec-pair"><div class="ec-pair-head">' + escapeHtml(fb.label) + ' <span class="aspect-priority ' + conf(fb.confidence) + '">' + fb.confidence + '</span></div>';
       html += '  <ol class="ec-affix-list">';
       for (const s of fb.slots) {
-        html += '<li class="ec-affix"><span class="ec-affix-n">' + s.n + '</span><span class="ec-affix-stat"><strong>' + escapeHtml(s.skill) + '</strong> &middot; ' + escapeHtml(s.role) + '<br><span class="ec-step-sub">' + escapeHtml(s.notes) + '</span></span></li>';
+        // Try to match the skill name or its upgrade subname (e.g. "Dread Claws: Encircling Terror" matches "Encircling Terror")
+        const parts = s.skill.split(':').map((p) => p.trim());
+        let sIcon = spriteIcon(parts[0], 'skill', 28);
+        if (!sIcon && parts[1]) sIcon = spriteIcon(parts[1], 'skill', 28);
+        const iconHtml = sIcon ? '<span class="ec-affix-icon">' + sIcon + '</span>' : '';
+        html += '<li class="ec-affix"><span class="ec-affix-n">' + s.n + '</span>' + iconHtml + '<span class="ec-affix-stat"><strong>' + escapeHtml(s.skill) + '</strong> &middot; ' + escapeHtml(s.role) + '<br><span class="ec-step-sub">' + escapeHtml(s.notes) + '</span></span></li>';
       }
       html += '  </ol></div>';
       if (eg.skillBar.lv70SwapMoment) {
@@ -4575,6 +4619,8 @@
       html += '  <div class="patch-banner-meta">Season ' + meta.season + ' &middot; ' + meta.seasonName + ' &middot; Launched ' + meta.releaseDate + '</div>';
       html += '  <div class="patch-banner-compiled">Data compiled ' + ((window.D4_DATA && window.D4_DATA.compiledAt) || 'unknown') + '</div>';
       if (meta.freshnessNote) html += '  <div class="patch-banner-fresh">' + escapeHtml(meta.freshnessNote) + '</div>';
+      const sp = window.D4_SPRITES;
+      if (sp && sp.attribution) html += '  <div class="patch-banner-fresh">' + escapeHtml(sp.attribution) + '</div>';
       html += '</section>';
 
       html += '<section class="patch-section">';

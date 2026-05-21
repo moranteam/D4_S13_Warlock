@@ -1,0 +1,4 @@
+[     627ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ https://moranteam.github.io/D4_S13_Warlock/?cb=20260519:0
+[     745ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://moranteam.github.io/D4_S13_Warlock/icon-192.png:0
+[     745ms] [WARNING] Error while trying to use the following icon from the Manifest: https://moranteam.github.io/D4_S13_Warlock/icon-192.png (Download error or resource isn't a valid image) @ https://moranteam.github.io/D4_S13_Warlock/?cb=20260519:0
+[     746ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://moranteam.github.io/favicon.ico:0

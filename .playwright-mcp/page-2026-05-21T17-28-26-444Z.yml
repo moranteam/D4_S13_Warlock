@@ -1,0 +1,126 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - button "Toggle navigation" [ref=e3] [cursor=pointer]:
+      - generic [ref=e4]: 
+    - generic [ref=e5]:
+      - generic [ref=e7]: 
+      - generic [ref=e8]:
+        - generic [ref=e9]: D4 WARLOCK
+        - generic [ref=e10]: Dread Claws Mastermind
+    - generic [ref=e11]: Dashboard
+    - generic [ref=e12]:
+      - button "Settings" [ref=e13] [cursor=pointer]:
+        - generic [ref=e14]: 
+      - text:    
+  - complementary [ref=e15]:
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - generic [ref=e18]: Overview
+        - link " Dashboard" [ref=e19] [cursor=pointer]:
+          - /url: "#dashboard"
+          - generic [ref=e20]: 
+          - generic [ref=e21]: Dashboard
+      - generic [ref=e22]:
+        - generic [ref=e23]: Leveling
+        - link " Leveling Path 0%" [ref=e24] [cursor=pointer]:
+          - /url: "#leveling-path"
+          - generic [ref=e25]: 
+          - generic [ref=e26]: Leveling Path
+          - generic [ref=e27]: 0%
+        - link " Skills Reference" [ref=e28] [cursor=pointer]:
+          - /url: "#skills-reference"
+          - generic [ref=e29]: 
+          - generic [ref=e30]: Skills Reference
+      - generic [ref=e31]:
+        - generic [ref=e32]: Endgame
+        - link " Endgame Build" [ref=e33] [cursor=pointer]:
+          - /url: "#endgame-build"
+          - generic [ref=e34]: 
+          - generic [ref=e35]: Endgame Build
+      - generic [ref=e36]:
+        - generic [ref=e37]: Gear
+        - link " Gear Targets 0/12" [ref=e38] [cursor=pointer]:
+          - /url: "#gear-targets"
+          - generic [ref=e39]: 
+          - generic [ref=e40]: Gear Targets
+          - generic [ref=e41]: 0/12
+        - link " Gear Comparison" [ref=e42] [cursor=pointer]:
+          - /url: "#gear-comparison"
+          - generic [ref=e43]: 
+          - generic [ref=e44]: Gear Comparison
+      - generic [ref=e45]:
+        - generic [ref=e46]: Reference
+        - link " Slot Reference" [ref=e47] [cursor=pointer]:
+          - /url: "#slot-reference"
+          - generic [ref=e48]: 
+          - generic [ref=e49]: Slot Reference
+        - link " About" [ref=e50] [cursor=pointer]:
+          - /url: "#about"
+          - generic [ref=e51]: 
+          - generic [ref=e52]: About
+    - generic [ref=e53]:
+      - generic [ref=e54]:
+        - generic [ref=e55]: Patch
+        - generic [ref=e56]: 3.0 LoH
+      - generic [ref=e57]:
+        - generic [ref=e58]: Build
+        - generic [ref=e59]: v0.2
+      - generic [ref=e60]: Press / to quick update
+  - main [ref=e61]:
+    - generic [ref=e63]:
+      - generic [ref=e64]:
+        - generic [ref=e65]: Current Phase
+        - generic [ref=e66]: Leveling
+      - generic [ref=e68]: Lv 1
+      - generic [ref=e69]:
+        - generic [ref=e70]: 
+        - text: Hit Lv 70 and complete Pit 10 to unlock Torment 1.
+    - generic [ref=e71]:
+      - generic [ref=e72]:
+        - heading "Dashboard" [level=1] [ref=e73]
+        - generic [ref=e74]: Where you are, what to do next
+      - generic [ref=e75]:
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - generic [ref=e78]: Character Level
+            - generic [ref=e79]: "1"
+            - generic [ref=e80]: Dread Claws Mastermind
+          - generic [ref=e84]: 1 / 70
+        - generic [ref=e85]:
+          - heading "Current Phase" [level=2] [ref=e87]
+          - generic [ref=e88]:
+            - generic [ref=e89]: Pre-tutorial
+            - generic [ref=e90]: Pick a starter zone and reach level 3 to unlock Dread Claws.
+        - generic [ref=e91]:
+          - heading "Next Pivot" [level=2] [ref=e93]
+          - generic [ref=e94]:
+            - generic [ref=e95]: Level 3
+            - generic [ref=e96]: Unlock Dread Claws and start spamming. This is your core skill from now until 70.
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - heading "Today's Priority" [level=2] [ref=e99]
+            - generic [ref=e100]: Auto
+          - list [ref=e102]:
+            - listitem [ref=e103]: Pick a starter zone and clear the opening campaign beats
+            - listitem [ref=e104]: Spam Dread Claws, weave a basic attack when Wrath is low
+            - listitem [ref=e105]: Salvage gear to research Aspect of Deeper Shadows in the Codex
+        - generic [ref=e106]:
+          - heading "Paragon" [level=2] [ref=e108]
+          - generic [ref=e109]:
+            - generic [ref=e110]: "0"
+            - generic [ref=e111]: of 300 points
+        - generic [ref=e112]:
+          - heading "Torment" [level=2] [ref=e114]
+          - generic [ref=e115]:
+            - generic [ref=e116]: T0
+            - generic [ref=e117]: Pre-endgame
+        - generic [ref=e118]:
+          - heading "Pit Cleared" [level=2] [ref=e120]
+          - generic [ref=e121]:
+            - generic [ref=e122]: "0"
+            - generic [ref=e123]: highest tier
+    - text:                                                                                                                                                                                                                                                                                       
+  - text:           
+  - button "Quick update" [ref=e124] [cursor=pointer]:
+    - generic [ref=e125]: 
+  - text:  
