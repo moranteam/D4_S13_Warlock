@@ -174,3 +174,24 @@ mercs.canonical already Raheir/Aldkin. No discrepancy. Confidence on the endgame
 hired pick raised from MEDIUM to HIGH for the Maxroll canonical specifically, since
 it is now directly verified against the cited source (the 3-way source disagreement
 note still stands for cross-source context).
+
+## V2.3 Master Prompt Reconciliation, 2026-05-19
+
+Charlie supplied a master prompt (D4 Warlock God Run Endgame Content Build) with
+researched data. Three items diverged from Maxroll canonical reconciliation:
+
+1. Master prompt: Talisman seal is Shadow of Harash 5 piece.
+2. Master prompt: Mercenary reinforcement is Varyana.
+3. Master prompt: Amulet aspect is Hellbent Commander.
+
+Resolved 2026-05-19 with Charlie's directive: use Maxroll versions as default and
+priority. All three master prompt divergences are OVERRULED. Existing canonical data
+holds.
+
+- Resolution 1 (Talisman) stands: Chains of Horazon / Beru of Horazon's Chains.
+- Resolution 2 / V2.2 (Mercenary) stands: Raheir hired + Aldkin reinforcement.
+- Resolution 5 (Amulet aspect) stands: Aspect of Rallying Reversal primary,
+  Hellbent Commander documented as a valid Icy Veins alt.
+
+This makes the Maxroll-canonical rule the project-wide tie-breaker for any future
+divergence between user-supplied research and our reconciled data.
