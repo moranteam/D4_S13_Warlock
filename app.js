@@ -2975,6 +2975,22 @@
         html += '</section>';
       }
 
+      // High value loops, prominent callouts above the recipe list
+      if (hc.highValueLoops && hc.highValueLoops.length) {
+        html += '<section class="hc-section">';
+        html += '  <h3 class="hc-section-title">High value loops</h3>';
+        html += '  <div class="hc-recipes">';
+        for (const lp of hc.highValueLoops) {
+          html += '<div class="hc-recipe hc-pri-high">';
+          html += '  <div class="hc-recipe-head"><span class="hc-recipe-name">' + escapeHtml(lp.name) + '</span><span class="aspect-priority rg-conf-high">CALLOUT</span></div>';
+          html += '  <div class="hc-recipe-fn"><strong>' + escapeHtml(lp.tagline) + '</strong></div>';
+          html += '  <div class="hc-recipe-use">' + escapeHtml(lp.detail) + '</div>';
+          html += '</div>';
+        }
+        html += '  </div>';
+        html += '</section>';
+      }
+
       // Build workflow, the actionable order
       if (hc.buildWorkflow && hc.buildWorkflow.length) {
         html += '<section class="hc-section">';
@@ -2985,6 +3001,21 @@
           html += '<li class="ec-step"><span class="ec-step-n">' + (n++) + '</span><div class="ec-step-body"><div class="ec-step-text">' + escapeHtml(step) + '</div></div></li>';
         }
         html += '  </ol>';
+        html += '</section>';
+      }
+
+      // Per item workflow
+      if (hc.perItemWorkflow && hc.perItemWorkflow.length) {
+        html += '<section class="hc-section">';
+        html += '  <h3 class="hc-section-title">Per item workflow</h3>';
+        html += '  <ol class="ec-step-list">';
+        for (const step of hc.perItemWorkflow) {
+          html += '<li class="ec-step"><span class="ec-step-n">' + step.rank + '</span><div class="ec-step-body"><div class="ec-step-text">' + escapeHtml(step.action) + '</div></div></li>';
+        }
+        html += '  </ol>';
+        if (hc.disciplineNote) {
+          html += '  <div class="hc-warn"><div class="hc-warn-head"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Material discipline</div><p class="hc-warn-body">' + escapeHtml(hc.disciplineNote) + '</p></div>';
+        }
         html += '</section>';
       }
 

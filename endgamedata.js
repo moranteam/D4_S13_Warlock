@@ -936,6 +936,8 @@
         { name: 'Rune Crafting', fn: 'Craft a specific target Legendary Rune', materials: '1 specific Rare Rune, 5 any Rare Runes, 5 any Legendary Runes', buildUse: 'The targeted path to the runeword runes. Craft Neo, Prid, Nagu, Que directly instead of waiting on drops.', priority: 'HIGH', confidence: 'HIGH' },
         { name: 'Reroll Set Charm', fn: 'Convert a Set Charm into a different one from the same set', materials: '1 Set Charm, 25 Raw Primordial Dust, 50 Infused Horadric Resin', buildUse: 'Reshape the Beru of Horazon Chains set toward the charm affixes you need (Demonology Ranks, All Stats).', priority: 'MEDIUM', confidence: 'HIGH' },
         { name: 'Recycle Uniques', fn: '3 same Uniques to a random Unique of that type', materials: '3 same Unique/Mythic/Unique Charm', buildUse: 'Dump duplicate boss Uniques back into the pool for a reroll.', priority: 'LOW', confidence: 'HIGH' },
+        { name: 'Emulation', fn: '3 identical boss dropped items to one fresh 900 item power roll of that same item', materials: '3 identical boss-dropped items', buildUse: 'The targeting tool for boss Uniques. Stockpile duplicates of Litany of Sable or Heir of Perdition, then Emulate for a fresh roll.', priority: 'HIGH', confidence: 'HIGH' },
+        { name: 'Rune Amalgamation', fn: '5 magic runes to 1 random rare rune. 5 rare runes to 1 random legendary rune.', materials: '5 same tier runes', buildUse: 'Climb the rune tier without waiting on legendary drops. Pair with Rune Crafting to target Neo, Prid, Nagu, Que.', priority: 'HIGH', confidence: 'HIGH' },
         { name: 'Upgrade to Legendary', fn: 'Rare to Legendary with a random Legendary power', materials: '1 Rare, 1 Pure Primordial Dust, 10 Raw Primordial Dust, Tuning Prism optional', buildUse: 'Early gearing filler before Codex aspects are unlocked.', priority: 'LOW', confidence: 'HIGH' },
         { name: 'Add Affix', fn: 'Adds a random affix', materials: '1 item, 1 Coarse Primordial Dust, 5 Raw Primordial Dust, Tuning Prism optional', buildUse: 'Fill an empty affix slot, narrow the category with a Tuning Prism.', priority: 'LOW', confidence: 'HIGH' },
       ],
@@ -963,6 +965,35 @@
         'Amulet: Transfigure with the Kullean prism to land Aspect of Rallying Reversal.',
         'Reroll Litany unique power with Unique Power Reroll only when the rest of the dagger is near perfect.',
       ],
+
+      // Three high value loops to highlight above the recipe list
+      highValueLoops: [
+        {
+          name: 'Recycle Unique',
+          tagline: 'Three bad Uniques in, one fresh roll out.',
+          detail: 'Unique affixes are randomized this season, so bank off class or bad Uniques and recycle them for a fresh roll within the same item type.',
+        },
+        {
+          name: 'Emulation',
+          tagline: 'Three identical boss dropped items in, one fresh 900 item power roll out.',
+          detail: 'The targeting tool for boss Uniques. Stockpile duplicates of a specific item (e.g. three Litany of Sable) and Emulate for a fresh 900 roll of that exact item.',
+        },
+        {
+          name: 'Rune Amalgamation',
+          tagline: 'Five magic runes in for a random rare. Five rare runes in for a random legendary.',
+          detail: 'Climb the rune tier without waiting on legendary drops. Pair with the Rune Crafting recipe to target the specific runeword runes you need.',
+        },
+      ],
+
+      // Per item workflow, separate from the broader buildWorkflow above
+      perItemWorkflow: [
+        { rank: 1, action: 'Get a clean 900 Ancestral base with mostly good affixes.' },
+        { rank: 2, action: 'Remove Affix on the weak slot, then Add Affix or Focused Reroll with a Tuning Prism to fix it.' },
+        { rank: 3, action: 'Masterwork the finished item to amplify key affixes.' },
+        { rank: 4, action: 'Transfigure last, only once the item is fully built. Transfigure locks the item.' },
+      ],
+
+      disciplineNote: 'Do not spend Primordial Dust on an item until it is a confirmed long term keeper. Materials are scarce and Transfigure locks the item.',
     },
   };
 })();
