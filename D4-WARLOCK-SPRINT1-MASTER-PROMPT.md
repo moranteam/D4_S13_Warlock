@@ -10,14 +10,14 @@
 
 In this exact order, view each file fully:
 
-1. `/mnt/skills/user/game-guide-builder/SKILL.md` — architecture tribal knowledge
-2. `/mnt/skills/user/game-data-compiler/SKILL.md` — data compilation patterns
-3. `~/Projects/personal/D4_S13_Warlock/index.html` — current section structure
-4. `~/Projects/personal/D4_S13_Warlock/app.js` — current module list (15 modules)
-5. `~/Projects/personal/D4_S13_Warlock/data.js` — current data schema
-6. `~/Projects/personal/D4_S13_Warlock/itemdata.js` — current uniques data
-7. `~/Projects/personal/D4_S13_Warlock/paragon.js` — current paragon data
-8. `~/Projects/personal/D4_S13_Warlock/data-sources/ai_llm_output_combined.md` — LLM reference data (Grok, Perplexity, Claude sections; Gemini section is hallucinated garbage, ignore it)
+1. `/mnt/skills/user/game-guide-builder/SKILL.md` ,  architecture tribal knowledge
+2. `/mnt/skills/user/game-data-compiler/SKILL.md` ,  data compilation patterns
+3. `~/Projects/personal/D4_S13_Warlock/index.html` ,  current section structure
+4. `~/Projects/personal/D4_S13_Warlock/app.js` ,  current module list (15 modules)
+5. `~/Projects/personal/D4_S13_Warlock/data.js` ,  current data schema
+6. `~/Projects/personal/D4_S13_Warlock/itemdata.js` ,  current uniques data
+7. `~/Projects/personal/D4_S13_Warlock/paragon.js` ,  current paragon data
+8. `~/Projects/personal/D4_S13_Warlock/data-sources/ai_llm_output_combined.md` ,  LLM reference data (Grok, Perplexity, Claude sections; Gemini section is hallucinated garbage, ignore it)
 
 **Do not write a single line of code until all 8 files are read. Confirm out loud that you read them.**
 
@@ -38,25 +38,25 @@ Three LLM sources delivered usable data: Grok, Perplexity, Claude. Gemini halluc
 
 **Output files (in this order):**
 
-**1. `data-sources/RECONCILIATION.md`** — Audit trail of how reconciliation was done:
+**1. `data-sources/RECONCILIATION.md`** ,  Audit trail of how reconciliation was done:
 - Table per disagreement: "Source A said X, Source B said Y, Source C said Z, resolution = X because Maxroll"
 - Cover at minimum: skill points per level (all 70 levels), controller bindings per milestone, gear weights per slot, rune combos
 - Flag any data point with LOW confidence
 
-**2. `data-sources/leveling-skill-points.md`** — Reconciled Lv 1 to 70 skill allocation:
+**2. `data-sources/leveling-skill-points.md`** ,  Reconciled Lv 1 to 70 skill allocation:
 - Markdown table with one row per level (1 to 70, all 70 rows)
 - Columns: Level, Point Spent, Cumulative State, Respec Trigger, Notes
 - After the table, add post-respec rebuild states for Lv 15, 30, 34, 40
 
-**3. `data-sources/controller-bindings.md`** — Reconciled PS5 controller evolution:
+**3. `data-sources/controller-bindings.md`** ,  Reconciled PS5 controller evolution:
 - Markdown table with one row per milestone (Lv 1, 3, 4, 8, 9, 15, 20, 30, 34, 41, 50, 70, endgame)
 - Columns: Level, Square, Triangle, Circle, X, R1, R2, L2, Replaced This Update, Why
 
-**4. `data-sources/gear-weights.md`** — Reconciled stat priorities per slot:
+**4. `data-sources/gear-weights.md`** ,  Reconciled stat priorities per slot:
 - One section per slot (Weapon, Daggers, Focus, Helm, Chest, Gloves, Pants, Boots, Amulet, Ring 1, Ring 2)
 - Per slot: Affix Priority table + Tempering table + Masterwork table
 
-**5. `data-sources/runes-gems.md`** — Reconciled rune and gem reference:
+**5. `data-sources/runes-gems.md`** ,  Reconciled rune and gem reference:
 - Section A: Gems per slot type
 - Section B: Rune combos (at least 6) with tier rankings
 - Section C: Socket recommendations per equipment slot
@@ -144,7 +144,7 @@ Sprint 1 is complete when ALL of these are true:
 10. ✅ `README.md` rewritten to match reality
 11. ✅ App loads in browser with zero console errors
 12. ✅ Clicking each of the 8 nav items shows the correct consolidated content
-13. ✅ `grep -nE "—|–" *.html *.js *.css *.md` returns ZERO matches (no em dashes, no en dashes)
+13. ✅ `grep -nE ", |, " *.html *.js *.css *.md` returns ZERO matches (no em dashes, no en dashes)
 14. ✅ Git commit with message: "Sprint 1: architecture refactor 13 to 8, data reconciliation, 5 simplifications"
 
 ---
