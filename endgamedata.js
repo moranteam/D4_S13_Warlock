@@ -884,6 +884,33 @@
     },
 
     /* ============================================================
+       ITEM POWER PROGRESSION (post Lv 70)
+       Source: master prompt 2026-05-19, verified against IcyVeins,
+       Maxroll, Wowhead Season 13.
+       ============================================================ */
+    itemPower: {
+      compiledAt: '2026-05-19',
+      facts: [
+        'After Lv 70, gear drops at 850 item power on Penitent difficulty or higher. The 850 set is the endgame entry point.',
+        'Item power caps this season: non Ancestral 850, Ancestral 900.',
+        'Ancestral gear (900 item power) only drops at Torment 1 and above.',
+        'A clean 900 Ancestral with no Greater Affix is still a real upgrade. Not every Ancestral rolls a Greater Affix.',
+        'Greater Affixes become realistic around Torment 3.',
+      ],
+      unlockGotcha: {
+        headline: 'You must clear Pit Tier 10 WHILE at Lv 70 for the Torment 1 unlock to register.',
+        detail: 'Clearing Pit 10 earlier does not count. Hit 70 first, then push Pit 10, then the Torment 1 unlock triggers.',
+      },
+      ladder: [
+        { rank: 1, action: 'Reach Lv 70, then fill every slot with 850 item power gear on Penitent difficulty.' },
+        { rank: 2, action: 'Clear Pit Tier 10 at Lv 70 to unlock Torment 1.' },
+        { rank: 3, action: 'Farm Torment 1 to replace gear with 900 Ancestral pieces.' },
+        { rank: 4, action: 'Push Torment tiers as the build allows for better Ancestral odds, Greater Affix chances, and crafting materials.' },
+      ],
+      confidence: 'HIGH',
+    },
+
+    /* ============================================================
        HORADRIC CUBE (Lord of Hatred crafting station)
        Source: Maxroll resources Horadric Cube, fetched 2026-05-15.
        ============================================================ */

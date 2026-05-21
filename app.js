@@ -4112,6 +4112,28 @@
       html += '  <div class="ec-hero-meta">Torment ' + curTorment + ' &middot; Pit ' + curPit + ' tracked</div>';
       html += '</section>';
 
+      // Item Power Progression (Batch A)
+      if (eg.itemPower) {
+        const ip = eg.itemPower;
+        html += '<section class="ec-section">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F4AA}</span><h2 class="ec-section-title">Item Power Progression</h2></header>';
+        html += '  <div class="ec-block ec-block-aspect"><div class="ec-block-label">Facts</div><ul class="ec-affix-list">';
+        for (const f of ip.facts) {
+          html += '<li class="ec-affix"><span class="ec-affix-stat">' + escapeHtml(f) + '</span></li>';
+        }
+        html += '  </ul></div>';
+        if (ip.unlockGotcha) {
+          html += '  <div class="hc-warn"><div class="hc-warn-head"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> ' + escapeHtml(ip.unlockGotcha.headline) + '</div><p class="hc-warn-body">' + escapeHtml(ip.unlockGotcha.detail) + '</p></div>';
+        }
+        html += '  <div class="ec-block-label" style="margin-top:8px">Progression ladder</div>';
+        html += '  <ol class="ec-step-list">';
+        for (const step of ip.ladder) {
+          html += '<li class="ec-step"><span class="ec-step-n">' + step.rank + '</span><div class="ec-step-body"><div class="ec-step-text">' + escapeHtml(step.action) + '</div></div></li>';
+        }
+        html += '  </ol>';
+        html += '</section>';
+      }
+
       // Difficulty ladder
       html += '<section class="ec-section ec-section-stats">';
       html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F4C8}</span><h2 class="ec-section-title">Difficulty Ladder</h2></header>';
