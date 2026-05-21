@@ -563,6 +563,13 @@
       if (slotLabel) html += '<div class="ec-item-slot">' + escapeHtml(slotLabel) + '</div>';
       html += '      <h3 class="ec-item-name">' + escapeHtml(item.name) + '</h3>';
       html += '      <div class="ec-item-tags">';
+      // Endgame ilvl chip. Mythics and Ancestral Uniques are explicit, everything
+      // else gets the default 900 Ancestral endgame target label.
+      const ipChip = /mythic/i.test(item.type || '') ? '900 Mythic'
+                    : /ancestral/i.test(item.type || '') ? '900 Ancestral'
+                    : /unique/i.test(item.type || '') ? '900 Ancestral Unique'
+                    : '900 ilvl Ancestral';
+      html += '<span class="ec-tag ec-tag-ilvl">' + escapeHtml(ipChip) + '</span>';
       if (item.tier) html += '<span class="ec-tag ec-tag-tier">' + escapeHtml(item.tier) + '</span>';
       html += '<span class="aspect-priority rg-conf-' + conf + '">' + (item.confidence || 'MEDIUM') + '</span>';
       html += '      </div>';

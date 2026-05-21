@@ -4373,3 +4373,16 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
   flex-shrink: 0;
   margin-right: 4px;
 }
+
+/* Endgame item power chip */
+.ec-tag-ilvl {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 1px 8px;
+  border-radius: 4px;
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-line);
+  color: var(--gold-bright);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
