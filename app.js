@@ -284,6 +284,7 @@
         Mercenary.render();
       }
       if (this.current === 'gear-targets') {
+        AffixPriority.render();
         Aspects.render();
         Uniques.render();
         Bosses.render();
@@ -1017,6 +1018,7 @@
       Controller.render();
       Skills.render();
       Shards.render();
+      AffixPriority.render();
       Aspects.render();
       Paragon.render();
       Uniques.render();
@@ -2208,6 +2210,79 @@
           Shards.render();
         }
       });
+    },
+  };
+
+  // ========================================
+  // AFFIX PRIORITY REFERENCE (Batch C)
+  // Compact per-slot affix + temper + aspect table for Gear Targets.
+  // Plus the Greater Affix priority list (where to spend Tuning Prisms).
+  // Reads endgamedata.gear and endgamedata.greaterAffixPriority.
+  // ========================================
+  const AffixPriority = {
+    // endgamedata gear key -> human label for the table rows
+    slotOrder: ['helm', 'chest', 'gloves', 'pants', 'boots', 'mainHand', 'offhand', 'amulet', 'ring1', 'ring2'],
+
+    render() {
+      const root = document.getElementById('affixPriorityRoot');
+      if (!root) return;
+      const eg = window.D4_ENDGAME;
+      if (!eg || !eg.gear) {
+        paint(root, '<div class="placeholder-card"><i class="fa-solid fa-list-ol placeholder-icon"></i><div class="placeholder-title">No affix priority data</div></div>');
+        return;
+      }
+      let html = '';
+
+      html += '<section class="ec-hero">';
+      html += '  <h2 class="ec-hero-title">Affix and Gear Priority</h2>';
+      html += '  <p class="ec-hero-sub">Per slot affix order, tempering target, and the aspect or unique that owns the slot. The top affix per slot is your Masterwork and Greater Affix target.</p>';
+      html += '</section>';
+
+      // Per slot affix table
+      html += '<section class="ec-section">';
+      html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{1F4DC}</span><h2 class="ec-section-title">Per Slot Reference</h2></header>';
+      html += '  <div class="ap-table">';
+      for (const key of this.slotOrder) {
+        const slot = eg.gear[key];
+        if (!slot || !slot.primary) continue;
+        const p = slot.primary;
+        const aspectOrUnique = p.aspect || p.name;
+        html += '<div class="ap-row">';
+        html += '  <div class="ap-slot-name">' + escapeHtml(slot.slot) + '</div>';
+        html += '  <div class="ap-affixes"><div class="ec-block-label">Affix priority</div><ol class="ec-affix-list">';
+        for (const a of (p.affixes || [])) {
+          if (!a || !a.stat) continue;
+          html += '<li class="ec-affix' + (a.mustHave ? ' is-must' : '') + (a.buildDefining ? ' is-build-defining' : '') + '">';
+          html += '  <span class="ec-affix-n">' + (a.rank || '') + '</span>';
+          html += '  <span class="ec-affix-stat">' + escapeHtml(a.stat) + '</span>';
+          if (a.buildDefining) html += '<span class="ec-affix-flag ec-flag-defining">KEY</span>';
+          else if (a.mustHave) html += '<span class="ec-affix-flag ec-flag-must">MUST</span>';
+          html += '</li>';
+        }
+        html += '  </ol></div>';
+        html += '  <div class="ap-temper-aspect">';
+        if (p.tempering) html += '<div class="ec-block ec-block-temper"><div class="ec-block-label">Tempering target</div><div class="ec-block-val">' + escapeHtml(p.tempering) + '</div></div>';
+        if (aspectOrUnique) html += '<div class="ec-block ec-block-aspect"><div class="ec-block-label">Aspect or unique</div><div class="ec-block-val">' + escapeHtml(aspectOrUnique) + '</div></div>';
+        html += '  </div>';
+        html += '</div>';
+      }
+      html += '  </div>';
+      html += '</section>';
+
+      // Greater Affix priority
+      if (eg.greaterAffixPriority && eg.greaterAffixPriority.length) {
+        html += '<section class="ec-section ec-section-stats">';
+        html += '  <header class="ec-section-head"><span class="ec-section-emoji" aria-hidden="true">\u{2728}</span><h2 class="ec-section-title">Greater Affix Priority</h2></header>';
+        html += '  <p class="ec-notes">Where to spend Tuning Prisms and Focused Rerolls first, in order.</p>';
+        html += '  <ol class="ec-step-list">';
+        for (const s of eg.greaterAffixPriority) {
+          html += '<li class="ec-step"><span class="ec-step-n">' + s.rank + '</span><div class="ec-step-body"><div class="ec-step-text"><strong>' + escapeHtml(s.focus) + '</strong></div><div class="ec-step-sub">' + escapeHtml(s.why) + '</div></div></li>';
+        }
+        html += '  </ol>';
+        html += '</section>';
+      }
+
+      paint(root, html);
     },
   };
 

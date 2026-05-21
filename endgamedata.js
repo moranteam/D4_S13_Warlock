@@ -884,6 +884,18 @@
     },
 
     /* ============================================================
+       GREATER AFFIX PRIORITY (where to spend Tuning Prisms)
+       Source: master prompt 2026-05-19.
+       ============================================================ */
+    greaterAffixPriority: [
+      { rank: 1, focus: 'Weapon Damage on Weapon and Focus', why: 'Highest value, scales everything downstream.' },
+      { rank: 2, focus: 'Critical Strike Chance on Helm', why: 'Pushes you toward the 90 percent Crit Chance target.' },
+      { rank: 3, focus: 'Attack Speed on both Rings, Gloves, Amulet', why: 'Hits the 86 percent Attack Speed breakpoint.' },
+      { rank: 4, focus: 'Maximum Resource on Chest and Amulet', why: 'Supports the ~280 Wrath pool for Vollach.' },
+      { rank: 5, focus: 'Maximum Life on Pants, Willpower on Boots', why: 'Survival floor plus Willpower scaling (12.5 percent per 100).' },
+    ],
+
+    /* ============================================================
        ITEM POWER PROGRESSION (post Lv 70)
        Source: master prompt 2026-05-19, verified against IcyVeins,
        Maxroll, Wowhead Season 13.

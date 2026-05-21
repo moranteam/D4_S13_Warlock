@@ -4326,3 +4326,28 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; 
 .ec-slot-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .ec-slot-svg-fallback { width: 100%; height: 100%; }
 .ec-ld-icon .ec-slot-img { width: 38px; height: 38px; }
+
+/* ============================================================
+   AFFIX PRIORITY REFERENCE TABLE (Batch C)
+   ============================================================ */
+.affix-priority-root { display: flex; flex-direction: column; gap: 16px; margin-bottom: 16px; }
+.ap-table { display: flex; flex-direction: column; gap: 10px; }
+.ap-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  background-image: var(--stone-grain), var(--ember-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+.ap-slot-name {
+  font-family: var(--font-mythic);
+  color: var(--gold-bright);
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+}
+.ap-affixes, .ap-temper-aspect { display: flex; flex-direction: column; gap: 8px; }
+@media (min-width: 768px) {
+  .ap-row { grid-template-columns: 160px 1fr 1fr; align-items: start; }
+}
