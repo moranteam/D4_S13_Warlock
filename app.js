@@ -487,8 +487,25 @@
   function spriteIcon(name, kind, displayPx) {
     const s = window.D4_SPRITES;
     if (!s || !name) return '';
-    const tableKey = kind === 'skill' ? 'skills' : kind === 'small' ? 'itemSmall' : 'itemLarge';
-    const entry = s[tableKey] && s[tableKey][name];
+    // Build a tried-list with multiple variations so compound names work
+    const tried = [name];
+    if (name.indexOf(',') !== -1) {
+      for (const p of name.split(',')) tried.push(p.trim());
+    }
+    if (name.indexOf('Aspect of ') === 0) tried.push(name.replace('Aspect of ', ''));
+    // For 'large' kind, fall back to 'small' if not in itemLarge
+    const tableOrder = kind === 'skill' ? ['skills']
+                     : kind === 'small' ? ['itemSmall', 'itemLarge']
+                     : ['itemLarge', 'itemSmall'];
+    let entry = null;
+    for (const tableKey of tableOrder) {
+      const table = s[tableKey];
+      if (!table) continue;
+      for (const n of tried) {
+        if (table[n]) { entry = table[n]; break; }
+      }
+      if (entry) break;
+    }
     if (!entry) return '';
     const sp = s.sprites[entry.sprite];
     if (!sp) return '';
